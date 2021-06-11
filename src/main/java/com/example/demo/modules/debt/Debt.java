@@ -13,6 +13,70 @@ import java.security.Timestamp;
 @Entity
 public class Debt {
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public boolean isPaid() {
+        return paid;
+    }
+
+    public void setPaid(boolean paid) {
+        this.paid = paid;
+    }
+
+    public Timestamp getTimestampCreation() {
+        return timestampCreation;
+    }
+
+    public void setTimestampCreation(Timestamp timestampCreation) {
+        this.timestampCreation = timestampCreation;
+    }
+
+    public Timestamp getTimestampDeadline() {
+        return timestampDeadline;
+    }
+
+    public void setTimestampDeadline(Timestamp timestampDeadline) {
+        this.timestampDeadline = timestampDeadline;
+    }
+
+    public User getCreditor() {
+        return creditor;
+    }
+
+    public void setCreditor(User creditor) {
+        this.creditor = creditor;
+    }
+
+    public User getDebtor() {
+        return debtor;
+    }
+
+    public void setDebtor(User debtor) {
+        this.debtor = debtor;
+    }
+
+    public boolean isCreditorConfirmed() {
+        return creditorConfirmed;
+    }
+
+    public void setCreditorConfirmed(boolean creditorConfirmed) {
+        this.creditorConfirmed = creditorConfirmed;
+    }
+
+    public boolean isDebtorConfirmed() {
+        return debtorConfirmed;
+    }
+
+    public void setDebtorConfirmed(boolean debtorConfirmed) {
+        this.debtorConfirmed = debtorConfirmed;
+    }
+
     @Id
     @GeneratedValue
     @Getter
@@ -26,11 +90,11 @@ public class Debt {
 
     @Getter
     @Setter
-    private Timestamp timestamp_creation;
+    private Timestamp timestampCreation;
     
     @Getter
     @Setter
-    private Timestamp timestamp_deadline;
+    private Timestamp timestampDeadline;
 
     @Getter
     @Setter
@@ -42,32 +106,32 @@ public class Debt {
 
     @Getter
     @Setter
-    private boolean creditor_confirmed;
+    private boolean creditorConfirmed;
 
     @Getter
     @Setter
-    private boolean debtor_confirmed;
+    private boolean debtorConfirmed;
 
     public Debt (){};
 
-    public Debt (Long id, boolean paid, Timestamp timestamp_creation, Timestamp timestamp_deadline, User creditor, User debtor, boolean creditor_confirmed,  boolean debtor_confirmed){
+    public Debt (Long id, boolean paid, Timestamp timestampCreation, Timestamp timestampDeadline, User creditor, User debtor, boolean creditorConfirmed,  boolean debtorConfirmed){
         this.id = id;
         this.paid = paid;
-        this.timestamp_creation = timestamp_creation;
-        this.timestamp_deadline = timestamp_deadline;
+        this.timestampCreation = timestampCreation;
+        this.timestampDeadline = timestampDeadline;
         this.creditor = creditor;
         this.debtor = debtor;
-        this.creditor_confirmed = creditor_confirmed;
-        this.debtor_confirmed = debtor_confirmed;
+        this.creditorConfirmed = creditorConfirmed;
+        this.debtorConfirmed = debtorConfirmed;
     }
 
-    public Debt (boolean paid, Timestamp timestamp_creation, Timestamp timestamp_deadline, User creditor, User debtor, boolean creditor_confirmed,  boolean debtor_confirmed){
+    public Debt (boolean paid, Timestamp timestampCreation, Timestamp timestampDeadline, User creditor, User debtor, boolean creditorConfirmed,  boolean debtorConfirmed){
         this.paid = paid;
-        this.timestamp_creation = timestamp_creation;
-        this.timestamp_deadline = timestamp_deadline;
+        this.timestampCreation = timestampCreation;
+        this.timestampDeadline = timestampDeadline;
         this.creditor = creditor;
         this.debtor = debtor;
-        this.creditor_confirmed = creditor_confirmed;
-        this.debtor_confirmed = debtor_confirmed;
+        this.creditorConfirmed = creditorConfirmed;
+        this.debtorConfirmed = debtorConfirmed;
     }
 }
