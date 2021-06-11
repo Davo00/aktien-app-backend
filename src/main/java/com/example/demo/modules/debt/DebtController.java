@@ -23,7 +23,7 @@ public class DebtController {
     @PostMapping("bla")
     public ResponseEntity<Debt> createDebt(@RequestBody @Valid Debt request, UriComponentsBuilder uriComponentsBuilder){
         Debt debt = debtService.createDebt(request);
-        UriComponents uriComponents = uriComponentsBuilder.path("debt/{name}").buildAndExpand(debt.getId());
+        UriComponents uriComponents = uriComponentsBuilder.path("debt/{id}").buildAndExpand(debt.getId());
         URI location = uriComponents.toUri();
         return ResponseEntity.created(location).body(debt);
     }
