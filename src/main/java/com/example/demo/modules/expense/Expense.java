@@ -34,46 +34,6 @@ public class Expense {
     @Setter
     private double amount;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getUserPaid() {
-        return userPaid;
-    }
-
-    public void setUserPaid(String userPaid) {
-        this.userPaid = userPaid;
-    }
-
-    public String getDebtName() {
-        return debtName;
-    }
-
-    public void setDebtName(String debtName) {
-        this.debtName = debtName;
-    }
-
-    public double getAmount() {
-        return amount;
-    }
-
-    public void setAmount(double amount) {
-        this.amount = amount;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
     @Getter
     @Setter
     private String description;
