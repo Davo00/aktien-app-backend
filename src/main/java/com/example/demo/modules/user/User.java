@@ -36,9 +36,9 @@ public class User {
     @Getter
     @Setter
     @ManyToMany
-    @JoinTable(name = "user_group",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "group_id"))
+    @JoinTable(name = "player_pool",
+            joinColumns = @JoinColumn(name = "player_id"),
+            inverseJoinColumns = @JoinColumn(name = "pool_id"))
     private Set<Group> joinedGroups;
 
     public User() {
