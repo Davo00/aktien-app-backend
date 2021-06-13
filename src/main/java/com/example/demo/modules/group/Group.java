@@ -1,13 +1,12 @@
 package com.example.demo.modules.group;
 
+import com.example.demo.modules.user.User;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.Set;
 
 @Entity
 public class Group {
@@ -25,15 +24,21 @@ public class Group {
     @Setter
     private String name;
 
+    @Getter
+    @Setter
+    @ManyToMany(mappedBy = "joinedGroups")
+    private Set<User> myUsers;
+
     public Group() {
     }
 
-    public Group(long id, String name) {
+    public Group(@NotNull long id, @NotNull String name, Set<User> myUsers) {
         this.id = id;
         this.name = name;
+        this.myUsers = myUsers;
     }
 
-    public Group(String name) {
+    public Group(@NotNull String name) {
         this.name = name;
     }
 

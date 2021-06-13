@@ -24,7 +24,7 @@ public class GroupController {
     @PostMapping("name")
     public ResponseEntity<Group> createGroup(@RequestBody @Valid Group request, UriComponentsBuilder uriComponentsBuilder,
                                              @PathVariable String name) {
-        Group group = groupService.createService(request);
+        Group group = groupService.createGroup(request);
         UriComponents uriComponents = uriComponentsBuilder.path("group/{name}").buildAndExpand(name);
         URI location = uriComponents.toUri();
         return ResponseEntity.created(location).body(group);
@@ -34,7 +34,7 @@ public class GroupController {
     public ResponseEntity<Group> addUserToGroup(@RequestBody @Valid Group request,
                                                 UriComponentsBuilder uriComponentsBuilder,
                                                 @PathVariable String username) {
-        Group group = groupService.createService(request);
+        Group group = groupService.createGroup(request);
         UriComponents uriComponents = uriComponentsBuilder.path("group/{username}").buildAndExpand(username);
         URI location = uriComponents.toUri();
         return ResponseEntity.created(location).body(group);

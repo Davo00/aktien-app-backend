@@ -20,7 +20,7 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public Group createService(Group request) {
+    public Group createGroup(Group request) {
         Group group = new Group(request.getName());
         group = groupRepository.save(group);
         return group;
