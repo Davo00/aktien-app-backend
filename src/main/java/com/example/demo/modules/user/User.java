@@ -12,10 +12,9 @@ import java.util.Set;
 public class User {
     @Id
     @GeneratedValue
-    @NotNull
     @Getter
     @Setter
-    private long id;
+    private @NotNull Long id;
 
     @NotNull
     @Getter

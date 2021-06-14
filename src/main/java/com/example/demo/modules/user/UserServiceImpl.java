@@ -14,7 +14,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User createUser(User request) {
-        return null;
+        return new User(request.getUsername(), request.getEmail());
     }
 
     @Override

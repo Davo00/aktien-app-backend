@@ -13,10 +13,9 @@ public class Group {
 
     @Id
     @GeneratedValue
-    @NotNull
     @Getter
     @Setter
-    private long id;
+    private @NotNull Long id;
 
     @NotNull
     @Column(unique = true)
