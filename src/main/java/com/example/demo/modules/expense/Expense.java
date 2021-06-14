@@ -1,9 +1,5 @@
 package com.example.demo.modules.expense;
 
-
-
-
-import com.example.demo.modules.user.User;
 import com.sun.istack.NotNull;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,7 +7,6 @@ import lombok.Setter;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
 
 @Entity
 public class Expense {
@@ -39,7 +34,8 @@ public class Expense {
     private String description;
 
 
-    public Expense (){};
+    public Expense() {
+    }
 
 
     public Expense(Long id, String userPaid, String debtName, double amount, String description) {
