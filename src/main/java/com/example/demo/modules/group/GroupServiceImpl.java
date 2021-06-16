@@ -1,7 +1,13 @@
 package com.example.demo.modules.group;
 
+import com.example.demo.modules.user.User;
+import com.example.demo.utils.DeletionIntegrityException;
+import com.example.demo.utils.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class GroupServiceImpl implements GroupService {
@@ -24,5 +30,26 @@ public class GroupServiceImpl implements GroupService {
         Group group = new Group(request.getName());
         group = groupRepository.save(group);
         return group;
+    }
+
+    @Override
+    public void deleteGroupById(long groupId) throws NotFoundException, DeletionIntegrityException {
+        Group group = groupRepository.findById(groupId).orElseThrow(() -> new NotFoundException("Group could not be found"));
+        try{
+            groupRepository.delete(group);
+        }catch (Exception e ){
+            throw new DeletionIntegrityException(e.getMessage());
+        }
+    }
+
+
+    @Override
+    public List<User> getAllUserOfGroup(long groupId) throws NotFoundException {
+        Group group = groupRepository.findById(groupId).orElseThrow(() -> new NotFoundException("Group could not be found"));
+        List<User> myUsers = new ArrayList<>();
+        for(User user : group.getMyUsers()){
+            myUsers.add(user);
+        }
+        return myUsers;
     }
 }
