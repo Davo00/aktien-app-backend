@@ -1,6 +1,7 @@
 package com.example.demo.modules.group;
 
 import com.example.demo.modules.user.User;
+import com.example.demo.modules.user.UserRepository;
 import com.example.demo.utils.DeletionIntegrityException;
 import com.example.demo.utils.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,9 @@ public class GroupServiceImpl implements GroupService {
 
     @Autowired
     GroupRepository groupRepository;
+
+    @Autowired
+    UserRepository userRepository;
 
     /*@Override
     public List<Group> findAllUsersByGroupName(String name) {
@@ -46,10 +50,26 @@ public class GroupServiceImpl implements GroupService {
     @Override
     public List<User> getAllUserOfGroup(long groupId) throws NotFoundException {
         Group group = groupRepository.findById(groupId).orElseThrow(() -> new NotFoundException("Group could not be found"));
-        List<User> myUsers = new ArrayList<>();
+        List<User> myUsers = userRepository.findAllByJoinedGroups(group);
+
+        /*group.getMyUsers().forEach(user -> myUsers.add(user));
         for(User user : group.getMyUsers()){
             myUsers.add(user);
-        }
+        }*/
         return myUsers;
+    }
+
+
+    @Override
+    public void addUserToGroup(long groupId, String username) throws NotFoundException{
+        User user = userRepository.findByUsername(username);
+        if (user==null){
+            throw new NotFoundException("User could not be found");
+        }
+        Group group = groupRepository.findById(groupId).orElseThrow(() -> new NotFoundException("Group could not be found"));
+        group.addUser(user);
+        userRepository.save(user);
+        groupRepository.save(group);
+
     }
 }

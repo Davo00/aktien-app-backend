@@ -12,4 +12,5 @@ public interface GroupService {
     Group createGroup(Group request);
     void deleteGroupById(long groupId) throws NotFoundException, DeletionIntegrityException;
     List<User> getAllUserOfGroup(long groupId) throws NotFoundException;
+    void addUserToGroup( long groupId, String username);
 }

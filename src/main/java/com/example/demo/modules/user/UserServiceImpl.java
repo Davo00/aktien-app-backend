@@ -6,6 +6,7 @@ import com.example.demo.utils.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -25,7 +26,17 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<Group> getAllGroupsOfUser(long userId)throws NotFoundException{
         User user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("User could not be found!"));
-        List<Group> myGroups = groupRepository.findByMyUserId(userId);
+        List<Group> allGroups = groupRepository.findAll();
+        List<Group> myGroups = new ArrayList<>();
+        for (Group group: allGroups){
+            for (User userInGroup: group.getMyUsers()){
+                if(userInGroup== user){
+                    myGroups.add(group);
+                    break;
+                }
+            }
+        }
+
         return myGroups;
     }
 }

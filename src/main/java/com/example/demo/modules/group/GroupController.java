@@ -40,14 +40,11 @@ public class GroupController {
         return ResponseEntity.created(location).body(group);
     }
 
-    @PostMapping("username")
-    public ResponseEntity<Group> addUserToGroup(@RequestBody @Valid Group request,
-                                                UriComponentsBuilder uriComponentsBuilder,
-                                                @PathVariable String username) {
-        Group group = groupService.createGroup(request);
-        UriComponents uriComponents = uriComponentsBuilder.path("group/{username}").buildAndExpand(username);
-        URI location = uriComponents.toUri();
-        return ResponseEntity.created(location).body(group);
+    @PutMapping("{groupId}/{username}")
+    public ResponseEntity<Void> addUserToGroup(@PathVariable ("groupId") long groupId,
+                                                @PathVariable ("username") String username) {
+        groupService.addUserToGroup(groupId, username);
+        return ResponseEntity.noContent().build();
     }
 
 

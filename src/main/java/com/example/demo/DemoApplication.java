@@ -12,7 +12,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 
@@ -35,18 +37,24 @@ public class DemoApplication {
             User davit = new User("Davit", "davit@googlemail.com");
             User ramona = new User("Ramona", "ramona@googlemail.com");
 
-            Set<User> userSet = new HashSet<>();
-            userSet.add(hendrik);
-            userSet.add(moritz);
-            userSet.add(davit);
-            userSet.add(ramona);
+
+            List<User> userList = new ArrayList<>();
+            //userList.add(hendrik);
+            userList.add(moritz);
+            userList.add(davit);
+            userList.add(ramona);
 
             Expense test = new Expense("Hendrik", "Bier", 15.99, "Teuerstes Bier der Welt");
             expenseRepository.save(test);
 
-            Group group = new Group("Shafi", userSet );
+            Group group = new Group("Shafi", userList);
 
 
+            groupRepository.save(group);
+            userRepository.save(hendrik);
+            userRepository.save(moritz);
+            userRepository.save(davit);
+            userRepository.save(ramona);
 
         };
     }
