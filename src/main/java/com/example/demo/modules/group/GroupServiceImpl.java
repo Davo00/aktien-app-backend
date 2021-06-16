@@ -51,8 +51,7 @@ public class GroupServiceImpl implements GroupService {
     public List<User> getAllUserOfGroup(long groupId) throws NotFoundException {
         Group group = groupRepository.findById(groupId).orElseThrow(() -> new NotFoundException("Group could not be found"));
         List<User> myUsers = userRepository.findAllByJoinedGroups(group);
-
-        /*group.getMyUsers().forEach(user -> myUsers.add(user));
+                /*group.getMyUsers().forEach(user -> myUsers.add(user));
         for(User user : group.getMyUsers()){
             myUsers.add(user);
         }*/

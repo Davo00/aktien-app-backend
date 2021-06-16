@@ -1,6 +1,7 @@
 package com.example.demo.modules.group;
 
 import com.example.demo.modules.user.User;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -28,6 +29,7 @@ public class Group {
     @Getter
     @Setter
     @ManyToMany(cascade = CascadeType.ALL,mappedBy = "joinedGroups")
+    @JsonManagedReference
     private List<User> myUsers;
 
     public Group() {

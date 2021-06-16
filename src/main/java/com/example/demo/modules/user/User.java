@@ -1,6 +1,7 @@
 package com.example.demo.modules.user;
 
 import com.example.demo.modules.group.Group;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Getter;
 import lombok.Setter;
 import net.minidev.json.annotate.JsonIgnore;
@@ -41,6 +42,7 @@ public class User {
     @JoinTable(name = "player_pool",
             joinColumns = @JoinColumn(name = "player_id"),
             inverseJoinColumns = @JoinColumn(name = "pool_id"))
+    @JsonBackReference
     private List<Group> joinedGroups;
 
     public User() {
