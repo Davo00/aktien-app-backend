@@ -1,12 +1,19 @@
 package com.example.demo;
 
+import com.example.demo.modules.debt.DebtRepository;
 import com.example.demo.modules.expense.Expense;
 import com.example.demo.modules.expense.ExpenseRepository;
+import com.example.demo.modules.group.Group;
+import com.example.demo.modules.group.GroupRepository;
+import com.example.demo.modules.user.User;
+import com.example.demo.modules.user.UserRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
+import java.util.HashSet;
+import java.util.Set;
 
 
 @SpringBootApplication
@@ -17,10 +24,30 @@ public class DemoApplication {
     }
 
     @Bean
-    CommandLineRunner init(ExpenseRepository expenseRepository){
+    CommandLineRunner init(ExpenseRepository expenseRepository,
+                           GroupRepository groupRepository,
+                           UserRepository userRepository,
+                           DebtRepository debtRepository){
         return args -> {
+
+            User hendrik = new User("Hendrik", "hendrik@googlemail.com");
+            User moritz = new User("Moritz", "moritz@googlemail.com");
+            User davit = new User("Davit", "davit@googlemail.com");
+            User ramona = new User("Ramona", "ramona@googlemail.com");
+
+            Set<User> userSet = new HashSet<>();
+            userSet.add(hendrik);
+            userSet.add(moritz);
+            userSet.add(davit);
+            userSet.add(ramona);
+
             Expense test = new Expense("Hendrik", "Bier", 15.99, "Teuerstes Bier der Welt");
             expenseRepository.save(test);
+
+            Group group = new Group("Shafi", userSet );
+
+
+
         };
     }
 

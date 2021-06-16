@@ -41,4 +41,9 @@ public class Group {
         this.name = name;
     }
 
+    public Group(@NotNull String name, @NotNull Set<User> myUsers) {
+        this.name = name;
+        this.myUsers = myUsers;
+    }
+
 }
