@@ -1,5 +1,6 @@
 package com.example.demo.modules.share;
 
+import com.example.demo.modules.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -31,8 +32,27 @@ public class ShareServiceImpl implements ShareService {
     @Override
     public Share one(long id) {
         Share share = shareRepository.getOne(id);
+
         return share;
     }
+
+    @Override
+    public Share deleteShare(long id) {
+        shareRepository.deleteById(id);
+        return null;
+    }
+
+    @Override
+    public Share getRandom() {
+      return null;
+    }
+
+    @Override
+    public User getRanking() {
+        return null;
+    }
+
+
 
 
 }
