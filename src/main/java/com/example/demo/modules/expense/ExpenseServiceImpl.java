@@ -2,6 +2,7 @@ package com.example.demo.modules.expense;
 
 import com.example.demo.modules.group.Group;
 import com.example.demo.modules.group.GroupRepository;
+import com.example.demo.modules.user.UserRepository;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -16,7 +17,7 @@ public class ExpenseServiceImpl implements ExpenseService{
     @Autowired
     GroupRepository groupRepository;
     @Autowired
-    GroupRepository userRepository;
+    UserRepository userRepository;
 
     @Override
     public List<Expense> findAllExpense() {
@@ -26,15 +27,14 @@ public class ExpenseServiceImpl implements ExpenseService{
 
     @Override
     public Expense createExpense(Expense request) {
-        Expense expense = new Expense(request.getGroupid(), request.getUserPaid(), request.getName() , request.getAmount(), request.getDescription());
+        Expense expense = new Expense(request.getGroupExpense(), request.getUserPaid(), request.getName() , request.getAmount(), request.getDescription());
         expense = expenseRepository.save(expense);
         return expense;
     }
 
     @Override
-    public Expense deleteExpense(Long id) {
+    public void deleteExpense(Long id) {
         expenseRepository.deleteById(id);
-        return null;
     }
 
 

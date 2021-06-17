@@ -25,7 +25,7 @@ public class ShareController {
         return ResponseEntity.ok(shareService.findAllShare());
     }
 
-    @PostMapping("bla")
+    @PostMapping("name")
     public ResponseEntity<Share> createShare(@RequestBody @Valid Share request, UriComponentsBuilder uriComponentsBuilder){
         Share share = shareService.createShare(request);
         UriComponents uriComponents = uriComponentsBuilder.path("share/{name}").buildAndExpand(share.getName());

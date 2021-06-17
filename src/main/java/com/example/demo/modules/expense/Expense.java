@@ -1,12 +1,13 @@
 package com.example.demo.modules.expense;
 
 
+import com.example.demo.modules.group.Group;
 import com.example.demo.modules.user.User;
 import lombok.Getter;
 import lombok.Setter;
-import org.jetbrains.annotations.NotNull;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -18,7 +19,7 @@ public class Expense {
     @Getter
     @Setter
     @NotNull
-    private long id;
+    private Long id;
 
     @Getter
     @Setter
@@ -38,7 +39,9 @@ public class Expense {
 
     @Getter
     @Setter
-    private long groupid;
+    @ManyToOne()
+    @JoinColumn(name="pool_id")
+    private Group groupExpense;
 
 
     @Getter
@@ -55,7 +58,7 @@ public class Expense {
             inverseJoinColumns = @JoinColumn(name = "expense_id"))
     @Getter
     @Setter
-    private Set<User> copayer = new HashSet<User>();
+    private Set<User> copayer;
 
 
     public Expense() {
@@ -64,9 +67,9 @@ public class Expense {
     ;
 
 
-    public Expense(@NotNull Long id, @NotNull Long groupid, String userPaid, String name, double amount, String description, Set<User> copayer) {
+    public Expense(@NotNull Long id, @NotNull Group group, String userPaid, String name, double amount, String description, Set<User> copayer) {
         this.id = id;
-        this.groupid= groupid;
+        this.groupExpense = group;
         this.userPaid = userPaid;
         this.name = name;
         this.amount = amount;
@@ -77,14 +80,14 @@ public class Expense {
     }
 
 
-    public Expense(@NotNull Long groupid, String userPaid, String name, double amount, String description) {
+    public Expense(@NotNull Group group, String userPaid, String name, double amount, String description) {
         this.userPaid = userPaid;
         this.name = name;
         this.amount = amount;
         this.description = description;
         this.open = true;
         this.consumercount = 0;
-        this.groupid = groupid;
+        this.groupExpense = group;
         this.copayer = new HashSet<User>();
     }
 

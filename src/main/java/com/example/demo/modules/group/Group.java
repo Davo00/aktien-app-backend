@@ -1,5 +1,6 @@
 package com.example.demo.modules.group;
 
+import com.example.demo.modules.expense.Expense;
 import com.example.demo.modules.user.User;
 import lombok.Getter;
 import lombok.Setter;
@@ -27,6 +28,11 @@ public class Group {
     @Setter
     @ManyToMany(mappedBy = "joinedGroups")
     private Set<User> myUsers;
+
+    @Getter
+    @Setter
+    @OneToMany(mappedBy = "userExpense")
+    Set<Expense> expenses;
 
     public Group() {
     }
