@@ -1,5 +1,6 @@
 package com.example.demo.modules.group;
 
+import com.example.demo.modules.group.request.UpdateGroup;
 import com.example.demo.modules.user.User;
 import com.example.demo.utils.DeletionIntegrityException;
 import com.example.demo.utils.NotFoundException;
@@ -45,6 +46,11 @@ public class GroupController {
                                                 @PathVariable ("username") String username) {
         groupService.addUserToGroup(groupId, username);
         return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("{groupId}")
+    public ResponseEntity<Group> updateGroupById(@RequestBody @Valid UpdateGroup request , @PathVariable ("groupId") long groupId) throws NotFoundException{
+        return ResponseEntity.ok(groupService.updateGroupById(groupId, request));
     }
 
 

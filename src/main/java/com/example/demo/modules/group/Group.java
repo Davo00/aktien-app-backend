@@ -30,7 +30,7 @@ public class Group {
     @Setter
     @ManyToMany(cascade = CascadeType.ALL,mappedBy = "joinedGroups")
     @JsonManagedReference
-    private List<User> myUsers;
+    private List<User> myUsers = new ArrayList<>();
 
     public Group() {
     }
@@ -43,12 +43,11 @@ public class Group {
 
     public Group(@NotNull String name) {
         this.name = name;
-        this.myUsers = new ArrayList<>();
+
     }
 
     public Group(@NotNull String name, @NotNull List<User> myUsers) {
         this.name = name;
-        this.myUsers = new ArrayList<>();
         if(!myUsers.isEmpty() && myUsers!=null){
            myUsers.forEach(user -> addUser(user));
         }
@@ -58,5 +57,8 @@ public class Group {
         myUsers.add(user);
         user.getJoinedGroups().add(this);
     }
+
+
+
 
 }

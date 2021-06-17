@@ -1,5 +1,6 @@
 package com.example.demo.modules.group;
 
+import com.example.demo.modules.group.request.UpdateGroup;
 import com.example.demo.modules.user.User;
 import com.example.demo.utils.DeletionIntegrityException;
 import com.example.demo.utils.NotFoundException;
@@ -13,4 +14,5 @@ public interface GroupService {
     void deleteGroupById(long groupId) throws NotFoundException, DeletionIntegrityException;
     List<User> getAllUserOfGroup(long groupId) throws NotFoundException;
     void addUserToGroup( long groupId, String username);
+    Group updateGroupById(long groupId, UpdateGroup request)throws NotFoundException;
 }
