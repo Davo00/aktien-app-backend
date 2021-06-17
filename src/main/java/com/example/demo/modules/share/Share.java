@@ -31,13 +31,13 @@ public class Share {
     private Money price;
 
 
+    public Share() {
+    }
+
+    ;
 
 
-
-    public Share(){};
-
-
-    public Share( Long id, String name) {
+    public Share(Long id, String name) {
         this.id = id;
         this.name = name;
 
@@ -50,24 +50,23 @@ public class Share {
         this.name = name;
     }
 
-    public Money getcurrentPrice(){
+    public Money getcurrentPrice() {
         Random generator = new Random();
-        int amount = generator.nextInt(20-1) + 1;
+        int amount = generator.nextInt(20 - 1) + 1;
         CurrencyUnit euro = Monetary.getCurrency("EUR");
         return Money.of(amount, euro);
 
     }
 
-    public Money getPriceAt(Timestamp timestamp){
+    public Money getPriceAt(Timestamp timestamp) {
 
         Random generator = new Random();
-       Long time = timestamp.getTime();
+        Long time = timestamp.getTime();
 
-        int amount = generator.nextInt(20-1) + 1;
+        int amount = generator.nextInt(20 - 1) + 1;
         CurrencyUnit euro = Monetary.getCurrency("EUR");
-       return Money.of(amount, euro) ;
+        return Money.of(amount, euro);
     }
-
 
 
 }

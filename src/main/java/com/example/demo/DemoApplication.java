@@ -19,7 +19,7 @@ public class DemoApplication {
     @Bean
     CommandLineRunner init(ExpenseRepository expenseRepository){
         return args -> {
-            Expense test = new Expense("Hendrik", "Bier", 15.99, "Teuerstes Bier der Welt");
+            Expense test = new Expense(Integer.toUnsignedLong(12),"Hendrik", "Bier", 15.99, "Teuerstes Bier der Welt");
             expenseRepository.save(test);
         };
     }

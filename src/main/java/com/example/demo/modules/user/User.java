@@ -1,5 +1,6 @@
 package com.example.demo.modules.user;
 
+import com.example.demo.modules.expense.Expense;
 import com.example.demo.modules.group.Group;
 import lombok.Getter;
 import lombok.Setter;
@@ -39,6 +40,11 @@ public class User {
             joinColumns = @JoinColumn(name = "player_id"),
             inverseJoinColumns = @JoinColumn(name = "pool_id"))
     private Set<Group> joinedGroups;
+
+    @Getter
+    @Setter
+    @ManyToMany(mappedBy = "copayer")
+    private Set<Expense> expense;
 
     public User() {
     }

@@ -1,5 +1,8 @@
 package com.example.demo.modules.expense;
 
+import com.example.demo.modules.group.Group;
+import com.example.demo.modules.group.GroupRepository;
+import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -10,9 +13,10 @@ public class ExpenseServiceImpl implements ExpenseService{
 
     @Autowired
     ExpenseRepository expenseRepository;
-
-
-
+    @Autowired
+    GroupRepository groupRepository;
+    @Autowired
+    GroupRepository userRepository;
 
     @Override
     public List<Expense> findAllExpense() {
@@ -22,65 +26,17 @@ public class ExpenseServiceImpl implements ExpenseService{
 
     @Override
     public Expense createExpense(Expense request) {
-        Expense expense = new Expense(request.getUserPaid(), request.getName() , request.getAmount(), request.getDescription());
+        Expense expense = new Expense(request.getGroupid(), request.getUserPaid(), request.getName() , request.getAmount(), request.getDescription());
         expense = expenseRepository.save(expense);
         return expense;
     }
 
     @Override
-    public Expense one(long id) {
-  Expense      expense = expenseRepository.getOne(id);
-        return expense;
-
-    }
-
-    public Expense Expense (String name) {
-        Expense expense = expenseRepository.findByname(name);
-        return expense;
-
-    }
-
-
-
-
-
-    @Override
-    public Expense deleteExpense(long id) {
-
+    public Expense deleteExpense(Long id) {
         expenseRepository.deleteById(id);
-
         return null;
     }
 
-/*    @Override
-    public Expense deleteCopayerFromExpense(Expense request, String username) {
-        Iterator<User> it = request.getCopayers().iterator();
-
-        User u;
-        while (it.hasNext()) {
-            u= it.next();
-            if (u.getUsername().equals(username)){
-                request.getCopayers().remove(u);
-                break;
-            }
-
-        }
-
-
-        expenseRepository.save(request);
-        return request;
-    }*/
-
-
-  /*  @Override
-    public Expense editExpense(Expense request, String copayer, String username) {
-        //  User u = userservice.getUserbyname(copayerName);
-        User u = new User(Long.valueOf(10),"Ramona");
-        request.getCopayers().add(u);
-        request.setUserPaid(username);
-        expenseRepository.save(request);
-        return request;
-    }*/
 
     @Override
     public Expense updateExpense(Expense request, String name, double amount, String userpaid) {
@@ -98,25 +54,22 @@ public class ExpenseServiceImpl implements ExpenseService{
         return request;
     }
 
-/*    @Override
-    public Expense acceptExpense(long expenseid, String username) {
-
-    Expense e =  expenseRepository.getOne(expenseid);
-    Iterator<
-
-            ExpenseUser> it = e.getExpenseUser().iterator();
-        while(it.hasNext()) {
-            ExpenseUser eu = it.next();
-
-        }
-        return null;
-    }*/
+    @Override
+    public Expense one(Long id){
+        return expenseRepository.getOne(id);
+    }
 
     @Override
-    public List<Expense> allExpensebyGroup(long groupid) {
-
-    return expenseRepository.findBygroupid(groupid);
-
-
+    public List<Expense> getAllExpensebyGroup(long groupId) throws NotFoundException{
+        Group group = groupRepository.findById(groupId).orElseThrow(() -> new NotFoundException("Group could not be found"));
+        List<Expense> e = expenseRepository.findBygroupid(groupId);
+        return e;
     }
+
+
+
+
 }
+
+
+

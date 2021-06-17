@@ -1,6 +1,6 @@
 package com.example.demo.modules.share;
 
-import com.example.demo.modules.expense.ExpenseNotFoundException;
+import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,8 +25,6 @@ public class ShareController {
         return ResponseEntity.ok(shareService.findAllShare());
     }
 
-
-
     @PostMapping("bla")
     public ResponseEntity<Share> createShare(@RequestBody @Valid Share request, UriComponentsBuilder uriComponentsBuilder){
         Share share = shareService.createShare(request);
@@ -35,31 +33,19 @@ public class ShareController {
         return ResponseEntity.created(location).body(share);
     }
 
-
     @GetMapping("/share/{id}")
-    public ResponseEntity<Share> one(@PathVariable long id) throws ExpenseNotFoundException {
+    public ResponseEntity<Share> one(@PathVariable long id) throws NotFoundException {
         Optional<Share> share = Optional.ofNullable(shareService.one(id));
-        if(share.isEmpty()){
-
-            throw new ShareNotFoundException((id));
-        }
-
-
-
-        return ResponseEntity.ok(shareService.one(id));
-
+        Share s = share.orElseThrow(() -> new NotFoundException("Share could not be found"));
+        return ResponseEntity.ok(s);
     }
 
 
     @DeleteMapping("/share/{id}")
-    public ResponseEntity<Share> deleteShare(@PathVariable long id) throws ExpenseNotFoundException {
-        Share share = shareService.deleteShare(id);
-
+    public ResponseEntity<Share> deleteShare(@PathVariable long id) throws Exception {
+        Share s = shareService.deleteShare(id);
         return ResponseEntity.noContent().build();
 
     }
 
-
-    //@GetMapping("id")
-    //@PutMapping
 }

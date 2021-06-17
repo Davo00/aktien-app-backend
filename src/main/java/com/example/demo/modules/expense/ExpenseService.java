@@ -1,21 +1,18 @@
 package com.example.demo.modules.expense;
 
+import javassist.NotFoundException;
+
 import java.util.List;
 
 public interface ExpenseService {
 
     List<Expense> findAllExpense();
     Expense createExpense(Expense request);
-    Expense one(long id);
-
-
-
-    Expense deleteExpense(long id);
-   // Expense deleteCopayerFromExpense(Expense request, String username);
-    //Expense editExpense(Expense request);
- //   Expense editExpense(Expense request, String copayer,String username);
+    Expense deleteExpense(Long id);
     Expense updateExpense(Expense request, String name, double amount, String userpaid);
-  //  Expense acceptExpense(long expenseid, String username);
-    List<Expense>allExpensebyGroup(long groupid);
+    Expense one(Long id) throws NotFoundException;
+    List<Expense> getAllExpensebyGroup(long groupId) throws NotFoundException;
+
+
 }
 

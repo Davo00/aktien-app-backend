@@ -1,13 +1,14 @@
 package com.example.demo.modules.expense;
 
 
+import com.example.demo.modules.user.User;
 import lombok.Getter;
 import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 
@@ -48,61 +49,44 @@ public class Expense {
     @Setter
     private int consumercount;
 
-/*    @Getter
-    @Setter
-    @Fetch(FetchMode.SELECT)
     @ManyToMany
-    private List<User> copayers= new ArrayList<>();*/
-
-    /*@ManyToMany
-    @JoinTable(name = "users",
+    @JoinTable(name = "player_expense",
             joinColumns = @JoinColumn(name = "player_id"),
             inverseJoinColumns = @JoinColumn(name = "expense_id"))
-    private Set<User> copayers;*/
+    @Getter
+    @Setter
+    private Set<User> copayer = new HashSet<User>();
 
 
- /*   @Transient
-    @Fetch(FetchMode.SELECT)*/
- //   private ArrayList<User> users = new ArrayList<User>();
+    public Expense() {
+    }
+
+    ;
 
 
-
-
-
-
-    public Expense (){};
-
-    
-    
-    
-    
-
-
-    public Expense(Long id, String userPaid, String name, double amount, String description) {
+    public Expense(@NotNull Long id, @NotNull Long groupid, String userPaid, String name, double amount, String description, Set<User> copayer) {
         this.id = id;
+        this.groupid= groupid;
         this.userPaid = userPaid;
         this.name = name;
         this.amount = amount;
         this.description = description;
         this.open = true;
-        
-        
         this.consumercount = 0;
-    //    this.copayers = copayers;
+        this.copayer = copayer;
     }
 
 
-    public Expense(String userPaid, String name, double amount, String description) {
+    public Expense(@NotNull Long groupid, String userPaid, String name, double amount, String description) {
         this.userPaid = userPaid;
         this.name = name;
         this.amount = amount;
         this.description = description;
-
         this.open = true;
         this.consumercount = 0;
-       // this.copayers = copayers;
+        this.groupid = groupid;
+        this.copayer = new HashSet<User>();
     }
-
 
 
 }
