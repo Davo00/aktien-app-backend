@@ -40,8 +40,17 @@ public class GroupServiceImpl implements GroupService {
     @Override
     public void deleteGroupById(long groupId) throws NotFoundException, DeletionIntegrityException {
         Group group = groupRepository.findById(groupId).orElseThrow(() -> new NotFoundException("Group could not be found"));
+        List<User> toSafeAtTheEnd = new ArrayList<>();
         try{
+            for (User user : group.getMyUsers()) {
+                user.getJoinedGroups().remove(group);
+                toSafeAtTheEnd.add(user);
+            }
+            group.getMyUsers().clear();
             groupRepository.delete(group);
+            for (User user : toSafeAtTheEnd){
+                user = userRepository.save(user);
+            }
         }catch (Exception e ){
             throw new DeletionIntegrityException(e.getMessage());
         }
@@ -111,6 +120,7 @@ public class GroupServiceImpl implements GroupService {
         group= groupRepository.save(group);
         for(User user : toSafeAtTheEnd){
             user = userRepository.save(user);
+
         }
 
 

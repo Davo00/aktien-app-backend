@@ -28,7 +28,7 @@ public class Group {
 
     @Getter
     @Setter
-    @ManyToMany(cascade = CascadeType.ALL,mappedBy = "joinedGroups")
+    @ManyToMany(mappedBy = "joinedGroups", cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<User> myUsers = new ArrayList<>();
 
@@ -58,6 +58,10 @@ public class Group {
         user.getJoinedGroups().add(this);
     }
 
+    /*@PreRemove
+    public void beforeRemovingAGroup(){
+        this.getMyUsers().clear();
+    }*/
 
 
 

@@ -41,7 +41,7 @@ public class User {
     @ManyToMany
     @JoinTable(name = "player_pool",
             joinColumns = @JoinColumn(name = "player_id"),
-            inverseJoinColumns = @JoinColumn(name = "pool_id"))
+            inverseJoinColumns = @JoinColumn(name = "pool_id", nullable = true))
     @JsonBackReference
     private List<Group> joinedGroups;
 
