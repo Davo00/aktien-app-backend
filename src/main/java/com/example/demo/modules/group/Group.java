@@ -58,11 +58,6 @@ public class Group {
         user.getJoinedGroups().add(this);
     }
 
-    /*@PreRemove
-    public void beforeRemovingAGroup(){
-        this.getMyUsers().clear();
-    }*/
-
 
 
 }
