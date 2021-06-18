@@ -1,12 +1,12 @@
 package com.example.demo.modules.expense;
 
-import com.example.demo.modules.group.Group;
 import com.example.demo.modules.group.GroupRepository;
 import com.example.demo.modules.user.UserRepository;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -61,8 +61,9 @@ public class ExpenseServiceImpl implements ExpenseService{
 
     @Override
     public List<Expense> getAllExpensebyGroup(long groupId) throws NotFoundException{
-        Group group = groupRepository.findById(groupId).orElseThrow(() -> new NotFoundException("Group could not be found"));
-        List<Expense> e = expenseRepository.findBygroupid(groupId);
+       /* Group group = groupRepository.findById(groupId).orElseThrow(() -> new NotFoundException("Group could not be found"));
+        List<Expense> e = expenseRepository.findByGroupExpense(group);*/
+        List<Expense> e = new ArrayList<Expense>();
         return e;
     }
 

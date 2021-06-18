@@ -39,8 +39,7 @@ public class Expense {
 
     @Getter
     @Setter
-    @ManyToOne()
-    @JoinColumn(name="pool_id")
+    @ManyToOne(cascade = CascadeType.ALL)
     private Group groupExpense;
 
 
