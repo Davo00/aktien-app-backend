@@ -2,6 +2,7 @@ package com.example.demo.modules.user;
 
 import com.example.demo.modules.group.Group;
 import com.example.demo.modules.group.GroupService;
+import com.example.demo.utils.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -31,15 +32,10 @@ public class UserController {
         return ResponseEntity.created(location).body(user);
     }
 
-    @GetMapping("group")
-    public ResponseEntity<List<User>> getUsersbyGroup(@RequestBody @Valid Group request,
-                                                UriComponentsBuilder uriComponentsBuilder,
-                                                @PathVariable String groupName) {
-        Group group = groupService.findGroupByName(request.getName());
-        List<User> users = userService.getUsersByGroup(group);
-        UriComponents uriComponents = uriComponentsBuilder.path("{groupname}").buildAndExpand(group.getName());
-        URI location = uriComponents.toUri();
-        return ResponseEntity.created(location).body(users);
+
+    @GetMapping("allGroups/{userId}")
+    public ResponseEntity<List<Group>> getAllGroupsOfUser (@PathVariable ("userId") long userId) throws NotFoundException {
+        return ResponseEntity.ok(userService.getAllGroupsOfUser(userId));
     }
 
 }
