@@ -13,12 +13,41 @@ public class UserServiceImpl implements UserService {
     UserRepository userRepository;
 
     @Override
-    public User createUser(User request) {
-        return new User(request.getUsername(), request.getEmail());
+    public User createUser(User request) throws UsernameReservedException{
+        if (isUsernameReserved(request.getUsername())) {
+            throw new UsernameReservedException();
+        }
+        User user = new User(request.getUsername(), request.getEmail());
+        userRepository.save(user);
+        return user;
     }
 
     @Override
     public List<User> getUsersByGroup(Group request) {
         return userRepository.findAllByJoinedGroups(request);
+    }
+
+    @Override
+    public User getCurrentUser() {
+        return userRepository.findById(1L).get();
+    }
+
+    @Override
+    public void updateUser(User updatedUser) throws UsernameReservedException {
+
+        if (isUsernameReserved(updatedUser.getUsername())) {
+            throw new UsernameReservedException();
+        }
+        getCurrentUser().setEmail(updatedUser.getEmail());
+        getCurrentUser().setUsername(updatedUser.getUsername());
+
+        userRepository.save(updatedUser);
+    }
+
+    private boolean isUsernameReserved(String username) {
+        return userRepository.findByUsername(username).isPresent();
+    }
+
+    static class UsernameReservedException extends Exception {
     }
 }
