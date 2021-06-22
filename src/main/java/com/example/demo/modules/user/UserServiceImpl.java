@@ -44,6 +44,12 @@ public class UserServiceImpl implements UserService {
         userRepository.save(updatedUser);
     }
 
+    @Override
+    public void deleteUser() {
+        User user = getCurrentUser();
+        userRepository.delete(user);
+    }
+
     private boolean isUsernameReserved(String username) {
         return userRepository.findByUsername(username).isPresent();
     }

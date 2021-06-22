@@ -25,7 +25,7 @@ public class UserController {
     @PostMapping("register")
     public ResponseEntity<User> createUser(@RequestBody @Valid User request, UriComponentsBuilder uriComponentsBuilder,
                                              @PathVariable String username) throws UserServiceImpl.UsernameReservedException {
-        User user = userService.createUser(request); // check if username exists
+        User user = userService.createUser(request);
         UriComponents uriComponents = uriComponentsBuilder.path("user/{username}").buildAndExpand(username);
         URI location = uriComponents.toUri();
         return ResponseEntity.created(location).body(user);
@@ -48,6 +48,17 @@ public class UserController {
         UriComponents uriComponents = uriComponentsBuilder.path("").buildAndExpand();
         URI location = uriComponents.toUri();
         return ResponseEntity.created(location).body(userService.getCurrentUser());
+    }
+
+    @DeleteMapping()
+    public ResponseEntity<User> deleteUser(UriComponentsBuilder uriComponentsBuilder) {
+
+
+        userService.deleteUser();
+
+        UriComponents uriComponents = uriComponentsBuilder.path("").buildAndExpand();
+        URI location = uriComponents.toUri();
+        return ResponseEntity.created(location).body(null);
     }
 
 }

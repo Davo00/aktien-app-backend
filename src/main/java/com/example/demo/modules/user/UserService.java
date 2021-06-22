@@ -9,4 +9,6 @@ public interface UserService {
     List<User> getUsersByGroup(Group group);
     User getCurrentUser();
     void updateUser(User updatedUser) throws UserServiceImpl.UsernameReservedException;
+
+    void deleteUser();
 }
