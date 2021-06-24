@@ -10,7 +10,7 @@ public interface ShareService {
     Share createShare(Share request);
     Share one(long id);
     Share deleteShare(long id) throws Exception;
-    List<Share>getPreferedSharesbyUser(long userid) throws NotFoundException;
-
+    List<Share>getPreferedSharesbyUser(String username) throws NotFoundException;
+    Share selectShareFromCreditor(String username, Long shareId) throws NotFoundException;
 
 }

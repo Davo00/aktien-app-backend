@@ -1,16 +1,17 @@
 package com.example.demo.modules.share;
 
+import com.example.demo.modules.user.User;
 import lombok.Getter;
 import lombok.Setter;
 import org.javamoney.moneta.Money;
 
 import javax.money.CurrencyUnit;
 import javax.money.Monetary;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 @Entity
@@ -30,6 +31,23 @@ public class Share {
     @Setter
     private Money price;
 
+    @ManyToMany
+    @JoinTable(name = "user_share",
+            joinColumns = @JoinColumn(name = "player_id"),
+            inverseJoinColumns = @JoinColumn(name = "share_id"))
+    @Getter
+    @Setter
+    private List<User> users = new ArrayList<>();
+
+/*    @Getter
+    @Setter
+    @ManyToMany(mappedBy = "suggestions")
+    private Set<Debt> debts;
+
+    @Getter
+    @Setter
+    @OneToMany(mappedBy = "selectedShare", cascade = CascadeType.ALL)
+    private List<Debt> usedFor;*/
 
     public Share() {
     }

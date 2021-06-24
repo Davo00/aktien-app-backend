@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class ShareServiceImpl implements ShareService {
@@ -50,13 +51,22 @@ public class ShareServiceImpl implements ShareService {
     }
 
     @Override
-    public List<Share> getPreferedSharesbyUser(long userId) throws NotFoundException {
-        User user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("User could not be found!"));
+    public List<Share> getPreferedSharesbyUser(String username) throws NotFoundException {
+        User user = userRepository.findByUsername(username);
+
+       List<Share> shares =user.getPreferedShares();
      //   List<Share> shares = Wird nachgeholt, wenn User_sharelist da ist
+
+        return shares;
+    }
+
+    @Override
+    public Share selectShareFromCreditor(String username, Long shareId) throws NotFoundException {
+        Optional<Share> s = shareRepository.findById(shareId);
+
 
         return null;
     }
-
 
 
 }

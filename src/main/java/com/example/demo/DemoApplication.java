@@ -13,9 +13,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 
 @SpringBootApplication
@@ -44,17 +42,27 @@ public class DemoApplication {
             userList.add(davit);
             userList.add(ramona);
 
-            Expense test = new Expense("Hendrik", "Bier", 15.99, "Teuerstes Bier der Welt");
-            expenseRepository.save(test);
+
+
 
             Group group = new Group("Shafi", userList);
-
+            group.setMyUsers(userList);
+            List<Group> groups = new ArrayList<>();
+            groups.add(group);
+            for(User user: userList){
+                user.setJoinedGroups(groups);
+            }
 
             groupRepository.save(group);
             userRepository.save(hendrik);
             userRepository.save(moritz);
             userRepository.save(davit);
             userRepository.save(ramona);
+
+
+            Expense test = new Expense( group, "Hendrik", "Bier", 15.99, "Teuerstes Bier der Welt",userList);
+            expenseRepository.save(test);
+
 
         };
     }

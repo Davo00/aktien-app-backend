@@ -9,7 +9,7 @@ public interface ExpenseService {
     List<Expense> findAllExpense();
     Expense createExpense(Expense request);
     void deleteExpense(Long id);
-    Expense updateExpense(Expense request, String name, double amount, String userpaid);
+    Expense updateExpensebyId(Long id, UpdateExpense request)throws NotFoundException;
     Expense one(Long id) throws NotFoundException;
     List<Expense> getAllExpensebyGroup(long groupId) throws NotFoundException;
 

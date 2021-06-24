@@ -2,10 +2,10 @@ package com.example.demo.modules.user;
 
 import com.example.demo.modules.expense.Expense;
 import com.example.demo.modules.group.Group;
+import com.example.demo.modules.share.Share;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Getter;
 import lombok.Setter;
-import net.minidev.json.annotate.JsonIgnore;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -45,6 +45,13 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "pool_id", nullable = true))
     @JsonBackReference
     private List<Group> joinedGroups;
+
+    @Getter
+    @Setter
+    @ManyToMany(mappedBy = "users")
+    private List<Share> preferedShares;
+
+
 
     @Getter
     @Setter

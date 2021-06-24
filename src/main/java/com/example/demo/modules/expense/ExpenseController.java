@@ -48,14 +48,9 @@ public class ExpenseController {
     }
 
 
-    @PostMapping("expense/{id}")
-    public ResponseEntity<Expense> updateExpense(@PathVariable(value = "id") long id,
-                                                 String name, String userpaid, double amount) throws NotFoundException {
-
-        Expense e = expenseService.one(id);
-        expenseService.updateExpense(e, name, amount, userpaid);
-        return ResponseEntity.ok(e);
-
+    @PutMapping("{expenseId}")
+    public ResponseEntity<Expense> updateGroupById(@RequestBody @Valid UpdateExpense request , @PathVariable ("groupId") long expenseId) throws NotFoundException{
+        return ResponseEntity.ok(expenseService.updateExpensebyId(expenseId, request));
     }
 
 

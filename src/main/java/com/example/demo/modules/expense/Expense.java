@@ -8,8 +8,8 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 
@@ -39,7 +39,7 @@ public class Expense {
 
     @Getter
     @Setter
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.MERGE)
     private Group groupExpense;
 
 
@@ -57,7 +57,7 @@ public class Expense {
             inverseJoinColumns = @JoinColumn(name = "expense_id"))
     @Getter
     @Setter
-    private Set<User> copayer;
+    private List<User> copayer = new ArrayList<>();
 
 
     public Expense() {
@@ -66,7 +66,7 @@ public class Expense {
     ;
 
 
-    public Expense(@NotNull Long id, @NotNull Group group, String userPaid, String name, double amount, String description, Set<User> copayer) {
+    public Expense(@NotNull Long id, @NotNull Group group, String userPaid, String name, double amount, String description, List<User> copayer) {
         this.id = id;
         this.groupExpense = group;
         this.userPaid = userPaid;
@@ -79,7 +79,7 @@ public class Expense {
     }
 
 
-    public Expense(@NotNull Group group, String userPaid, String name, double amount, String description) {
+    public Expense(@NotNull Group group, String userPaid, String name, double amount, String description, @NotNull List<User> copayers) {
         this.userPaid = userPaid;
         this.name = name;
         this.amount = amount;
@@ -87,7 +87,16 @@ public class Expense {
         this.open = true;
         this.consumercount = 0;
         this.groupExpense = group;
-        this.copayer = new HashSet<User>();
+        this.copayer = copayers;
+     /*   if(!copayers.isEmpty() && copayers!=null){
+            copayers.forEach(user -> addUser(user));
+        }*/
+    }
+
+
+    public void addUser(User user){
+        copayer.add(user);
+        user.getExpense().add(this);
     }
 
 

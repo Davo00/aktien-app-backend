@@ -27,7 +27,7 @@ public class ExpenseServiceImpl implements ExpenseService{
 
     @Override
     public Expense createExpense(Expense request) {
-        Expense expense = new Expense(request.getGroupExpense(), request.getUserPaid(), request.getName() , request.getAmount(), request.getDescription());
+        Expense expense = new Expense(request.getGroupExpense(),request.getUserPaid(), request.getName(), request.getAmount(), request.getDescription(), request.getCopayer());
         expense = expenseRepository.save(expense);
         return expense;
     }
@@ -39,19 +39,69 @@ public class ExpenseServiceImpl implements ExpenseService{
 
 
     @Override
-    public Expense updateExpense(Expense request, String name, double amount, String userpaid) {
-        if(!name.isEmpty()){
-            request.setName(name);
-        }
-        if(amount!= 0){
-            request.setAmount(amount);
-        }
-        if(!userpaid.isEmpty()){
+    public Expense updateExpensebyId(Long id, UpdateExpense request) throws NotFoundException {
+      /*  Expense expense = expenseRepository.findById(id).orElseThrow(() ->new NotFoundException("Expense could not be found"));
+        //Group
 
-            request.setUserPaid(userpaid);
+       //Am Montag nochmal mit Hendrik besprechen
+
+
+
+
+        //Group
+
+
+        List<User> toSafeAtTheEnd = new ArrayList<>();
+        if (request.getUserIds()!= null && !request.getUserIds().isEmpty()){
+           List<User> newUserList = new ArrayList<>();
+           for(int i=0; i<request.getUserIds().size();i++){
+             System.out.println(request.getUserIds().get(i));
+              User user = userRepository.findById(request.getUserIds().get(i)).orElseThrow(() -> new NotFoundException("User could not be found"));
+               if(user!=null){
+                   newUserList.add(user);
+                   System.out.println(user.getUsername());
+               }
+           }
+           if(expense.getCopayer()!= null && !expense.getCopayer().isEmpty()){
+               for(User user: expense.getCopayer()){
+                   user.getExpense().remove(expense);
+                   toSafeAtTheEnd.add(user);
+
+               }
+
+               expense.getCopayer().clear();
+
+           }
+            for ( User user : newUserList){
+                System.out.println("to Add" + user.getUsername());
+                expense.addUser(user);
+                toSafeAtTheEnd.add(user);
+            }
+
+
         }
-        expenseRepository.save(request);
-        return request;
+
+        if (request.getName()!= null){
+            expense.setName(request.getName());
+        }
+
+
+            expense.setAmount(request.getAmount());
+        //andere Attribute noch setzen
+
+
+
+
+
+        expense= expenseRepository.save(expense);
+        for(User user : toSafeAtTheEnd){
+            user = userRepository.save(user);
+
+        }
+        expense.setGroupExpense();*/
+
+        return null;
+
     }
 
     @Override
