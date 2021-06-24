@@ -1,6 +1,8 @@
 package com.example.demo.modules.expense;
 
+import com.example.demo.modules.group.Group;
 import com.example.demo.modules.group.GroupRepository;
+import com.example.demo.modules.user.User;
 import com.example.demo.modules.user.UserRepository;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +42,7 @@ public class ExpenseServiceImpl implements ExpenseService{
 
     @Override
     public Expense updateExpensebyId(Long id, UpdateExpense request) throws NotFoundException {
-      /*  Expense expense = expenseRepository.findById(id).orElseThrow(() ->new NotFoundException("Expense could not be found"));
+       Expense expense = expenseRepository.findById(id).orElseThrow(() ->new NotFoundException("Expense could not be found"));
         //Group
 
        //Am Montag nochmal mit Hendrik besprechen
@@ -86,7 +88,28 @@ public class ExpenseServiceImpl implements ExpenseService{
         }
 
 
-            expense.setAmount(request.getAmount());
+        expense.setAmount(request.getAmount());
+        expense.setOpen(request.isOpen());
+        expense.setConsumercount(request.getConsumercount());
+
+        if (request.getUserPaid()!= null){
+            expense.setUserPaid(request.getUserPaid());
+        }
+
+        if (request.getDescription()!= null){
+            expense.setDescription(request.getDescription());
+        }
+
+        if (request.getDescription()!= null){
+            expense.setDescription(request.getDescription());
+        }
+
+
+        if (request.getDescription()!= null){
+            expense.setDescription(request.getDescription());
+        }
+
+
         //andere Attribute noch setzen
 
 
@@ -98,7 +121,7 @@ public class ExpenseServiceImpl implements ExpenseService{
             user = userRepository.save(user);
 
         }
-        expense.setGroupExpense();*/
+
 
         return null;
 
@@ -111,9 +134,9 @@ public class ExpenseServiceImpl implements ExpenseService{
 
     @Override
     public List<Expense> getAllExpensebyGroup(long groupId) throws NotFoundException{
-       /* Group group = groupRepository.findById(groupId).orElseThrow(() -> new NotFoundException("Group could not be found"));
-        List<Expense> e = expenseRepository.findByGroupExpense(group);*/
-        List<Expense> e = new ArrayList<Expense>();
+        Group group = groupRepository.findById(groupId).orElseThrow(() -> new NotFoundException("Group could not be found"));
+        List<Expense> e = expenseRepository.findByGroupExpense(group);
+      //  List<Expense> e = new ArrayList<Expense>();
         return e;
     }
 

@@ -49,7 +49,7 @@ public class ExpenseController {
 
 
     @PutMapping("{expenseId}")
-    public ResponseEntity<Expense> updateGroupById(@RequestBody @Valid UpdateExpense request , @PathVariable ("groupId") long expenseId) throws NotFoundException{
+    public ResponseEntity<Expense> updateExpenseById(@RequestBody @Valid UpdateExpense request , @PathVariable ("expenseId") long expenseId) throws NotFoundException{
         return ResponseEntity.ok(expenseService.updateExpensebyId(expenseId, request));
     }
 
