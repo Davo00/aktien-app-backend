@@ -8,7 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
-import java.security.Timestamp;
+import java.sql.Timestamp;
 
 @Entity
 public class Debt {
@@ -48,9 +48,13 @@ public class Debt {
     @Setter
     private boolean debtorConfirmed;
 
+    @Getter
+    @Setter
+    private String groupName;
+
     public Debt (){};
 
-    public Debt (Long id, boolean paid, Timestamp timestampCreation, Timestamp timestampDeadline, User creditor, User debtor, boolean creditorConfirmed,  boolean debtorConfirmed){
+    public Debt (Long id, boolean paid, Timestamp timestampCreation, Timestamp timestampDeadline, User creditor, User debtor, boolean creditorConfirmed,  boolean debtorConfirmed, String groupName){
         this.id = id;
         this.paid = paid;
         this.timestampCreation = timestampCreation;
@@ -59,9 +63,10 @@ public class Debt {
         this.debtor = debtor;
         this.creditorConfirmed = creditorConfirmed;
         this.debtorConfirmed = debtorConfirmed;
+        this.groupName = groupName;
     }
 
-    public Debt (boolean paid, Timestamp timestampCreation, Timestamp timestampDeadline, User creditor, User debtor, boolean creditorConfirmed,  boolean debtorConfirmed){
+    public Debt (boolean paid, Timestamp timestampCreation, Timestamp timestampDeadline, User creditor, User debtor, boolean creditorConfirmed,  boolean debtorConfirmed, String groupName){
         this.paid = paid;
         this.timestampCreation = timestampCreation;
         this.timestampDeadline = timestampDeadline;
@@ -69,5 +74,6 @@ public class Debt {
         this.debtor = debtor;
         this.creditorConfirmed = creditorConfirmed;
         this.debtorConfirmed = debtorConfirmed;
+        this.groupName = groupName;
     }
 }
