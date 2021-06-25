@@ -1,5 +1,6 @@
 package com.example.demo.modules.debt;
 
+import com.example.demo.modules.share.Share;
 import com.example.demo.modules.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -21,14 +22,14 @@ public class DebtServiceImpl implements DebtService{
 
     @Override
     public Debt createDebt(Debt request){
-        Debt debt = new Debt(request.isPaid(), request.getTimestampCreation(), request.getTimestampDeadline(), request.getCreditor(), request.getDebtor(), request.isCreditorConfirmed(), request.isDebtorConfirmed());
+        Debt debt = new Debt(request.isPaid(), request.getTimestampCreation(), request.getTimestampDeadline(), request.getCreditor(), request.getDebtor(), request.isCreditorConfirmed(), request.isDebtorConfirmed(), request.getGroupName(), request.getSelectedShare());
         debt = debtRepository.save(debt);
         return debt;
     }
 
     @Override
     public Debt proposeDebt(Debt oldDebt, Share stock, Timestamp timestamp, User user){
-        Debt newDebt = new Debt(false, null, timestamp, oldDebt.getCreditor(), oldDebt.getDebtor(), (user.getId() == oldDebt.getCreditor().getId())?true:false,  (user.getId() == oldDebt.getCreditor().getId())?false:true);
+        Debt newDebt = new Debt(false, null, timestamp, oldDebt.getCreditor(), oldDebt.getDebtor(), (user.getId() == oldDebt.getCreditor().getId())?true:false,  (user.getId() == oldDebt.getCreditor().getId())?false:true, oldDebt.getGroupName(), stock);
         debtRepository.deleteById(oldDebt.getId());
         debtRepository.save(newDebt);
         return newDebt;

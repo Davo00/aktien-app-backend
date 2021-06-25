@@ -1,5 +1,6 @@
 package com.example.demo.modules.debt;
 
+import com.example.demo.modules.share.Share;
 import com.example.demo.modules.user.User;
 import lombok.Getter;
 import lombok.Setter;
@@ -7,6 +8,7 @@ import lombok.Setter;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.sql.Timestamp;
+import java.util.List;
 
 @Entity
 public class Debt {
@@ -65,7 +67,7 @@ public class Debt {
 
     public Debt (){};
 
-    public Debt (Long id, boolean paid, Timestamp timestampCreation, Timestamp timestampDeadline, User creditor, User debtor, boolean creditorConfirmed,  boolean debtorConfirmed, String groupName){
+    public Debt (Long id, boolean paid, Timestamp timestampCreation, Timestamp timestampDeadline, User creditor, User debtor, boolean creditorConfirmed,  boolean debtorConfirmed, String groupName, Share selectedShare){
         this.id = id;
         this.paid = paid;
         this.timestampCreation = timestampCreation;
@@ -75,9 +77,10 @@ public class Debt {
         this.creditorConfirmed = creditorConfirmed;
         this.debtorConfirmed = debtorConfirmed;
         this.groupName = groupName;
+        this.selectedShare = selectedShare;
     }
 
-    public Debt (boolean paid, Timestamp timestampCreation, Timestamp timestampDeadline, User creditor, User debtor, boolean creditorConfirmed,  boolean debtorConfirmed, String groupName){
+    public Debt (boolean paid, Timestamp timestampCreation, Timestamp timestampDeadline, User creditor, User debtor, boolean creditorConfirmed,  boolean debtorConfirmed, String groupName, Share selectedShare){
         this.paid = paid;
         this.timestampCreation = timestampCreation;
         this.timestampDeadline = timestampDeadline;
@@ -86,6 +89,7 @@ public class Debt {
         this.creditorConfirmed = creditorConfirmed;
         this.debtorConfirmed = debtorConfirmed;
         this.groupName = groupName;
+        this.selectedShare = selectedShare;
     }
 
 /*    @OneToMany(mappedBy = "selectedForDebt")
