@@ -1,14 +1,21 @@
 package com.example.demo.modules.expense;
 
-import com.sun.istack.NotNull;
+
+import com.example.demo.modules.group.Group;
+import com.example.demo.modules.user.User;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
+
 public class Expense {
     @Id
     @GeneratedValue
@@ -23,7 +30,7 @@ public class Expense {
 
     @Getter
     @Setter
-    private String debtName;
+    private String name;
 
     @Getter
     @Setter
@@ -33,24 +40,69 @@ public class Expense {
     @Setter
     private String description;
 
+    @Getter
+    @Setter
+    @ManyToOne(cascade = CascadeType.MERGE)
+    @JsonBackReference
+    private Group groupExpense;
+
+
+    @Getter
+    @Setter
+    private boolean unpaid;
+
+    @Getter
+    @Setter
+    private int consumerCount;
+
+    @ManyToMany
+    @JoinTable(name = "player_expense",
+            joinColumns = @JoinColumn(name = "player_id"),
+            inverseJoinColumns = @JoinColumn(name = "expense_id"))
+    @Getter
+    @Setter
+    //@JsonManagedReference
+    private List<User> copayer = new ArrayList<>();
+
 
     public Expense() {
     }
 
 
-    public Expense(Long id, String userPaid, String debtName, double amount, String description) {
+
+
+    public Expense(@NotNull Long id, @NotNull Group group, String userPaid, String name, double amount, String description, List<User> copayer) {
         this.id = id;
+        this.groupExpense = group;
         this.userPaid = userPaid;
-        this.debtName = debtName;
+        this.name = name;
         this.amount = amount;
         this.description = description;
+        this.unpaid = true;
+        this.consumerCount = 0;
+        this.copayer = copayer;
     }
 
 
-    public Expense(String userPaid, String debtName, double amount, String description) {
+    public Expense(@NotNull Group group, String userPaid, String name, double amount, String description, @NotNull List<User> copayers) {
         this.userPaid = userPaid;
-        this.debtName = debtName;
+        this.name = name;
         this.amount = amount;
         this.description = description;
+        this.unpaid = true;
+        this.consumerCount = 0;
+        this.groupExpense = group;
+        this.copayer = copayers;
+     /*   if(!copayers.isEmpty() && copayers!=null){
+            copayers.forEach(user -> addUser(user));
+        }*/
     }
+
+
+    public void addUser(User user){
+        copayer.add(user);
+        user.getExpense().add(this);
+    }
+
+
 }

@@ -48,9 +48,20 @@ public class Debt {
     @Setter
     private boolean debtorConfirmed;
 
+
     @Getter
     @Setter
     private String groupName;
+
+    @Getter
+    @Setter
+    @ManyToMany(cascade = CascadeType.ALL)
+    private List<Share> suggestions;
+
+    @Getter
+    @Setter
+    @ManyToOne(cascade = CascadeType.ALL)
+    private Share selectedShare;
 
     public Debt (){};
 
@@ -76,4 +87,15 @@ public class Debt {
         this.debtorConfirmed = debtorConfirmed;
         this.groupName = groupName;
     }
+
+/*    @OneToMany(mappedBy = "selectedForDebt")
+    private Collection<Share> share;*/
+
+ /*   public Collection<Share> getShare() {
+        return share;
+    }
+*/
+ /*   public void setShare(Collection<Share> share) {
+        this.share = share;
+    }*/
 }
