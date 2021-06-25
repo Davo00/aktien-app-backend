@@ -1,10 +1,14 @@
 package com.example.demo.modules.user;
 
+import com.example.demo.modules.expense.Expense;
 import com.example.demo.modules.group.Group;
+import com.example.demo.modules.share.Share;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.Getter;
 import lombok.Setter;
-import net.minidev.json.annotate.JsonIgnore;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -13,6 +17,8 @@ import java.util.List;
 import java.util.Set;
 
 @Entity
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id")
 public class User {
     @Id
     @GeneratedValue
@@ -34,7 +40,7 @@ public class User {
 
     @Getter
     @Setter
-    private double overall_score;
+    private double overallScore;
 
     @Getter
     @Setter
@@ -45,6 +51,20 @@ public class User {
     @JsonBackReference
     private List<Group> joinedGroups;
 
+    @Getter
+    @Setter
+    @ManyToMany(mappedBy = "users")
+    @JsonManagedReference
+    private List<Share> preferedShares;
+
+
+
+    @Getter
+    @Setter
+    @ManyToMany(mappedBy = "copayer")
+    //@JsonBackReference
+    private Set<Expense> expense;
+
     public User() {
     }
 
@@ -52,7 +72,7 @@ public class User {
         this.id = id;
         this.username = username;
         this.email = email;
-        this.overall_score = overall_score;
+        this.overallScore = overall_score;
         this.joinedGroups = myGroups;
     }
 

@@ -32,6 +32,7 @@ public class Group {
     @JsonManagedReference
     private List<User> myUsers = new ArrayList<>();
 
+
     public Group() {
     }
 
