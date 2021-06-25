@@ -1,5 +1,7 @@
 package com.example.demo.modules.expense;
 
+import com.example.demo.modules.expense.request.CreateExpense;
+import com.example.demo.modules.expense.request.UpdateExpense;
 import com.example.demo.modules.group.Group;
 import com.example.demo.modules.group.GroupRepository;
 import com.example.demo.modules.user.User;
@@ -29,8 +31,18 @@ public class ExpenseServiceImpl implements ExpenseService{
     }
 
     @Override
-    public Expense createExpense(Expense request) {
-        Expense expense = new Expense(request.getGroupExpense(),request.getUserPaid(), request.getName(), request.getAmount(), request.getDescription(), request.getCopayer());
+    public Expense createExpense(CreateExpense request) throws NotFoundException {
+        Group group = groupRepository.findById(request.getGroupId()).orElseThrow(() -> new com.example.demo.utils.NotFoundException("Group could not be found"));
+
+        List<User> copayers = new ArrayList<>();
+        for (String name: request.getCopayerNames()){
+            User user = userRepository.findByUsername(name);
+            if(user ==null){
+                throw new NotFoundException("User "+ name +" could not be found");
+            }
+            copayers.add(user);
+        }
+        Expense expense = new Expense(group,request.getUserPaid(), request.getName(), request.getAmount(), request.getDescription(), copayers);
         expense = expenseRepository.save(expense);
         return expense;
     }

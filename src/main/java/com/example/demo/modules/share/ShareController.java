@@ -1,8 +1,10 @@
 package com.example.demo.modules.share;
 
+import com.example.demo.modules.share.request.CreateShare;
 import com.example.demo.modules.user.UserService;
 import com.example.demo.utils.DeletionIntegrityException;
 import javassist.NotFoundException;
+import org.aspectj.weaver.ast.Not;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,7 +32,7 @@ public class ShareController {
     }
 
     @PostMapping("")
-    public ResponseEntity<Share> createShare(@RequestBody @Valid Share request, UriComponentsBuilder uriComponentsBuilder){
+    public ResponseEntity<Share> createShare(@RequestBody @Valid CreateShare request, UriComponentsBuilder uriComponentsBuilder) throws NotFoundException {
         Share share = shareService.createShare(request);
         UriComponents uriComponents = uriComponentsBuilder.path("share/{name}").buildAndExpand(share.getName());
         URI location = uriComponents.toUri();

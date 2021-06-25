@@ -42,11 +42,15 @@ public class DemoApplication {
             User moritz = new User("Moritz", "moritz@googlemail.com");
             User davit = new User("Davit", "davit@googlemail.com");
             User ramona = new User("Ramona", "ramona@googlemail.com");
-            CurrencyUnit euro = Monetary.getCurrency("EUR");
+
+
+            /*CurrencyUnit euro = Monetary.getCurrency("EUR");
             int amount = 120;
             Money m =  Money.of(amount, euro);
             MonetaryAmount monetaryAmount = Money.of(123, "EUR");
-            NumberValue value = monetaryAmount.getNumber();
+            NumberValue value = monetaryAmount.getNumber();*/
+
+
             List<User> userList = new ArrayList<>();
             //userList.add(hendrik);
             userList.add(moritz);
@@ -77,7 +81,7 @@ public class DemoApplication {
             Expense test = new Expense( group, "Hendrik", "Bier", 15.99, "Teuerstes Bier der Welt",userList);
             expenseRepository.save(test);
 
-            Share s = new Share("SAP",value, sapEmployees);
+            Share s = new Share("SAP",127.99, sapEmployees);
             shareRepository.save(s);
 
 

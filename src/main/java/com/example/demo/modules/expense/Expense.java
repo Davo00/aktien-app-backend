@@ -3,8 +3,11 @@ package com.example.demo.modules.expense;
 
 import com.example.demo.modules.group.Group;
 import com.example.demo.modules.user.User;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.Setter;
+
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -40,6 +43,7 @@ public class Expense {
     @Getter
     @Setter
     @ManyToOne(cascade = CascadeType.MERGE)
+    @JsonBackReference
     private Group groupExpense;
 
 
@@ -57,6 +61,7 @@ public class Expense {
             inverseJoinColumns = @JoinColumn(name = "expense_id"))
     @Getter
     @Setter
+    //@JsonManagedReference
     private List<User> copayer = new ArrayList<>();
 
 

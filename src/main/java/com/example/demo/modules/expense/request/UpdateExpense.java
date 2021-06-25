@@ -1,4 +1,4 @@
-package com.example.demo.modules.expense;
+package com.example.demo.modules.expense.request;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

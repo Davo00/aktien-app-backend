@@ -1,5 +1,6 @@
 package com.example.demo.modules.share;
 
+import com.example.demo.modules.share.request.CreateShare;
 import com.example.demo.modules.user.User;
 import com.example.demo.modules.user.UserRepository;
 import com.example.demo.utils.DeletionIntegrityException;
@@ -28,8 +29,16 @@ public class ShareServiceImpl implements ShareService {
     }
 
     @Override
-    public Share createShare(Share request) {
-        Share share = new Share(request.getId(), request.getName());
+    public Share createShare(CreateShare request) throws NotFoundException{
+        List<User> userList = new ArrayList<>();
+        for(String name: request.getUserNames()){
+            User user = userRepository.findByUsername(name);
+            if(user == null){
+                throw new NotFoundException("User "+ name + " could not be found!");
+            }
+            userList.add(user);
+        }
+        Share share = new Share(request.getName(), request.getPrice(), userList);
         share = shareRepository.save(share);
         return share;
     }

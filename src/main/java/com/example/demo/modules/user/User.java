@@ -4,6 +4,9 @@ import com.example.demo.modules.expense.Expense;
 import com.example.demo.modules.group.Group;
 import com.example.demo.modules.share.Share;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,6 +17,8 @@ import java.util.List;
 import java.util.Set;
 
 @Entity
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id")
 public class User {
     @Id
     @GeneratedValue
@@ -49,6 +54,7 @@ public class User {
     @Getter
     @Setter
     @ManyToMany(mappedBy = "users")
+    @JsonManagedReference
     private List<Share> preferedShares;
 
 
@@ -56,6 +62,7 @@ public class User {
     @Getter
     @Setter
     @ManyToMany(mappedBy = "copayer")
+    //@JsonBackReference
     private Set<Expense> expense;
 
     public User() {

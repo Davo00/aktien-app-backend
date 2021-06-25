@@ -1,6 +1,7 @@
 package com.example.demo.modules.share;
 
 import com.example.demo.modules.user.User;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Getter;
 import lombok.Setter;
 import org.javamoney.moneta.Money;
@@ -30,8 +31,8 @@ public class Share {
 
     @Getter
     @Setter
-    @Lob
-    private NumberValue price;
+    //@Lob
+    private double price;
 
     @ManyToMany
     @JoinTable(name = "user_share",
@@ -39,23 +40,25 @@ public class Share {
             inverseJoinColumns = @JoinColumn(name = "share_id"))
     @Getter
     @Setter
+    @JsonBackReference
     private List<User> users = new ArrayList<>();
+
+
     public Share() {
     }
 
     public Share(Long id, String name) {
         this.id = id;
         this.name = name;
-
     }
 
-    public Share(String name, NumberValue price, List<User> users) {
+    public Share(String name, double price, List<User> users) {
         this.name = name;
         this.price = price;
         this.users = users;
     }
 
-    public Money getcurrentPrice() {
+    /*public Money getcurrentPrice() {
         Random generator = new Random();
         int amount = generator.nextInt(20 - 1) + 1;
         CurrencyUnit euro = Monetary.getCurrency("EUR");
@@ -70,6 +73,6 @@ public class Share {
         int amount = generator.nextInt(20 - 1) + 1;
         CurrencyUnit euro = Monetary.getCurrency("EUR");
         return Money.of(amount, euro);
-    }
+    }*/
 
 }

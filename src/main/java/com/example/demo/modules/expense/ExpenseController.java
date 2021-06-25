@@ -1,5 +1,7 @@
 package com.example.demo.modules.expense;
 
+import com.example.demo.modules.expense.request.CreateExpense;
+import com.example.demo.modules.expense.request.UpdateExpense;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -31,7 +33,7 @@ public class ExpenseController {
     }
 
     @PostMapping
-    public ResponseEntity<Expense> createExpense(@RequestBody @Valid Expense request, UriComponentsBuilder uriComponentsBuilder) {
+    public ResponseEntity<Expense> createExpense(@RequestBody @Valid CreateExpense request, UriComponentsBuilder uriComponentsBuilder) throws NotFoundException {
         Expense expense = expenseService.createExpense(request);
         UriComponents uriComponents = uriComponentsBuilder.path("expense/{name}").buildAndExpand(expense.getName());
         URI location = uriComponents.toUri();
