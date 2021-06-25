@@ -4,9 +4,7 @@ import com.example.demo.modules.user.User;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.sql.Timestamp;
 
@@ -34,10 +32,12 @@ public class Debt {
 
     @Getter
     @Setter
+    @ManyToOne
     private User creditor; //gets the money
 
     @Getter
     @Setter
+    @ManyToOne
     private User debtor; //owes the money
 
     @Getter
