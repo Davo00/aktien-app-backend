@@ -1,6 +1,7 @@
 package com.example.demo.modules.share;
 
 import com.example.demo.modules.user.UserService;
+import com.example.demo.utils.DeletionIntegrityException;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -28,7 +29,7 @@ public class ShareController {
         return ResponseEntity.ok(shareService.findAllShare());
     }
 
-    @PostMapping("name")
+    @PostMapping("")
     public ResponseEntity<Share> createShare(@RequestBody @Valid Share request, UriComponentsBuilder uriComponentsBuilder){
         Share share = shareService.createShare(request);
         UriComponents uriComponents = uriComponentsBuilder.path("share/{name}").buildAndExpand(share.getName());
@@ -36,7 +37,7 @@ public class ShareController {
         return ResponseEntity.created(location).body(share);
     }
 
-    @GetMapping("/share/{id}")
+    @GetMapping("{id}")
     public ResponseEntity<Share> one(@PathVariable long id) throws NotFoundException {
         Optional<Share> share = Optional.ofNullable(shareService.one(id));
         Share s = share.orElseThrow(() -> new NotFoundException("Share could not be found"));
@@ -44,14 +45,14 @@ public class ShareController {
     }
 
 
-    @DeleteMapping("/share/{id}")
-    public ResponseEntity<Share> deleteShare(@PathVariable long id) throws Exception {
-        Share s = shareService.deleteShare(id);
+    @DeleteMapping("{id}")
+    public ResponseEntity<Share> deleteShare(@PathVariable long id) throws NotFoundException, DeletionIntegrityException {
+        shareService.deleteShare(id);
         return ResponseEntity.noContent().build();
 
     }
 
-    @GetMapping("/shares/{username}")
+    @GetMapping("{username}")
     public ResponseEntity<List<Share>> getPreferedSharesbyUsername(@PathVariable String username) throws NotFoundException {
          Optional<List<Share>> share = Optional.ofNullable(shareService.getPreferedSharesbyUser(username));
         List<Share> s = share.orElseThrow(() -> new NotFoundException("Sharelist could not be found"));
@@ -60,10 +61,12 @@ public class ShareController {
 
 
 
-    @PostMapping("share/share_id/username")
+    @PostMapping("share_id/username")
     public  ResponseEntity<Share> selectShareFromPartner(@PathVariable Long share_id, @PathVariable String username)throws NotFoundException{
     Share s = null;
+    //To do
     return ResponseEntity.ok(s);
     }
+
 
 }

@@ -35,7 +35,7 @@ public class User {
 
     @Getter
     @Setter
-    private double overall_score;
+    private double overallScore;
 
     @Getter
     @Setter
@@ -65,7 +65,7 @@ public class User {
         this.id = id;
         this.username = username;
         this.email = email;
-        this.overall_score = overall_score;
+        this.overallScore = overall_score;
         this.joinedGroups = myGroups;
     }
 

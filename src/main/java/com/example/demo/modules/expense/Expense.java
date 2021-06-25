@@ -45,11 +45,11 @@ public class Expense {
 
     @Getter
     @Setter
-    private boolean open;
+    private boolean unpaid;
 
     @Getter
     @Setter
-    private int consumercount;
+    private int consumerCount;
 
     @ManyToMany
     @JoinTable(name = "player_expense",
@@ -63,7 +63,7 @@ public class Expense {
     public Expense() {
     }
 
-    ;
+
 
 
     public Expense(@NotNull Long id, @NotNull Group group, String userPaid, String name, double amount, String description, List<User> copayer) {
@@ -73,8 +73,8 @@ public class Expense {
         this.name = name;
         this.amount = amount;
         this.description = description;
-        this.open = true;
-        this.consumercount = 0;
+        this.unpaid = true;
+        this.consumerCount = 0;
         this.copayer = copayer;
     }
 
@@ -84,8 +84,8 @@ public class Expense {
         this.name = name;
         this.amount = amount;
         this.description = description;
-        this.open = true;
-        this.consumercount = 0;
+        this.unpaid = true;
+        this.consumerCount = 0;
         this.groupExpense = group;
         this.copayer = copayers;
      /*   if(!copayers.isEmpty() && copayers!=null){

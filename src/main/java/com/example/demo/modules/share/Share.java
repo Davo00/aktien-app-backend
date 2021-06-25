@@ -7,6 +7,7 @@ import org.javamoney.moneta.Money;
 
 import javax.money.CurrencyUnit;
 import javax.money.Monetary;
+import javax.money.NumberValue;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.sql.Timestamp;
@@ -29,7 +30,8 @@ public class Share {
 
     @Getter
     @Setter
-    private Money price;
+    @Lob
+    private NumberValue price;
 
     @ManyToMany
     @JoinTable(name = "user_share",
@@ -38,34 +40,19 @@ public class Share {
     @Getter
     @Setter
     private List<User> users = new ArrayList<>();
-
-/*    @Getter
-    @Setter
-    @ManyToMany(mappedBy = "suggestions")
-    private Set<Debt> debts;
-
-    @Getter
-    @Setter
-    @OneToMany(mappedBy = "selectedShare", cascade = CascadeType.ALL)
-    private List<Debt> usedFor;*/
-
     public Share() {
     }
-
-    ;
-
 
     public Share(Long id, String name) {
         this.id = id;
         this.name = name;
 
-
     }
 
-
-    public Share(Long id, String name, String abc) {
-        this.id = id;
+    public Share(String name, NumberValue price, List<User> users) {
         this.name = name;
+        this.price = price;
+        this.users = users;
     }
 
     public Money getcurrentPrice() {
@@ -73,7 +60,6 @@ public class Share {
         int amount = generator.nextInt(20 - 1) + 1;
         CurrencyUnit euro = Monetary.getCurrency("EUR");
         return Money.of(amount, euro);
-
     }
 
     public Money getPriceAt(Timestamp timestamp) {
@@ -85,6 +71,5 @@ public class Share {
         CurrencyUnit euro = Monetary.getCurrency("EUR");
         return Money.of(amount, euro);
     }
-
 
 }

@@ -4,6 +4,7 @@ import com.example.demo.modules.group.Group;
 import com.example.demo.modules.group.GroupRepository;
 import com.example.demo.modules.user.User;
 import com.example.demo.modules.user.UserRepository;
+import com.example.demo.utils.DeletionIntegrityException;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -35,23 +36,37 @@ public class ExpenseServiceImpl implements ExpenseService{
     }
 
     @Override
-    public void deleteExpense(Long id) {
-        expenseRepository.deleteById(id);
+    public void deleteExpense(Long id) throws NotFoundException,DeletionIntegrityException  {
+        Expense expense = expenseRepository.findById(id).orElseThrow(()-> new NotFoundException("Expense could not be found"));
+        List<User> toSafeAtTheEnd = new ArrayList<>();
+        Group safeGroup;
+
+        try {
+            for (User user : expense.getCopayer()) {
+                user.getExpense().remove(expense);
+                toSafeAtTheEnd.add(user);
+
+            }
+            expense.getCopayer().clear();
+            expenseRepository.delete(expense);
+            for (User user : toSafeAtTheEnd) {
+                user = userRepository.save(user);
+            }
+
+        }catch (Exception e){
+
+            throw new DeletionIntegrityException(e.getMessage());
+
+        }
+
+
+
     }
 
 
     @Override
     public Expense updateExpensebyId(Long id, UpdateExpense request) throws NotFoundException {
        Expense expense = expenseRepository.findById(id).orElseThrow(() ->new NotFoundException("Expense could not be found"));
-        //Group
-
-       //Am Montag nochmal mit Hendrik besprechen
-
-
-
-
-        //Group
-
 
         List<User> toSafeAtTheEnd = new ArrayList<>();
         if (request.getUserIds()!= null && !request.getUserIds().isEmpty()){
@@ -61,7 +76,6 @@ public class ExpenseServiceImpl implements ExpenseService{
               User user = userRepository.findById(request.getUserIds().get(i)).orElseThrow(() -> new NotFoundException("User could not be found"));
                if(user!=null){
                    newUserList.add(user);
-                   System.out.println(user.getUsername());
                }
            }
            if(expense.getCopayer()!= null && !expense.getCopayer().isEmpty()){
@@ -75,7 +89,6 @@ public class ExpenseServiceImpl implements ExpenseService{
 
            }
             for ( User user : newUserList){
-                System.out.println("to Add" + user.getUsername());
                 expense.addUser(user);
                 toSafeAtTheEnd.add(user);
             }
@@ -89,8 +102,8 @@ public class ExpenseServiceImpl implements ExpenseService{
 
 
         expense.setAmount(request.getAmount());
-        expense.setOpen(request.isOpen());
-        expense.setConsumercount(request.getConsumercount());
+        expense.setUnpaid(request.isOpen());
+        expense.setConsumerCount(request.getConsumercount());
 
         if (request.getUserPaid()!= null){
             expense.setUserPaid(request.getUserPaid());
@@ -110,11 +123,6 @@ public class ExpenseServiceImpl implements ExpenseService{
         }
 
 
-        //andere Attribute noch setzen
-
-
-
-
 
         expense= expenseRepository.save(expense);
         for(User user : toSafeAtTheEnd){
@@ -122,21 +130,21 @@ public class ExpenseServiceImpl implements ExpenseService{
 
         }
 
-
-        return null;
+        return expense;
 
     }
 
     @Override
-    public Expense one(Long id){
-        return expenseRepository.getOne(id);
+    public Expense one(Long id) throws NotFoundException{
+
+        Expense expense= expenseRepository.findById(id).orElseThrow(() -> new NotFoundException("Group could not be found"));
+        return expense;
     }
 
     @Override
     public List<Expense> getAllExpensebyGroup(long groupId) throws NotFoundException{
         Group group = groupRepository.findById(groupId).orElseThrow(() -> new NotFoundException("Group could not be found"));
         List<Expense> e = expenseRepository.findByGroupExpense(group);
-      //  List<Expense> e = new ArrayList<Expense>();
         return e;
     }
 

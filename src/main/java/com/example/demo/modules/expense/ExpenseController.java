@@ -24,13 +24,13 @@ public class ExpenseController {
         return ResponseEntity.ok(expenseService.findAllExpense());
     }
 
-    @GetMapping("expenses/{groupId}")
+    @GetMapping("{groupId}")
     public ResponseEntity<List<Expense>> getExpensebyGroup(@PathVariable("groupId") long groupId) throws NotFoundException {
         return ResponseEntity.ok(expenseService.getAllExpensebyGroup(groupId));
 
     }
 
-    @PostMapping("name")
+    @PostMapping
     public ResponseEntity<Expense> createExpense(@RequestBody @Valid Expense request, UriComponentsBuilder uriComponentsBuilder) {
         Expense expense = expenseService.createExpense(request);
         UriComponents uriComponents = uriComponentsBuilder.path("expense/{name}").buildAndExpand(expense.getName());
@@ -39,7 +39,7 @@ public class ExpenseController {
     }
 
 
-    @DeleteMapping("/expense/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Expense> deleteExpense(@PathVariable long id) throws NotFoundException {
             expenseService.deleteExpense(id);
 

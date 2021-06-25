@@ -2,10 +2,12 @@ package com.example.demo.modules.share;
 
 import com.example.demo.modules.user.User;
 import com.example.demo.modules.user.UserRepository;
+import com.example.demo.utils.DeletionIntegrityException;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,20 +36,33 @@ public class ShareServiceImpl implements ShareService {
 
 
     @Override
-    public Share one(long id) {
-        Share share = shareRepository.getOne(id);
+    public Share one(long id) throws NotFoundException{
+        Share share = shareRepository.findById(id).orElseThrow(() -> new NotFoundException("Share cound not be found"));
 
         return share;
     }
 
     @Override
-    public Share deleteShare(long id) throws Exception {
-        Share share = shareRepository.findById(id).orElseThrow(() -> new NotFoundException("Group could not be found"));
-        try{shareRepository.delete(share);
+    public void deleteShare(long id) throws NotFoundException, DeletionIntegrityException {
+
+        Share share = shareRepository.findById(id).orElseThrow(() -> new NotFoundException("Share could not be found"));
+        List<User> toSafeAtTheEnd = new ArrayList<>();
+        try{
+            for (User user : share.getUsers()){
+                user.getPreferedShares().remove(share);
+                toSafeAtTheEnd.add(user);
+            }
+
+            share.getUsers().clear();
+            shareRepository.delete(share);
+            for (User user : toSafeAtTheEnd){
+                user = userRepository.save(user);
+            }
         }catch (Exception e ){
-            throw new Exception(e.getMessage());
+            throw new DeletionIntegrityException(e.getMessage());
         }
-        return null;
+
+
     }
 
     @Override
@@ -56,6 +71,7 @@ public class ShareServiceImpl implements ShareService {
 
        List<Share> shares =user.getPreferedShares();
      //   List<Share> shares = Wird nachgeholt, wenn User_sharelist da ist
+      // To do
 
         return shares;
     }
