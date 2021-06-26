@@ -4,7 +4,10 @@ import com.example.demo.modules.user.User;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 import java.security.Timestamp;
 
@@ -48,6 +51,16 @@ public class Debt {
     @Setter
     private boolean debtorConfirmed;
 
+/*    @Getter
+    @Setter
+    @ManyToMany(cascade = CascadeType.ALL)
+    private List<Share> suggestions;
+
+    @Getter
+    @Setter
+    @ManyToOne(cascade = CascadeType.ALL)
+    private Share selectedShare;*/
+
     public Debt (){};
 
     public Debt (Long id, boolean paid, Timestamp timestampCreation, Timestamp timestampDeadline, User creditor, User debtor, boolean creditorConfirmed,  boolean debtorConfirmed){
@@ -70,4 +83,15 @@ public class Debt {
         this.creditorConfirmed = creditorConfirmed;
         this.debtorConfirmed = debtorConfirmed;
     }
+
+/*    @OneToMany(mappedBy = "selectedForDebt")
+    private Collection<Share> share;*/
+
+ /*   public Collection<Share> getShare() {
+        return share;
+    }
+*/
+ /*   public void setShare(Collection<Share> share) {
+        this.share = share;
+    }*/
 }

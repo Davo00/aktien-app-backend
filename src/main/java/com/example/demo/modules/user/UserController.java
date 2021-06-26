@@ -2,6 +2,7 @@ package com.example.demo.modules.user;
 
 import com.example.demo.modules.group.Group;
 import com.example.demo.modules.group.GroupService;
+import com.example.demo.utils.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -41,20 +42,26 @@ public class UserController {
         UriComponents uriComponents = uriComponentsBuilder.path("{groupname}").buildAndExpand(group.getName());
         URI location = uriComponents.toUri();
         return ResponseEntity.created(location).body(users);
-    }
 
-    @PutMapping()
-    public ResponseEntity<User> updateUser(@RequestBody @Valid User request, UriComponentsBuilder uriComponentsBuilder) throws UserServiceImpl.UsernameReservedException {
-        userService.updateUser(request);
-        UriComponents uriComponents = uriComponentsBuilder.path("").buildAndExpand();
-        URI location = uriComponents.toUri();
-        return ResponseEntity.created(location).body(userService.getCurrentUser());
-    }
+        @GetMapping("allGroups/{userId}")
+        public ResponseEntity<List<Group>> getAllGroupsOfUser ( @PathVariable("userId") long userId) throws
+        NotFoundException {
+            return ResponseEntity.ok(userService.getAllGroupsOfUser(userId));
+        }
 
-    @DeleteMapping()
-    public ResponseEntity<User> deleteUser() {
-        userService.deleteUser();
-        return ResponseEntity.noContent().build();
-    }
+        @PutMapping()
+        public ResponseEntity<User> updateUser (@RequestBody @Valid User request, UriComponentsBuilder
+        uriComponentsBuilder) throws UserServiceImpl.UsernameReservedException {
+            userService.updateUser(request);
+            UriComponents uriComponents = uriComponentsBuilder.path("").buildAndExpand();
+            URI location = uriComponents.toUri();
+            return ResponseEntity.created(location).body(userService.getCurrentUser());
+        }
 
-}
+        @DeleteMapping()
+        public ResponseEntity<User> deleteUser () {
+            userService.deleteUser();
+            return ResponseEntity.noContent().build();
+        }
+
+    }
