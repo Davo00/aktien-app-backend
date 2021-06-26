@@ -13,14 +13,13 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
 
     private UserRepository userRepository;
+    private GroupRepository groupRepository;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository, GroupRepository groupRepository) {
         this.userRepository = userRepository;
+        this.groupRepository = groupRepository;
     }
-
-    @Autowired
-    GroupRepository groupRepository;
 
     @Override
     public User createUser(User request) throws UsernameReservedException {
@@ -30,6 +29,11 @@ public class UserServiceImpl implements UserService {
         User user = new User(request.getUsername(), request.getEmail());
         userRepository.save(user);
         return user;
+    }
+
+    @Override
+    public List<User> getUsersByGroup(Group group) {
+        return userRepository.findAllByJoinedGroups(group);
     }
 
     @Override
@@ -73,7 +77,7 @@ public class UserServiceImpl implements UserService {
     }
 
     private boolean isUsernameReserved(String username) {
-        return userRepository.findByUsername(username).isPresent();
+        return userRepository.findByUsername(username) != null;
     }
 
     static class UsernameReservedException extends Exception {

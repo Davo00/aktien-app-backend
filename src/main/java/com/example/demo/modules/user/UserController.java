@@ -42,26 +42,27 @@ public class UserController {
         UriComponents uriComponents = uriComponentsBuilder.path("{groupname}").buildAndExpand(group.getName());
         URI location = uriComponents.toUri();
         return ResponseEntity.created(location).body(users);
-
-        @GetMapping("allGroups/{userId}")
-        public ResponseEntity<List<Group>> getAllGroupsOfUser ( @PathVariable("userId") long userId) throws
-        NotFoundException {
-            return ResponseEntity.ok(userService.getAllGroupsOfUser(userId));
-        }
-
-        @PutMapping()
-        public ResponseEntity<User> updateUser (@RequestBody @Valid User request, UriComponentsBuilder
-        uriComponentsBuilder) throws UserServiceImpl.UsernameReservedException {
-            userService.updateUser(request);
-            UriComponents uriComponents = uriComponentsBuilder.path("").buildAndExpand();
-            URI location = uriComponents.toUri();
-            return ResponseEntity.created(location).body(userService.getCurrentUser());
-        }
-
-        @DeleteMapping()
-        public ResponseEntity<User> deleteUser () {
-            userService.deleteUser();
-            return ResponseEntity.noContent().build();
-        }
-
     }
+
+    @GetMapping("allGroups/{userId}")
+    public ResponseEntity<List<Group>> getAllGroupsOfUser(@PathVariable("userId") long userId) throws
+            NotFoundException {
+        return ResponseEntity.ok(userService.getAllGroupsOfUser(userId));
+    }
+
+    @PutMapping()
+    public ResponseEntity<User> updateUser(@RequestBody @Valid User request, UriComponentsBuilder
+            uriComponentsBuilder) throws UserServiceImpl.UsernameReservedException {
+        userService.updateUser(request);
+        UriComponents uriComponents = uriComponentsBuilder.path("").buildAndExpand();
+        URI location = uriComponents.toUri();
+        return ResponseEntity.created(location).body(userService.getCurrentUser());
+    }
+
+    @DeleteMapping()
+    public ResponseEntity<User> deleteUser() {
+        userService.deleteUser();
+        return ResponseEntity.noContent().build();
+    }
+
+}
