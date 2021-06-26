@@ -1,7 +1,6 @@
 package com.example.demo.modules.user;
 
 import com.example.demo.modules.group.Group;
-import org.hibernate.service.spi.InjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -10,8 +9,7 @@ import java.util.List;
 @Component
 public class UserServiceImpl implements UserService {
 
-    //@Autowired
-     private UserRepository userRepository;
+    private UserRepository userRepository;
 
     @Autowired
     public UserServiceImpl(UserRepository userRepository) {
@@ -19,7 +17,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User createUser(User request) throws UsernameReservedException{
+    public User createUser(User request) throws UsernameReservedException {
         if (isUsernameReserved(request.getUsername())) {
             throw new UsernameReservedException();
         }
@@ -35,7 +33,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getCurrentUser() {
-        return userRepository.findById(1L).get();
+        return userRepository.findById(1L).get(); //TODO implement real method with JWT
     }
 
     @Override
@@ -61,5 +59,8 @@ public class UserServiceImpl implements UserService {
     }
 
     static class UsernameReservedException extends Exception {
+        UsernameReservedException() {
+            super("The username is already taken");
+        }
     }
 }

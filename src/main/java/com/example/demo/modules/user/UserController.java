@@ -16,26 +16,27 @@ import java.util.List;
 @RequestMapping("/user")
 public class UserController {
 
-    @Autowired
-    UserService userService;
+    private UserService userService;
+    private GroupService groupService;
 
     @Autowired
-    GroupService groupService;
+    public UserController(UserService userService, GroupService groupService) {
+        this.userService = userService;
+        this.groupService = groupService;
+    }
 
     @PostMapping("register")
-    public ResponseEntity<User> createUser(@RequestBody @Valid User request, UriComponentsBuilder uriComponentsBuilder,
-                                             @PathVariable String username) throws UserServiceImpl.UsernameReservedException {
+    public ResponseEntity<User> createUser(@RequestBody @Valid User request, UriComponentsBuilder uriComponentsBuilder) throws UserServiceImpl.UsernameReservedException {
         User user = userService.createUser(request);
-        UriComponents uriComponents = uriComponentsBuilder.path("user/{username}").buildAndExpand(username);
+        UriComponents uriComponents = uriComponentsBuilder.path("user/{username}").buildAndExpand(user.getUsername());
         URI location = uriComponents.toUri();
         return ResponseEntity.created(location).body(user);
     }
 
     @GetMapping("group")
-    public ResponseEntity<List<User>> getUsersbyGroup(@RequestBody @Valid Group request,
-                                                UriComponentsBuilder uriComponentsBuilder,
-                                                @PathVariable String groupName) {
-        Group group = groupService.findGroupByName(request.getName());
+    public ResponseEntity<List<User>> getUsersbyGroup(UriComponentsBuilder uriComponentsBuilder,
+                                                      @PathVariable String groupName) {
+        Group group = groupService.findGroupByName(groupName);
         List<User> users = userService.getUsersByGroup(group);
         UriComponents uriComponents = uriComponentsBuilder.path("{groupname}").buildAndExpand(group.getName());
         URI location = uriComponents.toUri();
@@ -51,14 +52,9 @@ public class UserController {
     }
 
     @DeleteMapping()
-    public ResponseEntity<User> deleteUser(UriComponentsBuilder uriComponentsBuilder) {
-
-
+    public ResponseEntity<User> deleteUser() {
         userService.deleteUser();
-
-        UriComponents uriComponents = uriComponentsBuilder.path("").buildAndExpand();
-        URI location = uriComponents.toUri();
-        return ResponseEntity.created(location).body(null);
+        return ResponseEntity.noContent().build();
     }
 
 }
