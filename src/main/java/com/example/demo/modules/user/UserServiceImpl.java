@@ -1,6 +1,7 @@
 package com.example.demo.modules.user;
 
 import com.example.demo.modules.group.Group;
+import org.hibernate.service.spi.InjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -9,8 +10,13 @@ import java.util.List;
 @Component
 public class UserServiceImpl implements UserService {
 
+    //@Autowired
+     private UserRepository userRepository;
+
     @Autowired
-    UserRepository userRepository;
+    public UserServiceImpl(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     @Override
     public User createUser(User request) throws UsernameReservedException{
