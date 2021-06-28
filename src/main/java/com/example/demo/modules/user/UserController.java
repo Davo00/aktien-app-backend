@@ -34,7 +34,7 @@ public class UserController {
         return ResponseEntity.created(location).body(user);
     }
 
-    @GetMapping("group")
+    @GetMapping("group/{groupName}")
     public ResponseEntity<List<User>> getUsersbyGroup(UriComponentsBuilder uriComponentsBuilder,
                                                       @PathVariable String groupName) {
         Group group = groupService.findGroupByName(groupName);
