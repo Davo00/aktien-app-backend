@@ -2,9 +2,17 @@ package com.example.demo.modules.user;
 
 import com.example.demo.modules.group.Group;
 import com.example.demo.modules.group.GroupService;
+import com.example.demo.modules.security.JwtTokenUtil;
+import com.example.demo.modules.user.request.UserLogin;
 import com.example.demo.utils.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -20,10 +28,15 @@ public class UserController {
     private UserService userService;
     private GroupService groupService;
 
+    private final AuthenticationManager authenticationManager;
+    private final JwtTokenUtil jwtTokenUtil;
+
     @Autowired
-    public UserController(UserService userService, GroupService groupService) {
+    public UserController(UserService userService, GroupService groupService, AuthenticationManager authenticationManager, JwtTokenUtil jwtTokenUtil) {
         this.userService = userService;
         this.groupService = groupService;
+        this.authenticationManager = authenticationManager;
+        this.jwtTokenUtil = jwtTokenUtil;
     }
 
     @PostMapping("register")
@@ -32,6 +45,28 @@ public class UserController {
         UriComponents uriComponents = uriComponentsBuilder.path("user/{username}").buildAndExpand(user.getUsername());
         URI location = uriComponents.toUri();
         return ResponseEntity.created(location).body(user);
+    }
+
+    @PostMapping("login")
+    public ResponseEntity login(@RequestBody @Valid UserLogin request) {
+        try {
+            Authentication authenticate = authenticationManager
+                    .authenticate(
+                            new UsernamePasswordAuthenticationToken(
+                                    request.getUsername(), request.getPassword()
+                            )
+                    );
+
+            User user = (User) authenticate.getPrincipal();
+
+            return ResponseEntity.ok()
+                    .header(
+                            HttpHeaders.AUTHORIZATION,
+                            jwtTokenUtil.generateAccessToken(user)
+                    ).build();
+        } catch (BadCredentialsException ex) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
     }
 
     @GetMapping("group/{groupName}")

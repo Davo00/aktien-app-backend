@@ -6,6 +6,7 @@ import com.example.demo.modules.user.UserRepository;
 import com.example.demo.utils.DeletionIntegrityException;
 import com.example.demo.utils.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -67,7 +68,8 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public void addUserToGroup(long groupId, String username) throws NotFoundException{
-        User user = userRepository.findByUsername(username);
+        User user = userRepository.findByUsername(username).orElseThrow(() ->
+                new UsernameNotFoundException("User: " + username + " not found"));
         if (user==null){
             throw new NotFoundException("User could not be found");
         }

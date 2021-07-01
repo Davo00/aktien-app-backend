@@ -26,7 +26,7 @@ public class UserServiceImpl implements UserService {
         if (isUsernameReserved(request.getUsername())) {
             throw new UsernameReservedException();
         }
-        User user = new User(request.getUsername(), request.getEmail());
+        User user = new User(request.getUsername(), request.getPassword(), request.getEmail());
         userRepository.save(user);
         return user;
     }

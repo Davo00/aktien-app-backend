@@ -9,6 +9,7 @@ import com.example.demo.modules.user.UserRepository;
 import com.example.demo.utils.DeletionIntegrityException;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -36,7 +37,8 @@ public class ExpenseServiceImpl implements ExpenseService{
 
         List<User> copayers = new ArrayList<>();
         for (String name: request.getCopayerNames()){
-            User user = userRepository.findByUsername(name);
+            User user = userRepository.findByUsername(name).orElseThrow(() ->
+                    new UsernameNotFoundException("User " + name + " not found"));
             if(user ==null){
                 throw new NotFoundException("User "+ name +" could not be found");
             }
