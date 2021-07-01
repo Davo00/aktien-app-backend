@@ -3,7 +3,8 @@ package com.example.demo.modules.security;
 import com.example.demo.modules.user.User;
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
-//import org.slf4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import java.util.Date;
 import static java.lang.String.format;
@@ -15,7 +16,7 @@ public class JwtTokenUtil {
     private final String jwtSecret = "zdtlD3JK56m6wTTgsNFhqzjqP";
     private final String jwtIssuer = "kreativeGruppe42.de";
 
-    //private final Logger logger;
+    private final Logger logger = LoggerFactory.getLogger(JwtTokenUtil.class);
 
     public String generateAccessToken(User user) {
         return Jwts.builder()
@@ -55,7 +56,7 @@ public class JwtTokenUtil {
     }
 
     public boolean validate(String token) {
-        /*try {
+        try {
             Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token);
             return true;
         } catch (SignatureException ex) {
@@ -68,7 +69,7 @@ public class JwtTokenUtil {
             logger.error("Unsupported JWT token - {}", ex.getMessage());
         } catch (IllegalArgumentException ex) {
             logger.error("JWT claims string is empty - {}", ex.getMessage());
-        }*/
+        }
         return false;
     }
 
