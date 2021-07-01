@@ -30,13 +30,10 @@ public class ShareServiceImpl implements ShareService {
     }
 
     @Override
-    public Share createShare(CreateShare request) throws NotFoundException {
+    public Share createShare(CreateShare request) {
         List<User> userList = new ArrayList<>();
         for (String name : request.getUserNames()) {
             User user = userRepository.findByUsername(name).orElseThrow(() -> new UsernameNotFoundException("User " + name + " could not be found!"));
-            if (user == null) {
-                throw new NotFoundException("User " + name + " could not be found!");
-            }
             userList.add(user);
         }
         Share share = new Share(request.getName(), request.getPrice(), userList);
@@ -82,7 +79,7 @@ public class ShareServiceImpl implements ShareService {
 
         List<Share> shares = user.getPreferedShares();
         //   List<Share> shares = Wird nachgeholt, wenn User_sharelist da ist
-        // To do
+        // TODO
 
         return shares;
     }
