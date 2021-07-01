@@ -86,17 +86,17 @@ public class UserController {
     }
 
     @PutMapping()
-    public ResponseEntity<User> updateUser(@RequestBody @Valid User request, UriComponentsBuilder
+    public ResponseEntity<User> updateUser(@RequestBody @Valid User request, @RequestHeader("Authorization") String token, UriComponentsBuilder
             uriComponentsBuilder) throws UserServiceImpl.UsernameReservedException {
-        userService.updateUser(request);
+        userService.updateUser(request, token);
         UriComponents uriComponents = uriComponentsBuilder.path("").buildAndExpand();
         URI location = uriComponents.toUri();
-        return ResponseEntity.created(location).body(userService.getCurrentUser());
+        return ResponseEntity.created(location).body(userService.getCurrentUser(token));
     }
 
     @DeleteMapping()
-    public ResponseEntity<User> deleteUser() {
-        userService.deleteUser();
+    public ResponseEntity<User> deleteUser(@RequestHeader("Authorization") String token) {
+        userService.deleteUser(token);
         return ResponseEntity.noContent().build();
     }
 

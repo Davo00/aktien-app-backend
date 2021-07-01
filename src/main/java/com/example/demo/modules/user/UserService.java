@@ -12,9 +12,9 @@ public interface UserService {
 
     List<User> getUsersByGroup(Group group);
 
-    User getCurrentUser();
+    User getCurrentUser(String token);
 
-    void updateUser(User updatedUser) throws UserServiceImpl.UsernameReservedException;
+    void updateUser(User updatedUser, String token) throws UserServiceImpl.UsernameReservedException;
 
-    void deleteUser();
+    void deleteUser(String token);
 }
