@@ -83,7 +83,7 @@ public class DemoApplication {
             userRepository.save(ramona);
 
 
-            Expense test = new Expense( group, "Hendrik", "Bier", 15.99, "Teuerstes Bier der Welt",userList);
+            Expense test = new Expense( group, "Hendrik", "Bier", 15.99, "Teuerstes Bier der Welt", userList);
             expenseRepository.save(test);
 
             Share s = new Share("SAP",127.99, sapEmployees);

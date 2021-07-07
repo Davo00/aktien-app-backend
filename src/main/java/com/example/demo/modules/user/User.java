@@ -63,7 +63,7 @@ public class User {
     @Setter
     @ManyToMany(mappedBy = "copayer")
     //@JsonBackReference
-    private Set<Expense> expense;
+    private List<Expense> expense = new ArrayList<>();
 
     public User() {
     }
