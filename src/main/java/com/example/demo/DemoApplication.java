@@ -1,5 +1,6 @@
 package com.example.demo;
 
+import com.example.demo.modules.debt.Debt;
 import com.example.demo.modules.debt.DebtRepository;
 import com.example.demo.modules.expense.Expense;
 import com.example.demo.modules.expense.ExpenseRepository;
@@ -19,7 +20,11 @@ import javax.money.CurrencyUnit;
 import javax.money.Monetary;
 import javax.money.MonetaryAmount;
 import javax.money.NumberValue;
+import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -83,6 +88,16 @@ public class DemoApplication {
 
             Share s = new Share("SAP",127.99, sapEmployees);
             shareRepository.save(s);
+
+            DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+            Date date = dateFormat.parse("23/09/2021");
+            long time = date.getTime();
+            Timestamp deadline = new Timestamp(time);
+
+            Debt debt = new Debt(false, deadline, hendrik, davit, false, false, "Shafi",s);
+            //debt.getSuggestions().add(s);
+
+            debtRepository.save(debt);
 
 
         };

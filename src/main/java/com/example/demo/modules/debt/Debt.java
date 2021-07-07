@@ -4,6 +4,7 @@ import com.example.demo.modules.share.Share;
 import com.example.demo.modules.user.User;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -26,6 +27,7 @@ public class Debt {
 
     @Getter
     @Setter
+    @CreationTimestamp
     private Timestamp timestampCreation;
     
     @Getter
@@ -55,14 +57,14 @@ public class Debt {
     @Setter
     private String groupName;
 
-    @Getter
+    /*@Getter
     @Setter
-    @ManyToMany(cascade = CascadeType.ALL)
-    private List<Share> suggestions;
+    @ManyToMany//(cascade = CascadeType.ALL)
+    private List<Share> suggestions;*/
 
     @Getter
     @Setter
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne//(cascade = CascadeType.ALL)
     private Share selectedShare;
 
     public Debt (){};
@@ -80,9 +82,9 @@ public class Debt {
         this.selectedShare = selectedShare;
     }
 
-    public Debt (boolean paid, Timestamp timestampCreation, Timestamp timestampDeadline, User creditor, User debtor, boolean creditorConfirmed,  boolean debtorConfirmed, String groupName, Share selectedShare){
+    public Debt (boolean paid, /*Timestamp timestampCreation,*/ Timestamp timestampDeadline, User creditor, User debtor, boolean creditorConfirmed,  boolean debtorConfirmed, String groupName, Share selectedShare){
         this.paid = paid;
-        this.timestampCreation = timestampCreation;
+        //this.timestampCreation = timestampCreation;
         this.timestampDeadline = timestampDeadline;
         this.creditor = creditor;
         this.debtor = debtor;
