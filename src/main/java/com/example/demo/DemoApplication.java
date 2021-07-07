@@ -47,6 +47,7 @@ public class DemoApplication {
             User moritz = new User("Moritz", "moritz@googlemail.com");
             User davit = new User("Davit", "davit@googlemail.com");
             User ramona = new User("Ramona", "ramona@googlemail.com");
+            User cevin = new User("Cevin", "cevin@googlemail.com");
 
 
             /*CurrencyUnit euro = Monetary.getCurrency("EUR");
@@ -57,34 +58,56 @@ public class DemoApplication {
 
 
             List<User> userList = new ArrayList<>();
-            //userList.add(hendrik);
+            userList.add(hendrik);
             userList.add(moritz);
             userList.add(davit);
-            userList.add(ramona);
+
 
             List<User> sapEmployees = new ArrayList<>();
             sapEmployees.add(davit);
             sapEmployees.add(ramona);
             sapEmployees.add(moritz);
+            sapEmployees.add(cevin);
+
+            List<User> wholeGroup = new ArrayList<>();
+            wholeGroup.add(hendrik);
+            wholeGroup.add(moritz);
+            wholeGroup.add(davit);
+            wholeGroup.add(ramona);
+            wholeGroup.add(cevin);
 
 
             Group group = new Group("Shafi", userList);
-            group.setMyUsers(userList);
+            group.setMyUsers(wholeGroup);
             List<Group> groups = new ArrayList<>();
             groups.add(group);
-            for(User user: userList){
+            for(User user: wholeGroup){
                 user.setJoinedGroups(groups);
             }
+
 
             groupRepository.save(group);
             userRepository.save(hendrik);
             userRepository.save(moritz);
             userRepository.save(davit);
             userRepository.save(ramona);
+            userRepository.save(cevin);
 
 
-            Expense test = new Expense( group, "Hendrik", "Bier", 15.99, "Teuerstes Bier der Welt", userList);
+            Expense test = new Expense( group, "Hendrik", "Bier", 16.99, "Teuerstes Bier der Welt", userList);
             expenseRepository.save(test);
+            Expense test2 = new Expense( group, "Moritz", "Bier", 28.99, "Teuerstes Bier der Welt", userList);
+            expenseRepository.save(test2);
+            Expense test3 = new Expense( group, "Hendrik", "Bier", 5.99, "Teuerstes Bier der Welt", userList);
+            expenseRepository.save(test3);
+            Expense test4 = new Expense( group, "Ramona", "Bier", 25.99, "Teuerstes Bier der Welt", userList);
+            expenseRepository.save(test4);
+            Expense test5 = new Expense( group, "Hendrik", "Bier", 19.99, "Teuerstes Bier der Welt", userList);
+            expenseRepository.save(test5);
+            Expense test6 = new Expense( group, "Davit", "Bier", 12.99, "Teuerstes Bier der Welt", userList);
+            expenseRepository.save(test6);
+            Expense test7 = new Expense( group, "Cevin", "Bier", 20.99, "Teuerstes Bier der Welt", userList);
+            expenseRepository.save(test7);
 
             Share s = new Share("SAP",127.99, sapEmployees);
             shareRepository.save(s);

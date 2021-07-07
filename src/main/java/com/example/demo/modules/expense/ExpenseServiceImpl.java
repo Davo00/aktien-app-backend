@@ -42,6 +42,11 @@ public class ExpenseServiceImpl implements ExpenseService{
             }
             copayers.add(user);
         }
+        User user = userRepository.findByUsername(request.getUserPaid());
+        if(user.getUsername()!=request.getUserPaid()|| user ==null){
+            throw new NotFoundException("The User who paid the bill could not be found, please enter a valid username");
+        }
+
         Expense expense = new Expense(group,request.getUserPaid(), request.getName(), request.getAmount(), request.getDescription(), copayers);
         expense = expenseRepository.save(expense);
         return expense;
