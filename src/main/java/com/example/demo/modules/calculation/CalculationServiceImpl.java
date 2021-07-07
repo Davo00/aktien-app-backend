@@ -36,7 +36,6 @@ public class CalculationServiceImpl implements CalculationService{
             creditOverviews.add(new CreditOverview(user));
         }
 
-        //HashMap<String, Double> creditOverview = new HashMap<>();
         for(Expense expense: allExpense){
             for(CreditOverview creditOverview : creditOverviews){
                 if(expense.getUserPaid()== creditOverview.getUsername()){
@@ -61,11 +60,7 @@ public class CalculationServiceImpl implements CalculationService{
         List<WhoOwesWhom> whoOwesWhomList = new ArrayList<>();
         List <CreditOverview> creditOverviews = calculateOverview(groupId);
         int usersAmoutCalculated=0;
-        /*boolean stillCalculating=true;
-        boolean[] calculatingDebts= new boolean[creditOverviews.size()];
-        for(int i=0; i < calculatingDebts.length; i++){
-            calculatingDebts[i]=true;
-        }*/
+
 
         CreditOverview highest=null;
         CreditOverview lowest=null;
