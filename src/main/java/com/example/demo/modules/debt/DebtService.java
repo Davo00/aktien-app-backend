@@ -15,5 +15,5 @@ public interface DebtService {
     List<DebtResponse> findAllDebt();
     DebtResponse createDebt(CreateDebt request) throws NotFoundException;
     Debt proposeDebt(Debt oldDebt, Share stock, Timestamp timestamp, User user);
-    Debt acceptDebt(long debtId, long userId) throws NotFoundException;
+    DebtResponse acceptDebt(long debtId, long userId) throws NotFoundException;
 }
