@@ -2,6 +2,9 @@ package com.example.demo.modules.user;
 
 import com.example.demo.modules.group.Group;
 import com.example.demo.modules.group.GroupService;
+import com.example.demo.modules.group.response.GroupResponse;
+import com.example.demo.modules.user.request.CreateUser;
+import com.example.demo.modules.user.response.UserResponse;
 import com.example.demo.utils.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -24,17 +27,16 @@ public class UserController {
     GroupService groupService;
 
     @PostMapping("register")
-    public ResponseEntity<User> createUser(@RequestBody @Valid User request, UriComponentsBuilder uriComponentsBuilder,
-                                             @PathVariable String username) {
-        User user = userService.createUser(request);
-        UriComponents uriComponents = uriComponentsBuilder.path("user/{username}").buildAndExpand(username);
+    public ResponseEntity<UserResponse> createUser(@RequestBody @Valid CreateUser request, UriComponentsBuilder uriComponentsBuilder) {
+        UserResponse user = userService.createUser(request);
+        UriComponents uriComponents = uriComponentsBuilder.path("user/{username}").buildAndExpand(request.getUsername());
         URI location = uriComponents.toUri();
         return ResponseEntity.created(location).body(user);
     }
 
 
     @GetMapping("allGroups/{userId}")
-    public ResponseEntity<List<Group>> getAllGroupsOfUser (@PathVariable ("userId") long userId) throws NotFoundException {
+    public ResponseEntity<List<GroupResponse>> getAllGroupsOfUser (@PathVariable ("userId") long userId) throws NotFoundException {
         return ResponseEntity.ok(userService.getAllGroupsOfUser(userId));
     }
 
