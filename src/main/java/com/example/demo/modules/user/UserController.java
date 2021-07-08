@@ -23,9 +23,6 @@ public class UserController {
     @Autowired
     UserService userService;
 
-    @Autowired
-    GroupService groupService;
-
     @PostMapping("register")
     public ResponseEntity<UserResponse> createUser(@RequestBody @Valid CreateUser request, UriComponentsBuilder uriComponentsBuilder) {
         UserResponse user = userService.createUser(request);
