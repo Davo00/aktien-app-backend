@@ -2,6 +2,7 @@ package com.example.demo.modules.expense;
 
 import com.example.demo.modules.expense.request.CreateExpense;
 import com.example.demo.modules.expense.request.UpdateExpense;
+import com.example.demo.modules.expense.respone.ExpenseResponse;
 import com.example.demo.modules.group.Group;
 import com.example.demo.modules.group.GroupRepository;
 import com.example.demo.modules.user.User;
@@ -30,8 +31,10 @@ public class ExpenseServiceImpl implements ExpenseService{
         return allExpense;
     }
 
+
+
     @Override
-    public Expense createExpense(CreateExpense request) throws NotFoundException {
+    public ExpenseResponse createExpense(CreateExpense request) throws NotFoundException {
         Group group = groupRepository.findById(request.getGroupId()).orElseThrow(() -> new com.example.demo.utils.NotFoundException("Group could not be found"));
 
         List<User> copayers = new ArrayList<>();
@@ -43,14 +46,17 @@ public class ExpenseServiceImpl implements ExpenseService{
             copayers.add(user);
         }
         User user = userRepository.findByUsername(request.getUserPaid());
-        if(user.getUsername()!=request.getUserPaid()|| user ==null){
+        if(!user.getUsername().equals(request.getUserPaid())|| user ==null){
             throw new NotFoundException("The User who paid the bill could not be found, please enter a valid username");
         }
 
         Expense expense = new Expense(group,request.getUserPaid(), request.getName(), request.getAmount(), request.getDescription(), copayers);
         expense = expenseRepository.save(expense);
-        return expense;
+        return new ExpenseResponse(expense);
     }
+
+
+
 
     @Override
     public void deleteExpense(Long id) throws NotFoundException,DeletionIntegrityException  {
