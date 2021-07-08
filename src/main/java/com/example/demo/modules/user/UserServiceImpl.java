@@ -15,38 +15,74 @@ import java.util.List;
 @Component
 public class UserServiceImpl implements UserService {
 
-    @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
+    private GroupRepository groupRepository;
 
     @Autowired
-    GroupRepository groupRepository;
+    public UserServiceImpl(UserRepository userRepository, GroupRepository groupRepository) {
+        this.userRepository = userRepository;
+        this.groupRepository = groupRepository;
+    }
 
     @Override
     public UserResponse createUser(CreateUser request) {
         User user = new User(request.getUsername(), request.getEmail());
         user = userRepository.save(user);
         return new UserResponse(user);
-        //return user;
+    }
+
+        @Override
+        public List<GroupResponse> getAllGroupsOfUser ( long userId)throws NotFoundException {
+            User user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("User with the id " + userId + " could not be found!"));
+            List<Group> allGroups = groupRepository.findAll();
+            List<Group> myGroups = new ArrayList<>();
+            for (Group group : allGroups) {
+                for (User userInGroup : group.getMyUsers()) {
+                    if (userInGroup == user) {
+                        myGroups.add(group);
+                        break;
+                    }
+                }
+            }
+
+            List<GroupResponse> groupResponseList = new ArrayList<>();
+            for (Group group : myGroups) {
+                groupResponseList.add(new GroupResponse(group));
+            }
+            return groupResponseList;
+        }
+
+
+    @Override
+    public User getCurrentUser() {
+        return userRepository.findById(1L).get(); //TODO implement real method with JWT
     }
 
     @Override
-    public List<GroupResponse> getAllGroupsOfUser(long userId)throws NotFoundException{
-        User user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("User with the id " +userId + " could not be found!"));
-        List<Group> allGroups = groupRepository.findAll();
-        List<Group> myGroups = new ArrayList<>();
-        for (Group group: allGroups){
-            for (User userInGroup: group.getMyUsers()){
-                if(userInGroup== user){
-                    myGroups.add(group);
-                    break;
-                }
-            }
-        }
+    public void updateUser(User updatedUser) throws UsernameReservedException {
 
-        List<GroupResponse> groupResponseList = new ArrayList<>();
-        for (Group group : myGroups){
-            groupResponseList.add(new GroupResponse(group));
+        if (isUsernameReserved(updatedUser.getUsername())) {
+            throw new UsernameReservedException();
         }
-        return groupResponseList;
+        getCurrentUser().setEmail(updatedUser.getEmail());
+        getCurrentUser().setUsername(updatedUser.getUsername());
+
+        userRepository.save(updatedUser);
+    }
+
+    @Override
+    public void deleteUser() {
+        User user = getCurrentUser();
+        userRepository.delete(user);
+    }
+
+    private boolean isUsernameReserved(String username) {
+        return userRepository.findByUsername(username) != null;
+    }
+
+    static class UsernameReservedException extends Exception {
+        UsernameReservedException() {
+            super("The username is already taken");
+        }
     }
 }
