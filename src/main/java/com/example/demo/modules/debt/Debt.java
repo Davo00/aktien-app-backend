@@ -1,15 +1,16 @@
 package com.example.demo.modules.debt;
 
+import com.example.demo.modules.calculation.response.WhoOwesWhom;
+import com.example.demo.modules.share.Share;
 import com.example.demo.modules.user.User;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.security.Timestamp;
+import java.sql.Timestamp;
+import java.util.List;
 
 @Entity
 public class Debt {
@@ -27,6 +28,11 @@ public class Debt {
 
     @Getter
     @Setter
+    private double amount;
+
+    @Getter
+    @Setter
+    @CreationTimestamp
     private Timestamp timestampCreation;
     
     @Getter
@@ -51,38 +57,51 @@ public class Debt {
     @Setter
     private boolean debtorConfirmed;
 
-/*    @Getter
-    @Setter
-    @ManyToMany(cascade = CascadeType.ALL)
-    private List<Share> suggestions;
 
     @Getter
     @Setter
-    @ManyToOne(cascade = CascadeType.ALL)
-    private Share selectedShare;*/
+    private String groupName;
+
+    /*@Getter
+    @Setter
+    @ManyToMany//(cascade = CascadeType.ALL)
+    private List<Share> suggestions;*/
+
+    @Getter
+    @Setter
+    @ManyToOne//(cascade = CascadeType.ALL)
+    private Share selectedShare;
 
     public Debt (){};
 
-    public Debt (Long id, boolean paid, Timestamp timestampCreation, Timestamp timestampDeadline, User creditor, User debtor, boolean creditorConfirmed,  boolean debtorConfirmed){
+    public Debt (Long id, boolean paid,double amount, Timestamp timestampCreation, Timestamp timestampDeadline, User creditor, User debtor, boolean creditorConfirmed,  boolean debtorConfirmed, String groupName, Share selectedShare){
         this.id = id;
         this.paid = paid;
+        this.amount= amount;
         this.timestampCreation = timestampCreation;
         this.timestampDeadline = timestampDeadline;
         this.creditor = creditor;
         this.debtor = debtor;
         this.creditorConfirmed = creditorConfirmed;
         this.debtorConfirmed = debtorConfirmed;
+        this.groupName = groupName;
+        this.selectedShare = selectedShare;
     }
 
-    public Debt (boolean paid, Timestamp timestampCreation, Timestamp timestampDeadline, User creditor, User debtor, boolean creditorConfirmed,  boolean debtorConfirmed){
+    public Debt (boolean paid, double amount,/*Timestamp timestampCreation,*/ Timestamp timestampDeadline, User creditor, User debtor, boolean creditorConfirmed,  boolean debtorConfirmed, String groupName, Share selectedShare){
         this.paid = paid;
-        this.timestampCreation = timestampCreation;
+        //this.timestampCreation = timestampCreation;
+        this.amount= amount;
         this.timestampDeadline = timestampDeadline;
         this.creditor = creditor;
         this.debtor = debtor;
         this.creditorConfirmed = creditorConfirmed;
         this.debtorConfirmed = debtorConfirmed;
+        this.groupName = groupName;
+        this.selectedShare = selectedShare;
     }
+
+
 
 /*    @OneToMany(mappedBy = "selectedForDebt")
     private Collection<Share> share;*/
