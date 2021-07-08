@@ -37,6 +37,9 @@ public class CalculationServiceImpl implements CalculationService{
         }
 
         for(Expense expense: allExpense){
+            if(!expense.isUnpaid()){
+                continue;
+            }
             for(CreditOverview creditOverview : creditOverviews){
                 if(expense.getUserPaid().equals(creditOverview.getUsername())){
                     creditOverview.addToCredit(expense.getAmount(), expense.getCopayer().size());
@@ -100,7 +103,15 @@ public class CalculationServiceImpl implements CalculationService{
                 usersAmoutCalculated++;
             }
 
+        }//while
+
+        Group group = groupRepository.findById(groupId).orElseThrow(()-> new NotFoundException("Group with groupId " + groupId +" could not be found "));
+        List <Expense> allExpense = expenseRepository.findByGroupExpense(group);
+
+        for(Expense expense: allExpense){
+            expense.setUnpaid(false);
         }
+
         return whoOwesWhomList;
     }
 }
