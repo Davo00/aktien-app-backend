@@ -4,6 +4,7 @@ import com.example.demo.modules.group.request.CreateGroup;
 import com.example.demo.modules.group.request.UpdateGroup;
 import com.example.demo.modules.group.response.GroupResponse;
 import com.example.demo.modules.user.User;
+import com.example.demo.modules.user.response.UserResponse;
 import com.example.demo.utils.DeletionIntegrityException;
 import com.example.demo.utils.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +30,7 @@ public class GroupController {
     }*/
 
     @GetMapping("allUsers/{groupId}")
-    public ResponseEntity<List<User>> getUsersbyGroup(@PathVariable("groupId") long groupId) throws NotFoundException {
+    public ResponseEntity<List<UserResponse>> getUsersbyGroup(@PathVariable("groupId") long groupId) throws NotFoundException {
         return ResponseEntity.ok(groupService.getAllUserOfGroup(groupId));
 
     }

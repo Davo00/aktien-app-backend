@@ -6,6 +6,7 @@ import com.example.demo.modules.group.request.UpdateGroup;
 import com.example.demo.modules.group.response.GroupResponse;
 import com.example.demo.modules.user.User;
 import com.example.demo.modules.user.UserRepository;
+import com.example.demo.modules.user.response.UserResponse;
 import com.example.demo.utils.AlreadyExistsException;
 import com.example.demo.utils.DeletionIntegrityException;
 import com.example.demo.utils.NotFoundException;
@@ -77,10 +78,12 @@ public class GroupServiceImpl implements GroupService {
 
 
     @Override
-    public List<User> getAllUserOfGroup(long groupId) throws NotFoundException {
+    public List<UserResponse> getAllUserOfGroup(long groupId) throws NotFoundException {
         Group group = groupRepository.findById(groupId).orElseThrow(() -> new NotFoundException("Group could not be found"));
         List<User> myUsers = userRepository.findAllByJoinedGroups(group);
-        return myUsers;
+        List<UserResponse> userResponseList = new ArrayList<>();
+        myUsers.forEach(user -> userResponseList.add(new UserResponse(user)));
+        return userResponseList;
     }
 
 
@@ -88,9 +91,15 @@ public class GroupServiceImpl implements GroupService {
     public void addUserToGroup(long groupId, String username) throws NotFoundException{
         User user = userRepository.findByUsername(username);
         if (user==null){
-            throw new NotFoundException("User could not be found");
+            throw new NotFoundException("User wiht the username " + username + " could not be found");
         }
-        Group group = groupRepository.findById(groupId).orElseThrow(() -> new NotFoundException("Group could not be found"));
+        Group group = groupRepository.findById(groupId).orElseThrow(() -> new NotFoundException("Group with the id " + groupId + " could not be found"));
+        for (User userInGroup: group.getMyUsers()){
+            if(userInGroup.getUsername().equals(username)){
+                throw new AlreadyExistsException("The User " + username + " is already part of the Group");
+            }
+        }
+
         group.addUser(user);
         userRepository.save(user);
         groupRepository.save(group);

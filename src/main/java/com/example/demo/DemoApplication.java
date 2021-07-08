@@ -48,6 +48,7 @@ public class DemoApplication {
             User davit = new User("Davit", "davit@googlemail.com");
             User ramona = new User("Ramona", "ramona@googlemail.com");
             User cevin = new User("Cevin", "cevin@googlemail.com");
+            User anonym = new User("Anonym", "anonym@googlemail.com");
 
 
             /*CurrencyUnit euro = Monetary.getCurrency("EUR");
@@ -92,6 +93,7 @@ public class DemoApplication {
             userRepository.save(davit);
             userRepository.save(ramona);
             userRepository.save(cevin);
+            userRepository.save(anonym);
 
 
             Expense test = new Expense( group, "Hendrik", "Bier", 16.99, "Teuerstes Bier der Welt", userList);
