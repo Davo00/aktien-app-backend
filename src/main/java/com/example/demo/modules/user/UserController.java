@@ -37,15 +37,6 @@ public class UserController {
         return ResponseEntity.created(location).body(user);
     }
 
-    @GetMapping("group/{groupName}")
-    public ResponseEntity<List<User>> getUsersbyGroup(UriComponentsBuilder uriComponentsBuilder,
-                                                      @PathVariable String groupName) {
-        Group group = groupService.findGroupByName(groupName);
-        List<User> users = userService.getUsersByGroup(group);
-        UriComponents uriComponents = uriComponentsBuilder.path("{groupname}").buildAndExpand(group.getName());
-        URI location = uriComponents.toUri();
-        return ResponseEntity.created(location).body(users);
-    }
 
     @GetMapping("allGroups/{userId}")
     public ResponseEntity<List<GroupResponse>> getAllGroupsOfUser (@PathVariable ("userId") long userId) throws NotFoundException {
