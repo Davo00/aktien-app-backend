@@ -10,6 +10,7 @@ import lombok.Setter;
 public class CreateDebt {
 
     private boolean paid;
+    private double amount;
     private String deadline; //   "dd/mm/yyyy"
     private Long creditorId;
     private Long debtorId;

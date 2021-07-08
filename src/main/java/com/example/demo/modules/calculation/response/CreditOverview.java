@@ -23,7 +23,8 @@ public class CreditOverview {
         credit= Math.round(100.0 *credit)/100.0;
     }
     public void addToCredit(double amount){
-        credit +=amount;
+        credit +=amount; //amount ist positiv aber credit ist negativ
+        credit= Math.round(100.0 *credit)/100.0;
     }
 
     public void takeFromCredit(double amount, int copayerCount){
@@ -31,7 +32,9 @@ public class CreditOverview {
        credit= Math.round(100.0 *credit)/100.0;
     }
     public void takeFromCredit(double amount){
-        credit -=amount;
+        credit +=amount; // amount ist immer negativ
+        credit= Math.round(100.0 *credit)/100.0;
+
     }
 
 }

@@ -38,13 +38,12 @@ public class CalculationServiceImpl implements CalculationService{
 
         for(Expense expense: allExpense){
             for(CreditOverview creditOverview : creditOverviews){
-                if(expense.getUserPaid()== creditOverview.getUsername()){
+                if(expense.getUserPaid().equals(creditOverview.getUsername())){
                     creditOverview.addToCredit(expense.getAmount(), expense.getCopayer().size());
-
                 }
 
                 for(User user : expense.getCopayer()) {
-                    if (user.getUsername()== creditOverview.getUsername()){
+                    if (user.getUsername().equals(creditOverview.getUsername())){
                         creditOverview.takeFromCredit(expense.getAmount(),expense.getCopayer().size());
                     }
                 }
@@ -99,8 +98,6 @@ public class CalculationServiceImpl implements CalculationService{
                 lowest.addToCredit(highest.getCredit());
                 highest.setCredit(0.0);
                 usersAmoutCalculated++;
-
-
             }
 
         }
