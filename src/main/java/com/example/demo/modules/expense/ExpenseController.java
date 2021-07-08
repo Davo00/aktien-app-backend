@@ -23,12 +23,12 @@ public class ExpenseController {
     ExpenseService expenseService;
 
     @GetMapping
-    public ResponseEntity<List<Expense>> findAllExpense() {
+    public ResponseEntity<List<ExpenseResponse>> findAllExpense() {
         return ResponseEntity.ok(expenseService.findAllExpense());
     }
 
     @GetMapping("{groupId}")
-    public ResponseEntity<List<Expense>> getExpensebyGroup(@PathVariable("groupId") long groupId) throws NotFoundException {
+    public ResponseEntity<List<ExpenseResponse>> getExpensebyGroup(@PathVariable("groupId") long groupId) throws NotFoundException {
         return ResponseEntity.ok(expenseService.getAllExpensebyGroup(groupId));
 
     }
@@ -52,7 +52,7 @@ public class ExpenseController {
 
 
     @PutMapping("{expenseId}")
-    public ResponseEntity<Expense> updateExpenseById(@RequestBody @Valid UpdateExpense request , @PathVariable ("expenseId") long expenseId) throws NotFoundException{
+    public ResponseEntity<ExpenseResponse> updateExpenseById(@RequestBody @Valid UpdateExpense request , @PathVariable ("expenseId") long expenseId) throws NotFoundException{
         return ResponseEntity.ok(expenseService.updateExpensebyId(expenseId, request));
     }
 

@@ -26,9 +26,11 @@ public class ExpenseServiceImpl implements ExpenseService{
     UserRepository userRepository;
 
     @Override
-    public List<Expense> findAllExpense() {
+    public List<ExpenseResponse> findAllExpense() {
         List<Expense> allExpense = expenseRepository.findAll();
-        return allExpense;
+        List<ExpenseResponse> expenseResponseList = new ArrayList<>();
+        allExpense.forEach(expense -> expenseResponseList.add(new ExpenseResponse(expense)));
+        return expenseResponseList;
     }
 
 
@@ -88,14 +90,19 @@ public class ExpenseServiceImpl implements ExpenseService{
 
 
     @Override
-    public Expense updateExpensebyId(Long id, UpdateExpense request) throws NotFoundException {
+    public ExpenseResponse updateExpensebyId(Long id, UpdateExpense request) throws NotFoundException {
        Expense expense = expenseRepository.findById(id).orElseThrow(() ->new NotFoundException("Expense could not be found"));
+       User userPaid = userRepository.findByUsername(request.getUserPaid());
+       if(userPaid == null){
+           throw  new NotFoundException("UserPaid : " + request.getUserPaid() +" could not be found");
+       }
 
         List<User> toSafeAtTheEnd = new ArrayList<>();
+
         if (request.getUserIds()!= null && !request.getUserIds().isEmpty()){
            List<User> newUserList = new ArrayList<>();
            for(int i=0; i<request.getUserIds().size();i++){
-             System.out.println(request.getUserIds().get(i));
+
               User user = userRepository.findById(request.getUserIds().get(i)).orElseThrow(() -> new NotFoundException("User could not be found"));
                if(user!=null){
                    newUserList.add(user);
@@ -153,7 +160,7 @@ public class ExpenseServiceImpl implements ExpenseService{
 
         }
 
-        return expense;
+        return new ExpenseResponse(expense);
 
     }
 
@@ -165,10 +172,12 @@ public class ExpenseServiceImpl implements ExpenseService{
     }
 
     @Override
-    public List<Expense> getAllExpensebyGroup(long groupId) throws NotFoundException{
+    public List<ExpenseResponse> getAllExpensebyGroup(long groupId) throws NotFoundException{
         Group group = groupRepository.findById(groupId).orElseThrow(() -> new NotFoundException("Group could not be found"));
         List<Expense> e = expenseRepository.findByGroupExpense(group);
-        return e;
+        List<ExpenseResponse> expenseResponseList = new ArrayList<>();
+        e.forEach(expense -> expenseResponseList.add(new ExpenseResponse(expense)));
+        return expenseResponseList;
     }
 
 

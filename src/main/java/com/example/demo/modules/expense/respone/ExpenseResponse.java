@@ -12,6 +12,7 @@ import java.util.List;
 @Setter
 public class ExpenseResponse {
 
+    private long id;
     private String userPaid;
     private String name;
     private double amount;
@@ -21,8 +22,9 @@ public class ExpenseResponse {
     private int consumerCount;
     private List<Long> copayerIds;
 
-    public ExpenseResponse(String userPaid, String name, double amount, String description,
+    public ExpenseResponse(long id,String userPaid, String name, double amount, String description,
                            boolean unpaid, int consumerCount) {
+        this.id=id;
         this.userPaid = userPaid;
         this.name = name;
         this.amount = amount;
@@ -32,7 +34,7 @@ public class ExpenseResponse {
     }
 
     public ExpenseResponse (Expense expense){
-        this(expense.getUserPaid(), expense.getName(), expense.getAmount(),expense.getDescription(), expense.isUnpaid(), expense.getConsumerCount());
+        this(expense.getId(), expense.getUserPaid(), expense.getName(), expense.getAmount(),expense.getDescription(), expense.isUnpaid(), expense.getConsumerCount());
 
         if (expense.getGroupExpense()!=null){
             this.setGroupId(expense.getGroupExpense().getId());
