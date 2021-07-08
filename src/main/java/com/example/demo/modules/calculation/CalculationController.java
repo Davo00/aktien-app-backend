@@ -4,6 +4,7 @@ import com.example.demo.modules.calculation.response.CreditOverview;
 import com.example.demo.modules.calculation.response.WhoOwesWhom;
 import com.example.demo.modules.debt.Debt;
 import com.example.demo.modules.debt.request.CreateDebt;
+import com.example.demo.modules.debt.response.DebtResponse;
 import com.example.demo.utils.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +30,7 @@ public class CalculationController {
     }
 
     @PutMapping("/final/{groupId}")
-    public ResponseEntity<List<CreateDebt>> finalCalculation(@PathVariable ("groupId") long groupId) throws NotFoundException {
+    public ResponseEntity<List<DebtResponse>> finalCalculation(@PathVariable ("groupId") long groupId) throws NotFoundException {
         return ResponseEntity.ok(calculationService.finalCalculation(groupId));
     }
 

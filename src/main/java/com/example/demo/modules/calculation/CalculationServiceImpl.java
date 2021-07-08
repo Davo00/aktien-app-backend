@@ -5,6 +5,7 @@ import com.example.demo.modules.calculation.response.WhoOwesWhom;
 import com.example.demo.modules.debt.Debt;
 import com.example.demo.modules.debt.DebtRepository;
 import com.example.demo.modules.debt.request.CreateDebt;
+import com.example.demo.modules.debt.response.DebtResponse;
 import com.example.demo.modules.expense.Expense;
 import com.example.demo.modules.expense.ExpenseRepository;
 import com.example.demo.modules.group.Group;
@@ -121,7 +122,7 @@ public class CalculationServiceImpl implements CalculationService{
     }
 
     @Override
-    public List<CreateDebt> finalCalculation(long groupId) throws NotFoundException {
+    public List<DebtResponse> finalCalculation(long groupId) throws NotFoundException {
 
         Group group = groupRepository.findById(groupId).orElseThrow(()-> new NotFoundException("Group with groupId " + groupId +" could not be found "));
 
@@ -143,9 +144,9 @@ public class CalculationServiceImpl implements CalculationService{
             debt= debtRepository.save(debt);
         }
 
-        List<CreateDebt> returnableDebts = new ArrayList<>();
+        List<DebtResponse> returnableDebts = new ArrayList<>();
         for(Debt debt: allNewDebts){
-            returnableDebts.add(new CreateDebt(debt));
+            returnableDebts.add(new DebtResponse(debt));
         }
 
         return returnableDebts;
