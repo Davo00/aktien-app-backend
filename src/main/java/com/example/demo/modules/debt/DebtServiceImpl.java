@@ -39,7 +39,7 @@ public class DebtServiceImpl implements DebtService{
     }
 
     @Override
-    public Debt createDebt(CreateDebt request) throws NotFoundException{
+    public DebtResponse createDebt(CreateDebt request) throws NotFoundException{
         String endDate = request.getDeadline();
         Timestamp deadline= null;
         try {
@@ -62,7 +62,7 @@ public class DebtServiceImpl implements DebtService{
 
         Debt debt = new Debt(request.isPaid(), /*request.getTimestampCreation(),*/ deadline, creditor, debtor, request.isCreditorConfirmed(), request.isDebtorConfirmed(), request.getGroupName(), share);
         debt = debtRepository.save(debt);
-        return debt;
+        return new DebtResponse(debt);
     }
 
     @Override

@@ -32,8 +32,8 @@ public class DebtController {
     public ResponseEntity<List<DebtResponse>> findAllDebt() {return ResponseEntity.ok(debtService.findAllDebt()); }
 
     @PostMapping("")
-    public ResponseEntity<Debt> createDebt(@RequestBody @Valid CreateDebt request, UriComponentsBuilder uriComponentsBuilder) throws com.example.demo.utils.NotFoundException {
-        Debt debt = debtService.createDebt(request);
+    public ResponseEntity<DebtResponse> createDebt(@RequestBody @Valid CreateDebt request, UriComponentsBuilder uriComponentsBuilder) throws com.example.demo.utils.NotFoundException {
+        DebtResponse debt = debtService.createDebt(request);
         UriComponents uriComponents = uriComponentsBuilder.path("debt/{id}").buildAndExpand(debt.getId());
         URI location = uriComponents.toUri();
         return ResponseEntity.created(location).body(debt);
