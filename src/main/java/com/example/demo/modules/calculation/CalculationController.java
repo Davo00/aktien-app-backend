@@ -2,13 +2,12 @@ package com.example.demo.modules.calculation;
 
 import com.example.demo.modules.calculation.response.CreditOverview;
 import com.example.demo.modules.calculation.response.WhoOwesWhom;
+import com.example.demo.modules.debt.Debt;
+import com.example.demo.modules.debt.request.CreateDebt;
 import com.example.demo.utils.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -27,6 +26,11 @@ public class CalculationController {
     @GetMapping("/debts/{groupId}")
     public ResponseEntity<List<WhoOwesWhom>> calculateDebts(@PathVariable("groupId") long groupId) throws NotFoundException {
         return ResponseEntity.ok(calculationService.calculateDebts(groupId));
+    }
+
+    @PutMapping("/final/{groupId}")
+    public ResponseEntity<List<CreateDebt>> finalCalculation(@PathVariable ("groupId") long groupId) throws NotFoundException {
+        return ResponseEntity.ok(calculationService.finalCalculation(groupId));
     }
 
 }

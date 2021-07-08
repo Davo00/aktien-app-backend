@@ -1,5 +1,6 @@
 package com.example.demo.modules.debt;
 
+import com.example.demo.modules.calculation.response.WhoOwesWhom;
 import com.example.demo.modules.share.Share;
 import com.example.demo.modules.user.User;
 import lombok.Getter;
@@ -99,6 +100,8 @@ public class Debt {
         this.groupName = groupName;
         this.selectedShare = selectedShare;
     }
+
+
 
 /*    @OneToMany(mappedBy = "selectedForDebt")
     private Collection<Share> share;*/

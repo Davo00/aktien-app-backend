@@ -2,11 +2,15 @@ package com.example.demo.modules.calculation;
 
 import com.example.demo.modules.calculation.response.CreditOverview;
 import com.example.demo.modules.calculation.response.WhoOwesWhom;
+import com.example.demo.modules.debt.Debt;
+import com.example.demo.modules.debt.DebtRepository;
+import com.example.demo.modules.debt.request.CreateDebt;
 import com.example.demo.modules.expense.Expense;
 import com.example.demo.modules.expense.ExpenseRepository;
 import com.example.demo.modules.group.Group;
 import com.example.demo.modules.group.GroupRepository;
 import com.example.demo.modules.user.User;
+import com.example.demo.modules.user.UserRepository;
 import com.example.demo.utils.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -22,6 +26,12 @@ public class CalculationServiceImpl implements CalculationService{
 
     @Autowired
     GroupRepository groupRepository;
+
+    @Autowired
+    UserRepository userRepository;
+
+    @Autowired
+    DebtRepository debtRepository;
 
 
     @Override
@@ -105,13 +115,39 @@ public class CalculationServiceImpl implements CalculationService{
 
         }//while
 
-        Group group = groupRepository.findById(groupId).orElseThrow(()-> new NotFoundException("Group with groupId " + groupId +" could not be found "));
-        List <Expense> allExpense = expenseRepository.findByGroupExpense(group);
 
+
+        return whoOwesWhomList;
+    }
+
+    @Override
+    public List<CreateDebt> finalCalculation(long groupId) throws NotFoundException {
+
+        Group group = groupRepository.findById(groupId).orElseThrow(()-> new NotFoundException("Group with groupId " + groupId +" could not be found "));
+
+        List<WhoOwesWhom> whoOwesWhomList = calculateDebts(groupId);
+
+        List <Expense> allExpense = expenseRepository.findByGroupExpense(group);
         for(Expense expense: allExpense){
             expense.setUnpaid(false);
         }
+        List<Debt> allNewDebts = new ArrayList<>();
 
-        return whoOwesWhomList;
+        for (WhoOwesWhom whom : whoOwesWhomList){
+            User creditor = userRepository.findByUsername(whom.getCreditor());
+            User debitor = userRepository.findByUsername(whom.getDebitor());
+            allNewDebts.add(new Debt(false, whom.getAmount(), null, creditor, debitor, false, false, group.getName(), null));
+        }
+
+        for (Debt debt : allNewDebts){
+            debt= debtRepository.save(debt);
+        }
+
+        List<CreateDebt> returnableDebts = new ArrayList<>();
+        for(Debt debt: allNewDebts){
+            returnableDebts.add(new CreateDebt(debt));
+        }
+
+        return returnableDebts;
     }
 }
