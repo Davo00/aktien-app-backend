@@ -60,14 +60,14 @@ public class DebtServiceImpl implements DebtService{
 
         Share share = shareRepository.findById(request.getSelectedShareId()).orElseThrow(() -> new NotFoundException("Share with the Id " + request.getSelectedShareId() + " could not be found"));
 
-        Debt debt = new Debt(request.isPaid(), /*request.getTimestampCreation(),*/ deadline, creditor, debtor, request.isCreditorConfirmed(), request.isDebtorConfirmed(), request.getGroupName(), share);
+        Debt debt = new Debt(request.isPaid(), request.getAmount(),/*request.getTimestampCreation(),*/ deadline, creditor, debtor, request.isCreditorConfirmed(), request.isDebtorConfirmed(), request.getGroupName(), share);
         debt = debtRepository.save(debt);
         return debt;
     }
 
     @Override
     public Debt proposeDebt(Debt oldDebt, Share stock, Timestamp timestamp, User user){
-        Debt newDebt = new Debt(false, /*null,*/ timestamp, oldDebt.getCreditor(), oldDebt.getDebtor(), (user.getId() == oldDebt.getCreditor().getId())?true:false,  (user.getId() == oldDebt.getCreditor().getId())?false:true, oldDebt.getGroupName(), stock);
+        Debt newDebt = new Debt(false, oldDebt.getAmount(), /*null,*/ timestamp, oldDebt.getCreditor(), oldDebt.getDebtor(), (user.getId() == oldDebt.getCreditor().getId())?true:false,  (user.getId() == oldDebt.getCreditor().getId())?false:true, oldDebt.getGroupName(), stock);
         debtRepository.deleteById(oldDebt.getId());
         debtRepository.save(newDebt);
         return newDebt;

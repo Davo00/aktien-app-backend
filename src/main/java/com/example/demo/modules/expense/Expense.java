@@ -26,7 +26,7 @@ public class Expense {
 
     @Getter
     @Setter
-    private String userPaid;
+    private String userPaid; //Username!!!!
 
     @Getter
     @Setter
