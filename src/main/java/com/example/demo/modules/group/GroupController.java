@@ -57,6 +57,7 @@ public class GroupController {
 
     @DeleteMapping("{groupId}")
     public ResponseEntity<Void> deleteGroupById ( @PathVariable("groupId") long groupId) throws NotFoundException, DeletionIntegrityException {
+
         groupService.deleteGroupById(groupId);
         return ResponseEntity.noContent().build();
     }

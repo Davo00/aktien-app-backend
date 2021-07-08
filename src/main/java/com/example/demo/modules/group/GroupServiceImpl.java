@@ -1,5 +1,6 @@
 package com.example.demo.modules.group;
 
+import com.example.demo.modules.expense.Expense;
 import com.example.demo.modules.group.request.CreateGroup;
 import com.example.demo.modules.group.request.UpdateGroup;
 import com.example.demo.modules.group.response.GroupResponse;

@@ -43,6 +43,7 @@ public class Expense {
     @Getter
     @Setter
     @ManyToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "group_id")
     @JsonBackReference
     private Group groupExpense;
 

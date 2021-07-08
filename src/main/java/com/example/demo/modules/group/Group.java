@@ -1,5 +1,6 @@
 package com.example.demo.modules.group;
 
+import com.example.demo.modules.expense.Expense;
 import com.example.demo.modules.group.request.CreateGroup;
 import com.example.demo.modules.user.User;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -32,6 +33,11 @@ public class Group {
     @ManyToMany(mappedBy = "joinedGroups", cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<User> myUsers = new ArrayList<>();
+
+    @Getter
+    @Setter
+    @OneToMany( mappedBy = "groupExpense",cascade = CascadeType.ALL)
+    private List<Expense> myExpenses;
 
 
     public Group() {
