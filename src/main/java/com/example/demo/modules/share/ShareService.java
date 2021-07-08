@@ -14,5 +14,6 @@ public interface ShareService {
     void deleteShare(long id) throws NotFoundException, DeletionIntegrityException;
     List<Share>getPreferedSharesbyUser(String username) throws NotFoundException;
     Share selectShareFromCreditor(String username, Long shareId) throws NotFoundException;
+    Stock getStockData(String stockName) throws NotFoundException;
 
 }

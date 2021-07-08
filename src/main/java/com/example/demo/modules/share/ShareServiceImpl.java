@@ -93,5 +93,11 @@ public class ShareServiceImpl implements ShareService {
         return null;
     }
 
+    @Override
+    public Stock getStockData(String stockName) throws NotFoundException {
+
+        return null;
+    }
+
 
 }

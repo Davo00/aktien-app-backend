@@ -7,19 +7,18 @@ import com.example.demo.modules.group.Group;
 import com.example.demo.modules.group.GroupRepository;
 import com.example.demo.modules.share.Share;
 import com.example.demo.modules.share.ShareRepository;
+import com.example.demo.modules.share.alphaVantageCon;
+import com.example.demo.modules.share.Stock;
 import com.example.demo.modules.user.User;
 import com.example.demo.modules.user.UserRepository;
-import org.javamoney.moneta.Money;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
-import javax.money.CurrencyUnit;
-import javax.money.Monetary;
-import javax.money.MonetaryAmount;
-import javax.money.NumberValue;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -83,7 +82,13 @@ public class DemoApplication {
 
             Share s = new Share("SAP",127.99, sapEmployees);
             shareRepository.save(s);
-
+            alphaVantageCon c = new alphaVantageCon();
+           // stock s1 = stock.getShareByName("IBM");
+            Date d = new Date() ;
+            SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd");
+            Stock s2 = Stock.getStock("SAP");
+            //String text = stock.getShareByName("SAP");
+            System.out.println("hallo"+ s2);
 
         };
     }

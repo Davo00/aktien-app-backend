@@ -43,7 +43,7 @@ public class ExpenseController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Expense> deleteExpense(@PathVariable long id) throws NotFoundException {
-            expenseService.deleteExpense(id);
+        expenseService.deleteExpense(id);
 
         return ResponseEntity.noContent().build();
 
@@ -51,7 +51,7 @@ public class ExpenseController {
 
 
     @PutMapping("{expenseId}")
-    public ResponseEntity<Expense> updateExpenseById(@RequestBody @Valid UpdateExpense request , @PathVariable ("expenseId") long expenseId) throws NotFoundException{
+    public ResponseEntity<Expense> updateExpenseById(@RequestBody @Valid UpdateExpense request, @PathVariable("expenseId") long expenseId) throws NotFoundException {
         return ResponseEntity.ok(expenseService.updateExpensebyId(expenseId, request));
     }
 
