@@ -9,10 +9,11 @@ import com.example.demo.utils.NotFoundException;
 import java.util.List;
 
 public interface UserService {
-
+  
     UserResponse createUser(CreateUser request);
     List<GroupResponse> getAllGroupsOfUser(long userId)throws NotFoundException;
     User getCurrentUser();
     void updateUser(User updatedUser) throws UserServiceImpl.UsernameReservedException;
     void deleteUser();
+
 }

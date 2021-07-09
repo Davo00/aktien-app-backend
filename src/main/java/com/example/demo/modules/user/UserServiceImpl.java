@@ -26,6 +26,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponse createUser(CreateUser request) {
+        if (isUsernameReserved(request.getUsername())) {
+            throw new UsernameReservedException();
+        }
         User user = new User(request.getUsername(), request.getEmail());
         user = userRepository.save(user);
         return new UserResponse(user);
@@ -52,6 +55,39 @@ public class UserServiceImpl implements UserService {
             return groupResponseList;
         }
 
+
+    @Override
+    public User getCurrentUser() {
+        return userRepository.findById(1L).get(); //TODO implement real method with JWT
+    }
+
+    @Override
+    public void updateUser(User updatedUser) throws UsernameReservedException {
+
+        if (isUsernameReserved(updatedUser.getUsername())) {
+            throw new UsernameReservedException();
+        }
+        getCurrentUser().setEmail(updatedUser.getEmail());
+        getCurrentUser().setUsername(updatedUser.getUsername());
+
+        userRepository.save(updatedUser);
+    }
+
+    @Override
+    public void deleteUser() {
+        User user = getCurrentUser();
+        userRepository.delete(user);
+    }
+
+    private boolean isUsernameReserved(String username) {
+        return userRepository.findByUsername(username) != null;
+    }
+
+    static class UsernameReservedException extends Exception {
+        UsernameReservedException() {
+            super("The username is already taken");
+        }
+    }
 
     @Override
     public User getCurrentUser() {
