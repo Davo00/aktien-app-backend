@@ -1,7 +1,10 @@
 package com.example.demo.modules.group;
 
+import com.example.demo.modules.group.request.CreateGroup;
 import com.example.demo.modules.group.request.UpdateGroup;
+import com.example.demo.modules.group.response.GroupResponse;
 import com.example.demo.modules.user.User;
+import com.example.demo.modules.user.response.UserResponse;
 import com.example.demo.utils.DeletionIntegrityException;
 import com.example.demo.utils.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,16 +30,15 @@ public class GroupController {
     }*/
 
     @GetMapping("allUsers/{groupId}")
-    public ResponseEntity<List<User>> getUsersbyGroup(@PathVariable("groupId") long groupId) throws NotFoundException {
+    public ResponseEntity<List<UserResponse>> getUsersbyGroup(@PathVariable("groupId") long groupId) throws NotFoundException {
         return ResponseEntity.ok(groupService.getAllUserOfGroup(groupId));
 
     }
 
-    @PostMapping("name")
-    public ResponseEntity<Group> createGroup(@RequestBody @Valid Group request, UriComponentsBuilder uriComponentsBuilder,
-                                             @PathVariable String name) {
-        Group group = groupService.createGroup(request);
-        UriComponents uriComponents = uriComponentsBuilder.path("group/{name}").buildAndExpand(name);
+    @PostMapping
+    public ResponseEntity<GroupResponse> createGroup(@RequestBody @Valid CreateGroup request, UriComponentsBuilder uriComponentsBuilder) {
+        GroupResponse group = groupService.createGroup(request);
+        UriComponents uriComponents = uriComponentsBuilder.path("group/{name}").buildAndExpand(request.getName());
         URI location = uriComponents.toUri();
         return ResponseEntity.created(location).body(group);
     }
@@ -49,13 +51,14 @@ public class GroupController {
     }
 
     @PutMapping("{groupId}")
-    public ResponseEntity<Group> updateGroupById(@RequestBody @Valid UpdateGroup request , @PathVariable ("groupId") long groupId) throws NotFoundException{
+    public ResponseEntity<GroupResponse> updateGroupById(@RequestBody @Valid UpdateGroup request , @PathVariable ("groupId") long groupId) throws NotFoundException{
         return ResponseEntity.ok(groupService.updateGroupById(groupId, request));
     }
 
 
     @DeleteMapping("{groupId}")
     public ResponseEntity<Void> deleteGroupById ( @PathVariable("groupId") long groupId) throws NotFoundException, DeletionIntegrityException {
+
         groupService.deleteGroupById(groupId);
         return ResponseEntity.noContent().build();
     }

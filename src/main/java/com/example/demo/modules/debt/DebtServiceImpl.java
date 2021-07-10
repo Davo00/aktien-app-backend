@@ -74,7 +74,7 @@ public class DebtServiceImpl implements DebtService{
     }
 
     @Override
-    public Debt acceptDebt(long debtId, long userId) throws NotFoundException{
+    public DebtResponse acceptDebt(long debtId, long userId) throws NotFoundException{
 
         Debt debt = debtRepository.findById(debtId).orElseThrow(()-> new NotFoundException("Debt with the Id " + debtId + " could not be found"));
 
@@ -92,7 +92,7 @@ public class DebtServiceImpl implements DebtService{
             debt.setTimestampCreation(timestamp);
         }
         debt=debtRepository.save(debt);
-        return debt;
+        return new DebtResponse(debt);
     }
 
 }

@@ -2,6 +2,9 @@ package com.example.demo.modules.user;
 
 import com.example.demo.modules.group.Group;
 import com.example.demo.modules.group.GroupService;
+import com.example.demo.modules.group.response.GroupResponse;
+import com.example.demo.modules.user.request.CreateUser;
+import com.example.demo.modules.user.response.UserResponse;
 import com.example.demo.utils.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -27,26 +30,16 @@ public class UserController {
     }
 
     @PostMapping("register")
-    public ResponseEntity<User> createUser(@RequestBody @Valid User request, UriComponentsBuilder uriComponentsBuilder) throws UserServiceImpl.UsernameReservedException {
-        User user = userService.createUser(request);
-        UriComponents uriComponents = uriComponentsBuilder.path("user/{username}").buildAndExpand(user.getUsername());
+    public ResponseEntity<UserResponse> createUser(@RequestBody @Valid CreateUser request, UriComponentsBuilder uriComponentsBuilder) {
+        UserResponse user = userService.createUser(request);
+        UriComponents uriComponents = uriComponentsBuilder.path("user/{username}").buildAndExpand(request.getUsername());
         URI location = uriComponents.toUri();
         return ResponseEntity.created(location).body(user);
     }
 
-    @GetMapping("group/{groupName}")
-    public ResponseEntity<List<User>> getUsersbyGroup(UriComponentsBuilder uriComponentsBuilder,
-                                                      @PathVariable String groupName) {
-        Group group = groupService.findGroupByName(groupName);
-        List<User> users = userService.getUsersByGroup(group);
-        UriComponents uriComponents = uriComponentsBuilder.path("{groupname}").buildAndExpand(group.getName());
-        URI location = uriComponents.toUri();
-        return ResponseEntity.created(location).body(users);
-    }
 
     @GetMapping("allGroups/{userId}")
-    public ResponseEntity<List<Group>> getAllGroupsOfUser(@PathVariable("userId") long userId) throws
-            NotFoundException {
+    public ResponseEntity<List<GroupResponse>> getAllGroupsOfUser (@PathVariable ("userId") long userId) throws NotFoundException {
         return ResponseEntity.ok(userService.getAllGroupsOfUser(userId));
     }
 

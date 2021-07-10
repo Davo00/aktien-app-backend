@@ -49,7 +49,7 @@ public class DebtController {
         return ResponseEntity.created(location).body(debt);
     }
     @PutMapping("accept/{debtId}")
-    public ResponseEntity<Debt> acceptDebt(@PathVariable("debtId") long debtId) throws NotFoundException {
+    public ResponseEntity<DebtResponse> acceptDebt(@PathVariable("debtId") long debtId) throws NotFoundException {
 
         User user = new User();//UserServiceImpl.getCurrentUser() ;//TODO mock function to return a user, later the logged on user
 
