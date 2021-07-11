@@ -72,6 +72,24 @@ public class CalculationServiceImpl implements CalculationService{
     public List<WhoOwesWhom> calculateDebts(long groupId) throws NotFoundException {
         List<WhoOwesWhom> whoOwesWhomList = new ArrayList<>();
         List <CreditOverview> creditOverviews = calculateOverview(groupId);
+        int creditZeroCounter=0;
+        boolean allZero=false;
+        for (CreditOverview creditOverview: creditOverviews){
+            if(creditOverview.getCredit()==0){
+                creditZeroCounter++;
+            }
+        }
+        if(creditOverviews.size()==creditZeroCounter){
+            allZero=true;
+        }
+
+
+        if (creditOverviews==null || creditOverviews.isEmpty() || allZero){
+            List<WhoOwesWhom> returnable = new ArrayList<>();
+            returnable.add(new WhoOwesWhom("Nobody owes Nobody" ,"Nobody", 0.0));
+            return returnable;
+        }
+
         int usersAmoutCalculated=0;
 
 
