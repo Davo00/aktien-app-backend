@@ -3,7 +3,6 @@ package com.example.demo.modules.user;
 import com.example.demo.modules.expense.Expense;
 import com.example.demo.modules.group.Group;
 import com.example.demo.modules.share.Share;
-import com.example.demo.modules.user.request.CreateUser;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
