@@ -10,6 +10,7 @@ import com.example.demo.modules.user.UserRepository;
 import com.example.demo.utils.DeletionIntegrityException;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -41,13 +42,14 @@ public class ExpenseServiceImpl implements ExpenseService{
 
         List<User> copayers = new ArrayList<>();
         for (String name: request.getCopayerNames()){
-            User user = userRepository.findByUsername(name);
+            User user = userRepository.findByUsername(name).orElseThrow(() ->
+                    new UsernameNotFoundException("User " + name + " not found"));
             if(user ==null){
                 throw new NotFoundException("User "+ name +" could not be found");
             }
             copayers.add(user);
         }
-        User user = userRepository.findByUsername(request.getUserPaid());
+        User user = userRepository.findByUsername(request.getUserPaid()).orElseThrow(() -> new UsernameNotFoundException("Username not found"));
         if(!user.getUsername().equals(request.getUserPaid())|| user ==null){
             throw new NotFoundException("The User who paid the bill could not be found, please enter a valid username");
         }
@@ -92,7 +94,7 @@ public class ExpenseServiceImpl implements ExpenseService{
     @Override
     public ExpenseResponse updateExpensebyId(Long id, UpdateExpense request) throws NotFoundException {
        Expense expense = expenseRepository.findById(id).orElseThrow(() ->new NotFoundException("Expense could not be found"));
-       User userPaid = userRepository.findByUsername(request.getUserPaid());
+       User userPaid = userRepository.findByUsername(request.getUserPaid()).orElseThrow(() -> new UsernameNotFoundException("Username not found"));
        if(userPaid == null){
            throw  new NotFoundException("UserPaid : " + request.getUserPaid() +" could not be found");
        }

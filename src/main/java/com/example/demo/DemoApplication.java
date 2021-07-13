@@ -43,12 +43,12 @@ public class DemoApplication {
                            ShareRepository shareRepository){
         return args -> {
 
-            User hendrik = new User("Hendrik", "hendrik@googlemail.com");
-            User moritz = new User("Moritz", "moritz@googlemail.com");
-            User davit = new User("Davit", "davit@googlemail.com");
-            User ramona = new User("Ramona", "ramona@googlemail.com");
-            User cevin = new User("Cevin", "cevin@googlemail.com");
-            User anonym = new User("Anonym", "anonym@googlemail.com");
+            User hendrik = new User("Hendrik", "pass", "hendrik@googlemail.com");
+            User moritz = new User("Moritz", "pass","moritz@googlemail.com");
+            User davit = new User("Davit", "pass","davit@googlemail.com");
+            User ramona = new User("Ramona", "pass","ramona@googlemail.com");
+            User cevin = new User("Cevin", "pass", "cevin@googlemail.com");
+            User anonym = new User("Anonym", "pass", "anonym@googlemail.com");
 
 
             /*CurrencyUnit euro = Monetary.getCurrency("EUR");
@@ -85,7 +85,6 @@ public class DemoApplication {
             for(User user: wholeGroup){
                 user.setJoinedGroups(groups);
             }
-
 
             groupRepository.save(group);
             userRepository.save(hendrik);

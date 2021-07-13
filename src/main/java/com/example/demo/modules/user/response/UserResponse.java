@@ -1,7 +1,5 @@
 package com.example.demo.modules.user.response;
 
-import com.example.demo.modules.group.Group;
-import com.example.demo.modules.share.Share;
 import com.example.demo.modules.user.User;
 import lombok.Getter;
 import lombok.Setter;
