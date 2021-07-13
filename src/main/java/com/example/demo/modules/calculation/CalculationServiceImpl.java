@@ -72,6 +72,24 @@ public class CalculationServiceImpl implements CalculationService{
     public List<WhoOwesWhom> calculateDebts(long groupId) throws NotFoundException {
         List<WhoOwesWhom> whoOwesWhomList = new ArrayList<>();
         List <CreditOverview> creditOverviews = calculateOverview(groupId);
+        int creditZeroCounter=0;
+        boolean allZero=false;
+        for (CreditOverview creditOverview: creditOverviews){
+            if(creditOverview.getCredit()==0){
+                creditZeroCounter++;
+            }
+        }
+        if(creditOverviews.size()==creditZeroCounter){
+            allZero=true;
+        }
+
+
+        if (creditOverviews==null || creditOverviews.isEmpty() || allZero){
+            List<WhoOwesWhom> returnable = new ArrayList<>();
+            returnable.add(new WhoOwesWhom("Nobody owes Nobody" ,"Nobody", 0.0));//do not change
+            return returnable;
+        }
+
         int usersAmoutCalculated=0;
 
 
@@ -127,6 +145,13 @@ public class CalculationServiceImpl implements CalculationService{
         Group group = groupRepository.findById(groupId).orElseThrow(()-> new NotFoundException("Group with groupId " + groupId +" could not be found "));
 
         List<WhoOwesWhom> whoOwesWhomList = calculateDebts(groupId);
+
+        String firstCreditor = whoOwesWhomList.get(0).getCreditor();
+        if(firstCreditor.equals("Nobody owes Nobody")){
+            List<DebtResponse> returnable = new ArrayList<>();
+            returnable.add(new DebtResponse("No debt possible as nobody owes anything to nobody"));
+            return returnable;
+        }
 
         List <Expense> allExpense = expenseRepository.findByGroupExpense(group);
         for(Expense expense: allExpense){

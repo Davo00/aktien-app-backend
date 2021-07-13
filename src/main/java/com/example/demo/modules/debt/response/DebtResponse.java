@@ -23,6 +23,10 @@ public class DebtResponse {
     private String groupName;
     private Long selectedShareId;
 
+    public DebtResponse (String message){
+        this.groupName=message;
+    }
+
 
     public DebtResponse(Long id, double amount, boolean paid, Timestamp creation, Timestamp deadline, Long creditorId
             , Long debtorId, boolean creditorConfirmed, boolean debtorConfirmed, String groupName) {
