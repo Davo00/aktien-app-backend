@@ -3,6 +3,7 @@ package com.example.demo.modules.user;
 import com.example.demo.modules.expense.Expense;
 import com.example.demo.modules.group.Group;
 import com.example.demo.modules.share.Share;
+import com.example.demo.modules.user.request.CreateUser;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -30,7 +31,8 @@ public class User implements UserDetails {
     @GeneratedValue
     @Getter
     @Setter
-    private @NotNull Long id;
+    @NotNull
+    private Long id;
 
     @NotNull
     @Getter
@@ -74,7 +76,7 @@ public class User implements UserDetails {
     @Setter
     @ManyToMany(mappedBy = "copayer")
     //@JsonBackReference
-    private Set<Expense> expense;
+    private List<Expense> expense = new ArrayList<>();
 
     public User() {
     }

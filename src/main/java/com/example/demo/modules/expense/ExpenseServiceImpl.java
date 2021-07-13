@@ -2,6 +2,7 @@ package com.example.demo.modules.expense;
 
 import com.example.demo.modules.expense.request.CreateExpense;
 import com.example.demo.modules.expense.request.UpdateExpense;
+import com.example.demo.modules.expense.respone.ExpenseResponse;
 import com.example.demo.modules.group.Group;
 import com.example.demo.modules.group.GroupRepository;
 import com.example.demo.modules.user.User;
@@ -26,13 +27,17 @@ public class ExpenseServiceImpl implements ExpenseService{
     UserRepository userRepository;
 
     @Override
-    public List<Expense> findAllExpense() {
+    public List<ExpenseResponse> findAllExpense() {
         List<Expense> allExpense = expenseRepository.findAll();
-        return allExpense;
+        List<ExpenseResponse> expenseResponseList = new ArrayList<>();
+        allExpense.forEach(expense -> expenseResponseList.add(new ExpenseResponse(expense)));
+        return expenseResponseList;
     }
 
+
+
     @Override
-    public Expense createExpense(CreateExpense request) throws NotFoundException {
+    public ExpenseResponse createExpense(CreateExpense request) throws NotFoundException {
         Group group = groupRepository.findById(request.getGroupId()).orElseThrow(() -> new com.example.demo.utils.NotFoundException("Group could not be found"));
 
         List<User> copayers = new ArrayList<>();
@@ -44,10 +49,18 @@ public class ExpenseServiceImpl implements ExpenseService{
             }
             copayers.add(user);
         }
+        User user = userRepository.findByUsername(request.getUserPaid());
+        if(!user.getUsername().equals(request.getUserPaid())|| user ==null){
+            throw new NotFoundException("The User who paid the bill could not be found, please enter a valid username");
+        }
+
         Expense expense = new Expense(group,request.getUserPaid(), request.getName(), request.getAmount(), request.getDescription(), copayers);
         expense = expenseRepository.save(expense);
-        return expense;
+        return new ExpenseResponse(expense);
     }
+
+
+
 
     @Override
     public void deleteExpense(Long id) throws NotFoundException,DeletionIntegrityException  {
@@ -79,14 +92,19 @@ public class ExpenseServiceImpl implements ExpenseService{
 
 
     @Override
-    public Expense updateExpensebyId(Long id, UpdateExpense request) throws NotFoundException {
+    public ExpenseResponse updateExpensebyId(Long id, UpdateExpense request) throws NotFoundException {
        Expense expense = expenseRepository.findById(id).orElseThrow(() ->new NotFoundException("Expense could not be found"));
+       User userPaid = userRepository.findByUsername(request.getUserPaid());
+       if(userPaid == null){
+           throw  new NotFoundException("UserPaid : " + request.getUserPaid() +" could not be found");
+       }
 
         List<User> toSafeAtTheEnd = new ArrayList<>();
+
         if (request.getUserIds()!= null && !request.getUserIds().isEmpty()){
            List<User> newUserList = new ArrayList<>();
            for(int i=0; i<request.getUserIds().size();i++){
-             System.out.println(request.getUserIds().get(i));
+
               User user = userRepository.findById(request.getUserIds().get(i)).orElseThrow(() -> new NotFoundException("User could not be found"));
                if(user!=null){
                    newUserList.add(user);
@@ -144,7 +162,7 @@ public class ExpenseServiceImpl implements ExpenseService{
 
         }
 
-        return expense;
+        return new ExpenseResponse(expense);
 
     }
 
@@ -156,10 +174,12 @@ public class ExpenseServiceImpl implements ExpenseService{
     }
 
     @Override
-    public List<Expense> getAllExpensebyGroup(long groupId) throws NotFoundException{
+    public List<ExpenseResponse> getAllExpensebyGroup(long groupId) throws NotFoundException{
         Group group = groupRepository.findById(groupId).orElseThrow(() -> new NotFoundException("Group could not be found"));
         List<Expense> e = expenseRepository.findByGroupExpense(group);
-        return e;
+        List<ExpenseResponse> expenseResponseList = new ArrayList<>();
+        e.forEach(expense -> expenseResponseList.add(new ExpenseResponse(expense)));
+        return expenseResponseList;
     }
 
 
