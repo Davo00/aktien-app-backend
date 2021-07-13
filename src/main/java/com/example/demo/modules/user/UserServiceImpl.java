@@ -4,6 +4,7 @@ import com.example.demo.modules.group.Group;
 import com.example.demo.modules.group.GroupRepository;
 import com.example.demo.modules.security.JwtTokenUtil;
 import com.example.demo.modules.group.response.GroupResponse;
+import com.example.demo.modules.share.Share;
 import com.example.demo.modules.user.request.CreateUser;
 import com.example.demo.modules.user.response.UserResponse;
 import com.example.demo.utils.NotFoundException;
@@ -85,6 +86,18 @@ public class UserServiceImpl implements UserService {
     public void deleteUser(String token) {
         User user = getCurrentUser(token);
         userRepository.delete(user);
+    }
+
+    @Override
+    public List<Share> getOwnPreferredShares(String token) {
+        return getCurrentUser(token).getPreferedShares();
+    }
+
+    @Override
+    public List<Share> getPreferredShares(String username) {
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("Username: " + username + " not found"))
+                .getPreferedShares();
     }
 
     private boolean isUsernameReserved(String username) {
