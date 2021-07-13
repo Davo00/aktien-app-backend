@@ -31,7 +31,6 @@ public class Share {
 
     @Getter
     @Setter
-    //@Lob
     private double price;
 
     @ManyToMany
