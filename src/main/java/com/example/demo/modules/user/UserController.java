@@ -1,7 +1,5 @@
 package com.example.demo.modules.user;
 
-import com.example.demo.modules.group.Group;
-import com.example.demo.modules.group.GroupService;
 import com.example.demo.modules.security.JwtTokenUtil;
 import com.example.demo.modules.user.request.UserLogin;
 import com.example.demo.modules.group.response.GroupResponse;
@@ -29,21 +27,19 @@ import java.util.List;
 public class UserController {
 
     private UserService userService;
-    private GroupService groupService;
-
     private final AuthenticationManager authenticationManager;
     private final JwtTokenUtil jwtTokenUtil;
 
     @Autowired
-    public UserController(UserService userService, GroupService groupService, AuthenticationManager authenticationManager, JwtTokenUtil jwtTokenUtil) {
+    public UserController(UserService userService, AuthenticationManager authenticationManager, JwtTokenUtil jwtTokenUtil) {
         this.userService = userService;
-        this.groupService = groupService;
         this.authenticationManager = authenticationManager;
         this.jwtTokenUtil = jwtTokenUtil;
     }
 
     @PostMapping("register")
-    public ResponseEntity<UserResponse> createUser(@RequestBody @Valid CreateUser request, UriComponentsBuilder uriComponentsBuilder) {
+    public ResponseEntity<UserResponse> createUser(@RequestBody @Valid CreateUser request,
+                                                   UriComponentsBuilder uriComponentsBuilder) throws UserServiceImpl.UsernameReservedException {
         UserResponse user = userService.createUser(request);
         UriComponents uriComponents = uriComponentsBuilder.path("user/{username}").buildAndExpand(request.getUsername());
         URI location = uriComponents.toUri();
@@ -72,19 +68,10 @@ public class UserController {
         }
     }
 
-    @GetMapping("group/{groupName}")
-    public ResponseEntity<List<User>> getUsersbyGroup(UriComponentsBuilder uriComponentsBuilder,
-                                                      @PathVariable String groupName) {
-        Group group = groupService.findGroupByName(groupName);
-        List<User> users = userService.getUsersByGroup(group);
-        UriComponents uriComponents = uriComponentsBuilder.path("{groupname}").buildAndExpand(group.getName());
-        URI location = uriComponents.toUri();
-        return ResponseEntity.created(location).body(users);
-    }
-
-    @GetMapping("allGroups/{userId}")
-    public ResponseEntity<List<GroupResponse>> getAllGroupsOfUser (@PathVariable ("userId") long userId) throws NotFoundException {
-        return ResponseEntity.ok(userService.getAllGroupsOfUser(userId));
+    @GetMapping("allGroups/")
+    public ResponseEntity<List<GroupResponse>> getAllGroupsOfUser(@RequestHeader("Authorization") String token) throws NotFoundException {
+        User user = userService.getCurrentUser(token);
+        return ResponseEntity.ok(userService.getAllGroupsOfUser(user.getId()));
     }
 
     @PutMapping()

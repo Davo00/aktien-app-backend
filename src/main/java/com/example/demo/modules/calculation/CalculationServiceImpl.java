@@ -14,6 +14,7 @@ import com.example.demo.modules.user.User;
 import com.example.demo.modules.user.UserRepository;
 import com.example.demo.utils.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -160,17 +161,13 @@ public class CalculationServiceImpl implements CalculationService{
         List<Debt> allNewDebts = new ArrayList<>();
 
         for (WhoOwesWhom whom : whoOwesWhomList){
-            User creditor = userRepository.findByUsername(whom.getCreditor());
-            User debitor = userRepository.findByUsername(whom.getDebitor());
+            User creditor = userRepository.findByUsername(whom.getCreditor()).orElseThrow(() -> new UsernameNotFoundException("Creditor: not found"));
+            User debitor = userRepository.findByUsername(whom.getDebitor()).orElseThrow(() -> new UsernameNotFoundException("Debtor: not found"));
             allNewDebts.add(new Debt(false, whom.getAmount(), null, creditor, debitor, false, false, group.getName(), null));
         }
-
-        for (Debt debt : allNewDebts){
-            debt= debtRepository.save(debt);
-        }
-
         List<DebtResponse> returnableDebts = new ArrayList<>();
-        for(Debt debt: allNewDebts){
+        for (Debt debt : allNewDebts){
+            debt = debtRepository.save(debt);
             returnableDebts.add(new DebtResponse(debt));
         }
 
