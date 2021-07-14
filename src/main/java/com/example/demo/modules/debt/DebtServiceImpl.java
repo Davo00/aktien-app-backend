@@ -1,7 +1,7 @@
 package com.example.demo.modules.debt;
 
-import com.example.demo.modules.debt.request.AcceptDebt;
 import com.example.demo.modules.debt.request.CreateDebt;
+import com.example.demo.modules.debt.request.ProposeDebt;
 import com.example.demo.modules.debt.response.DebtResponse;
 import com.example.demo.modules.share.Share;
 import com.example.demo.modules.share.ShareRepository;
@@ -19,19 +19,21 @@ import java.util.Date;
 import java.util.List;
 
 @Component
-public class DebtServiceImpl implements DebtService{
+public class DebtServiceImpl implements DebtService {
+
+    private DebtRepository debtRepository;
+    private UserRepository userRepository;
+    private ShareRepository shareRepository;
 
     @Autowired
-    DebtRepository debtRepository;
-
-    @Autowired
-    UserRepository userRepository;
-
-    @Autowired
-    ShareRepository shareRepository;
+    public DebtServiceImpl(DebtRepository debtRepository, UserRepository userRepository, ShareRepository shareRepository) {
+        this.debtRepository = debtRepository;
+        this.userRepository = userRepository;
+        this.shareRepository = shareRepository;
+    }
 
     @Override
-    public List<DebtResponse> findAllDebt(){
+    public List<DebtResponse> findAllDebt() {
         List<Debt> allDebt = debtRepository.findAll();
         List<DebtResponse> debtResponses = new ArrayList<>();
         allDebt.forEach(debt -> debtResponses.add(new DebtResponse(debt)));
@@ -39,26 +41,28 @@ public class DebtServiceImpl implements DebtService{
     }
 
     @Override
-    public DebtResponse createDebt(CreateDebt request) throws NotFoundException{
+    public DebtResponse createDebt(CreateDebt request) throws NotFoundException {
         String endDate = request.getDeadline();
-        Timestamp deadline= null;
+        Timestamp deadline = null;
         try {
             DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
             Date date = dateFormat.parse(endDate);
             long time = date.getTime();
             deadline = new Timestamp(time);
-        }catch (Exception e){
+        } catch (Exception e) {
             System.out.println("please provide the String in this \"dd/MM/yyyy\" format");
-            e.printStackTrace();}
+            e.printStackTrace();
+        }
+
+        User creditor = userRepository.findById(request.getCreditorId())
+                .orElseThrow(() -> new NotFoundException("Creditor with the Id " + request.getCreditorId() + " could not be found"));
+
+        User debtor = userRepository.findById(request.getDebtorId())
+                .orElseThrow(() -> new NotFoundException("Debtor with the Id " + request.getDebtorId() + " could not be found"));
 
 
-
-        User creditor = userRepository.findById(request.getCreditorId()).orElseThrow(()-> new NotFoundException("Creditor mit der Id " +request.getCreditorId() + " could not be found"));
-
-        User debtor = userRepository.findById(request.getDebtorId()).orElseThrow(()-> new NotFoundException("Debtor with the Id " + request.getDebtorId() + " could not be found"));
-
-
-        Share share = shareRepository.findById(request.getSelectedShareId()).orElseThrow(() -> new NotFoundException("Share with the Id " + request.getSelectedShareId() + " could not be found"));
+        Share share = shareRepository.findById(request.getSelectedShareId())
+                .orElseThrow(() -> new NotFoundException("Share with the Id " + request.getSelectedShareId() + " could not be found"));
 
         Debt debt = new Debt(request.isPaid(), request.getAmount(),/*request.getTimestampCreation(),*/ deadline, creditor, debtor, request.isCreditorConfirmed(), request.isDebtorConfirmed(), request.getGroupName(), share);
         debt = debtRepository.save(debt);
@@ -66,32 +70,45 @@ public class DebtServiceImpl implements DebtService{
     }
 
     @Override
-    public Debt proposeDebt(Debt oldDebt, Share stock, Timestamp timestamp, User user){
-        Debt newDebt = new Debt(false, oldDebt.getAmount(), /*null,*/ timestamp, oldDebt.getCreditor(), oldDebt.getDebtor(), (user.getId() == oldDebt.getCreditor().getId())?true:false,  (user.getId() == oldDebt.getCreditor().getId())?false:true, oldDebt.getGroupName(), stock);
-        debtRepository.deleteById(oldDebt.getId());
-        debtRepository.save(newDebt);
-        return newDebt;
+    public void proposeDebt(User proposer, ProposeDebt proposeDebt) throws Exception {
+        Debt debt = debtRepository.findById(proposeDebt.getDebtId())
+                .orElseThrow(() -> new NotFoundException("Debt with the Id " + proposeDebt.getDebtId() + " could not be found"));
+        boolean isDebtor = proposer.getId().equals(debt.getDebtor().getId());
+        boolean isCreditor = proposer.getId().equals(debt.getCreditor().getId());
+        if (!isCreditor && !isDebtor) {
+            throw new Exception("User is neither Creditor nor Debtor, no rights to propose Share for this debt");
+        } else {
+            debt.setDebtorConfirmed(isDebtor);
+            debt.setCreditorConfirmed(isCreditor);
+            debt.setSelectedShare(
+                    shareRepository.findById(proposeDebt.getShareId())
+                            .orElseThrow(() -> new NotFoundException("Share with ID: " + proposeDebt.getShareId() + " not found"))
+            );
+            debtRepository.save(debt);
+        }
     }
 
     @Override
-    public DebtResponse acceptDebt(long debtId, long userId) throws NotFoundException{
+    public DebtResponse acceptDebt(Long debtId, Long userId) throws Exception {
+        Debt debt = debtRepository.findById(debtId)
+                .orElseThrow(() -> new NotFoundException("Debt with the Id " + debtId + " could not be found"));
 
-        Debt debt = debtRepository.findById(debtId).orElseThrow(()-> new NotFoundException("Debt with the Id " + debtId + " could not be found"));
+        boolean isDebtor = userId.equals(debt.getDebtor().getId());
+        boolean isCreditor = userId.equals(debt.getCreditor().getId());
 
-        User user = userRepository.findById(userId).orElseThrow(()-> new NotFoundException("User with the Id " +userId +  " could not be found"));
-
-
-        if(user.getId() == debt.getCreditor().getId()){
+        if (isCreditor) {
             debt.setCreditorConfirmed(true);
-        }
-        else if(user.getId() == debt.getDebtor().getId()){
+        } else if (isDebtor) {
             debt.setDebtorConfirmed(true);
         }
-        if(debt.isCreditorConfirmed() && debt.isDebtorConfirmed()){
-            Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-            debt.setTimestampCreation(timestamp);
+
+        if (debt.isCreditorConfirmed() && debt.isDebtorConfirmed()) {
+            debt = debtRepository.save(debt);
         }
-        debt=debtRepository.save(debt);
+        else {
+            throw new Exception("Debt can't be accepted, please select a Share or try accepting an other debt");
+        }
+
         return new DebtResponse(debt);
     }
 

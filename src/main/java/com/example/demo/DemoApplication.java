@@ -113,6 +113,8 @@ public class DemoApplication {
 
             Share s = new Share("SAP",127.99, sapEmployees);
             shareRepository.save(s);
+            Share s2 = new Share("IBM",139.59, sapEmployees);
+            shareRepository.save(s2);
 
             DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
             Date date = dateFormat.parse("23/09/2021");

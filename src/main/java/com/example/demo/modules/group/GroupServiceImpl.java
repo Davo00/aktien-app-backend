@@ -1,6 +1,5 @@
 package com.example.demo.modules.group;
 
-import com.example.demo.modules.expense.Expense;
 import com.example.demo.modules.group.request.CreateGroup;
 import com.example.demo.modules.group.request.UpdateGroup;
 import com.example.demo.modules.group.response.GroupResponse;
@@ -44,7 +43,7 @@ public class GroupServiceImpl implements GroupService {
         }
         Group group = new Group(request.getName());
         List <User> myUser = new ArrayList<>();
-        for (Long id : request.getMyUsersIds()){
+        for (Long id : request.getMyUsersIds()){ //TODO Replace by username
             User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException("User with the id "+ id + " could not be found"));
             myUser.add(user);
         }
