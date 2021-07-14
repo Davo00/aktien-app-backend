@@ -5,6 +5,7 @@ import com.example.demo.modules.debt.request.CreateDebt;
 import com.example.demo.modules.debt.response.DebtResponse;
 import com.example.demo.modules.share.Share;
 import com.example.demo.modules.user.User;
+import com.example.demo.modules.user.UserService;
 import com.example.demo.modules.user.UserServiceImpl;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,8 +24,16 @@ import java.util.List;
 @RequestMapping("/debt")
 public class DebtController {
 
+
+    private DebtService debtService;
+    private UserService userService;
+
     @Autowired
-    DebtService debtService;
+    DebtController(DebtService debtService, UserService userService) {
+        this.debtService = debtService;
+        this.userService = userService;
+
+    }
 
 
 
@@ -40,9 +49,12 @@ public class DebtController {
     }
 
     @PostMapping("propose")
-    public ResponseEntity<Debt> proposeDebt(@RequestBody @Valid Debt oldDebt, @RequestBody @Valid Share stock, @RequestBody @Valid Timestamp timestamp, UriComponentsBuilder uriComponentsBuilder){
-        //TODO find the actual user who proposed the change
-        User user = new User();//TODO mock function to return a user, later the logged on user
+    public ResponseEntity<Debt> proposeDebt(@RequestHeader("Authorization") String token,
+                                            @RequestBody @Valid Debt oldDebt,
+                                            @RequestBody @Valid Share stock,
+                                            @RequestBody @Valid Timestamp timestamp,
+                                            UriComponentsBuilder uriComponentsBuilder){
+        User user = userService.getCurrentUser(token);
         Debt debt = debtService.proposeDebt(oldDebt, stock, timestamp, user);
         UriComponents uriComponents = uriComponentsBuilder.path("debt/{id}").buildAndExpand(debt.getId());
         URI location = uriComponents.toUri();

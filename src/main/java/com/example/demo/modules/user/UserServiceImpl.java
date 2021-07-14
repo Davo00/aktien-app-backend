@@ -64,6 +64,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getCurrentUser(String token) {
+        token = token.split(" ")[1];
         String username = jwtTokenUtil.getUsername(token);
         return userRepository.findByUsername(username).orElseThrow(() ->
                 new UsernameNotFoundException("User: " + username + "not found"));
