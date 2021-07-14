@@ -46,8 +46,9 @@ public class GroupServiceImpl implements GroupService {
         }
         Group group = new Group(request.getName());
         List <User> myUser = new ArrayList<>();
-        for (Long id : request.getMyUsersIds()) {
-            User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException("User with the id "+ id + " could not be found"));
+        for (String username : request.getUsernames()) {
+            User user = userRepository.findByUsername(username)
+                    .orElseThrow(() -> new NotFoundException("User with the id "+ username + " could not be found"));
             myUser.add(user);
         }
         for(User user : myUser){

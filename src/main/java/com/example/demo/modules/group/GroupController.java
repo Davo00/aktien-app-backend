@@ -21,8 +21,13 @@ import java.util.List;
 @RequestMapping("/group")
 public class GroupController {
 
+
+    private GroupService groupService;
+
     @Autowired
-    GroupService groupService;
+    public GroupController(GroupService groupService) {
+        this.groupService = groupService;
+    }
 
     /*@GetMapping("name/{name}/all/user")
     public ResponseEntity<List<Group>> findAllExpense(@PathVariable String name) {
