@@ -4,11 +4,13 @@ import com.example.demo.modules.group.request.CreateGroup;
 import com.example.demo.modules.group.request.UpdateGroup;
 import com.example.demo.modules.group.response.GroupResponse;
 import com.example.demo.modules.user.User;
+import com.example.demo.modules.user.UserService;
 import com.example.demo.modules.user.response.UserResponse;
 import com.example.demo.utils.DeletionIntegrityException;
 import com.example.demo.utils.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -23,6 +25,7 @@ public class GroupController {
 
 
     private GroupService groupService;
+    private UserService userService;
 
     @Autowired
     public GroupController(GroupService groupService) {
@@ -41,7 +44,11 @@ public class GroupController {
     }
 
     @PostMapping
-    public ResponseEntity<GroupResponse> createGroup(@RequestBody @Valid CreateGroup request, UriComponentsBuilder uriComponentsBuilder) {
+    public ResponseEntity<GroupResponse> createGroup(@RequestHeader("Authorization") String token,
+                                                     @RequestBody @Valid CreateGroup request,
+                                                     UriComponentsBuilder uriComponentsBuilder) {
+        String requester = userService.getCurrentUser(token).getUsername();
+        request.getUsernames().add(requester);
         GroupResponse group = groupService.createGroup(request);
         UriComponents uriComponents = uriComponentsBuilder.path("group/{name}").buildAndExpand(request.getName());
         URI location = uriComponents.toUri();
