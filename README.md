@@ -5,10 +5,25 @@ The technology we use:
 - We use java Springboot
 - We use an in memory database for testing purposes
 - We can upgrade to a MySQL Database at a moments notice
+- We use JWT Tokens as an authentication tool
 
 The plan for our Project is as follows:
 
 [Klassendiagram.pdf](https://github.com/Davo00/aktien-app-backend/files/6823431/Klassendiagram.pdf)
+
+
+
+Lessons Learned:
+- How to use git effectively
+- Automated documentation through swagger
+- Using JWT Tokens to authenticate users in a safe way
+- Using maven to manage dependencies
+- Coordination using ClickUp
+- Setting up simple web APIs for existing Java projects (making the Pagnia app publicly accessible)
+- The Pros (and Cons) of a Classdiagram
+- Saving the files in the formally correct folders and subfolders for Spring applications
+- Seperation between decleration and implementation of Methods
+- Using 3rd Party APIs to get live Stockprices
 
 The Idea behind the App is as follows:
 
@@ -31,6 +46,3 @@ Wird dieser Abend abgerechnet, ergibt sich, dass D 6€ an C schuldet, E 3€ an
 D schuldet also 6 € an C. D denkt, dass der Bitcoin Preis innerhalb der nächsten 2 Wochen fällt. C ist optimistischer und denkt, der Bitcoin Kurs steigt weiter. Sie einigen sich darauf, die Schuld für 2 Wochen an den Bitcoin Preis zu binden. 
 
 Die App speichert diese Schuld jetzt also nicht als 6 €, sondern als einen Anteil eines Bitcoins, welcher zu dem Zeitpunkt 6€ Wert ist. Nach Ablauf der 2 Wochen wird der Wert des Anteils errechnet. Ist der Bitcoin Preis gestiegen, so sind die 6 € jetzt z.B. 7 € Wert, ist er gefallen, so ist die Schuld jetzt z.B. 4 € wert. Der neue Schuldbetrag wird jetzt D und C angezeigt. Den neuen Betrag kann D jetzt an C zahlen.
-
-
-
