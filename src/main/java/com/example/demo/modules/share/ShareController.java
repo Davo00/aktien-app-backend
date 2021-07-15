@@ -109,7 +109,6 @@ public class ShareController {
     return null;
     }
 
-
     @PostMapping("share_id/username")
     public ResponseEntity<Share> selectShareFromPartner(@PathVariable Long share_id, @PathVariable String username) throws NotFoundException {
         Share s = null;

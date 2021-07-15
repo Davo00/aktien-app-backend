@@ -9,7 +9,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-public class UpdateExpense{
+public class UpdateExpense {
     private String userPaid;
     private double amount;
     private String description;
@@ -18,5 +18,5 @@ public class UpdateExpense{
     private int consumercount;
 
     private List<Long> userIds;
-    private Long groupIds;
+    private Long groupId;
 }

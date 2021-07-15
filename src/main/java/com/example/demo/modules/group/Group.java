@@ -1,5 +1,7 @@
 package com.example.demo.modules.group;
 
+import com.example.demo.modules.expense.Expense;
+import com.example.demo.modules.group.request.CreateGroup;
 import com.example.demo.modules.user.User;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
@@ -32,6 +34,11 @@ public class Group {
     @JsonManagedReference
     private List<User> myUsers = new ArrayList<>();
 
+    @Getter
+    @Setter
+    @OneToMany(mappedBy = "groupExpense", cascade = CascadeType.ALL)
+    private List<Expense> myExpenses;
+
 
     public Group() {
     }
@@ -44,21 +51,20 @@ public class Group {
 
     public Group(@NotNull String name) {
         this.name = name;
-
     }
+
 
     public Group(@NotNull String name, @NotNull List<User> myUsers) {
         this.name = name;
-        if(!myUsers.isEmpty() && myUsers!=null){
-           myUsers.forEach(user -> addUser(user));
+        if (!myUsers.isEmpty() && myUsers != null) {
+            myUsers.forEach(user -> addUser(user));
         }
     }
 
-    public void addUser(User user){
+    public void addUser(User user) {
         myUsers.add(user);
         user.getJoinedGroups().add(this);
     }
-
 
 
 }

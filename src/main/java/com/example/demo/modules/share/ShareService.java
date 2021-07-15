@@ -9,10 +9,15 @@ import java.util.List;
 public interface ShareService {
 
     List<Share> findAllShare();
+
     Share createShare(CreateShare request) throws NotFoundException;
+
     Share one(long id) throws NotFoundException;
+
     void deleteShare(long id) throws NotFoundException, DeletionIntegrityException;
-    List<Share>getPreferedSharesbyUser(String username) throws NotFoundException;
+
+    List<Share> getPreferedSharesbyUser(String username) throws NotFoundException;
+
     Share selectShareFromCreditor(String username, Long shareId) throws NotFoundException;
     Stock getStockData(String stockName) throws NotFoundException;
     double getSharePriceByDebt(Long debtId) throws Exception;

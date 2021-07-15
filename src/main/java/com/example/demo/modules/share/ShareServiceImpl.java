@@ -8,6 +8,7 @@ import com.example.demo.modules.user.UserRepository;
 import com.example.demo.utils.DeletionIntegrityException;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -35,13 +36,10 @@ public class ShareServiceImpl implements ShareService {
     }
 
     @Override
-    public Share createShare(CreateShare request) throws NotFoundException {
+    public Share createShare(CreateShare request) {
         List<User> userList = new ArrayList<>();
         for (String name : request.getUserNames()) {
-            User user = userRepository.findByUsername(name);
-            if (user == null) {
-                throw new NotFoundException("User " + name + " could not be found!");
-            }
+            User user = userRepository.findByUsername(name).orElseThrow(() -> new UsernameNotFoundException("User " + name + " could not be found!"));
             userList.add(user);
         }
         Share share = new Share(request.getName(), request.getPrice(), userList);
@@ -82,11 +80,12 @@ public class ShareServiceImpl implements ShareService {
 
     @Override
     public List<Share> getPreferedSharesbyUser(String username) throws NotFoundException {
-        User user = userRepository.findByUsername(username);
+        User user = userRepository.findByUsername(username).orElseThrow(() ->
+                new UsernameNotFoundException("User " + username + " could not be found!"));
 
         List<Share> shares = user.getPreferedShares();
         //   List<Share> shares = Wird nachgeholt, wenn User_sharelist da ist
-        // To do
+        // TODO
 
         return shares;
     }

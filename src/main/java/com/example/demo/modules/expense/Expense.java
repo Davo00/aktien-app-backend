@@ -24,7 +24,7 @@ public class Expense {
 
     @Getter
     @Setter
-    private String userPaid;
+    private String userPaid; //Username!!!!
 
     @Getter
     @Setter
@@ -41,6 +41,7 @@ public class Expense {
     @Getter
     @Setter
     @ManyToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "group_id")
     @JsonBackReference
     private Group groupExpense;
 
@@ -54,7 +55,7 @@ public class Expense {
     private int consumerCount;
 
     @ManyToMany
-    @JoinTable(name = "expenseplayer",
+    @JoinTable(name = "expense_player",
             joinColumns = @JoinColumn(name = "expense_id"),
             inverseJoinColumns = @JoinColumn(name = "player_id"))
     @Getter
@@ -88,10 +89,10 @@ public class Expense {
         this.unpaid = true;
         this.consumerCount = 0;
         this.groupExpense = group;
-        this.copayer = copayers;
-     /*   if(!copayers.isEmpty() && copayers!=null){
+        //this.copayer = copayers;
+        if (!copayers.isEmpty() && copayers != null) {
             copayers.forEach(user -> addUser(user));
-        }*/
+        }
     }
 
 
