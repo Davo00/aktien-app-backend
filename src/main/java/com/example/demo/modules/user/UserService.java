@@ -1,6 +1,7 @@
 package com.example.demo.modules.user;
 
 import com.example.demo.modules.group.response.GroupResponse;
+import com.example.demo.modules.share.Share;
 import com.example.demo.modules.user.request.CreateUser;
 import com.example.demo.modules.user.response.UserResponse;
 import com.example.demo.utils.NotFoundException;
@@ -17,4 +18,8 @@ public interface UserService {
     void updateUser(User updatedUser, String token) throws UserServiceImpl.UsernameReservedException;
 
     void deleteUser(String token);
+
+    List<Share> getOwnPreferredShares(String token);
+
+    List<Share> getPreferredShares(String username);
 }

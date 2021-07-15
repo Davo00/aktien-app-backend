@@ -1,11 +1,13 @@
 package com.example.demo.modules.user;
 
 import com.example.demo.modules.security.JwtTokenUtil;
+import com.example.demo.modules.share.Share;
 import com.example.demo.modules.user.request.UserLogin;
 import com.example.demo.modules.group.response.GroupResponse;
 import com.example.demo.modules.user.request.CreateUser;
 import com.example.demo.modules.user.response.UserResponse;
 import com.example.demo.utils.NotFoundException;
+import org.hibernate.annotations.Parameter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -14,6 +16,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -46,6 +49,7 @@ public class UserController {
         return ResponseEntity.created(location).body(user);
     }
 
+    @CrossOrigin("http://localhost:4200")
     @PostMapping("login")
     public ResponseEntity login(@RequestBody @Valid UserLogin request) {
         try {
@@ -87,6 +91,22 @@ public class UserController {
     public ResponseEntity<User> deleteUser(@RequestHeader("Authorization") String token) {
         userService.deleteUser(token);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("preferredShares")
+    public ResponseEntity<List<Share>> getOwnPreferredShareList(@RequestHeader("Authorization") String token,
+                                                                UriComponentsBuilder uriComponentsBuilder) throws UsernameNotFoundException {
+        UriComponents uriComponents = uriComponentsBuilder.path("user/preferredShares").buildAndExpand();
+        URI location = uriComponents.toUri();
+        return ResponseEntity.created(location).body(userService.getOwnPreferredShares(token));
+    }
+
+    @GetMapping("preferredShares/{username}")
+    public ResponseEntity<List<Share>> getPreferredShareList(@PathVariable String username,
+                                                             UriComponentsBuilder uriComponentsBuilder) throws UsernameNotFoundException {
+        UriComponents uriComponents = uriComponentsBuilder.path("user/preferredShares").buildAndExpand(username);
+        URI location = uriComponents.toUri();
+        return ResponseEntity.created(location).body(userService.getPreferredShares(username));
     }
 
 }

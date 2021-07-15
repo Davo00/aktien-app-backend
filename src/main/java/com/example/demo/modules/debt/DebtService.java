@@ -1,9 +1,8 @@
 package com.example.demo.modules.debt;
 
-import com.example.demo.modules.debt.request.AcceptDebt;
 import com.example.demo.modules.debt.request.CreateDebt;
+import com.example.demo.modules.debt.request.ProposeDebt;
 import com.example.demo.modules.debt.response.DebtResponse;
-import com.example.demo.modules.share.Share;
 import com.example.demo.modules.user.User;
 import com.example.demo.utils.NotFoundException;
 
@@ -14,6 +13,6 @@ public interface DebtService {
 
     List<DebtResponse> findAllDebt();
     DebtResponse createDebt(CreateDebt request) throws NotFoundException;
-    Debt proposeDebt(Debt oldDebt, Share stock, Timestamp timestamp, User user);
-    DebtResponse acceptDebt(long debtId, long userId) throws NotFoundException;
+    void proposeDebt (User user, ProposeDebt proposeDebt) throws Exception;
+    DebtResponse acceptDebt(Long debtId, Long userId) throws Exception;
 }

@@ -11,9 +11,6 @@ import java.util.List;
 public class CreateGroup {
 
     private String name;
-    private List<Long> myUsersIds;
-
-
-
+    private List<String> usernames;
 
 }

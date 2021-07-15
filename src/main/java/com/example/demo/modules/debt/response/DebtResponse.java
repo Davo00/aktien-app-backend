@@ -11,51 +11,53 @@ import java.sql.Timestamp;
 @Setter
 public class DebtResponse {
 
-    private Long Id;
+    private Long id;
     private double amount;
     private boolean paid;
     private Timestamp creation;
     private Timestamp deadline;
-    private Long creditorId;
-    private Long debtorId;
+    private String creditorUsername;
+    private String debtorUsername;
     private boolean creditorConfirmed;
     private boolean debtorConfirmed;
     private String groupName;
     private Long selectedShareId;
 
-    public DebtResponse (String message){
-        this.groupName=message;
+    public DebtResponse(String message) {
+        this.groupName = message;
     }
 
 
-    public DebtResponse(Long id, double amount, boolean paid, Timestamp creation, Timestamp deadline, Long creditorId
-            , Long debtorId, boolean creditorConfirmed, boolean debtorConfirmed, String groupName) {
-        Id = id;
+    public DebtResponse(Long id, double amount, boolean paid, Timestamp creation, Timestamp deadline,
+                        String creditorUsername, String debtorUsername, boolean creditorConfirmed,
+                        boolean debtorConfirmed, String groupName) {
+        this.id = id;
         this.amount = amount;
         this.paid = paid;
         this.creation = creation;
         this.deadline = deadline;
-        this.creditorId = creditorId;
-        this.debtorId = debtorId;
+        this.creditorUsername = creditorUsername;
+        this.debtorUsername = debtorUsername;
         this.creditorConfirmed = creditorConfirmed;
         this.debtorConfirmed = debtorConfirmed;
         this.groupName = groupName;
 
     }
 
-    public DebtResponse(Debt debt){
-        this(debt.getId(),
+    public DebtResponse(Debt debt) {
+        this(
+                debt.getId(),
                 debt.getAmount(),
                 debt.isPaid(),
                 debt.getTimestampCreation(),
                 debt.getTimestampDeadline(),
-                debt.getCreditor().getId(),
-                debt.getDebtor().getId(),
+                debt.getCreditor().getUsername(),
+                debt.getDebtor().getUsername(),
                 debt.isCreditorConfirmed(),
                 debt.isDebtorConfirmed(),
                 debt.getGroupName());
 
-        if(debt.getSelectedShare()!=null){
+        if (debt.getSelectedShare() != null) {
             this.setSelectedShareId(debt.getSelectedShare().getId());
         }
     }
