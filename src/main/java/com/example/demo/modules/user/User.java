@@ -70,7 +70,6 @@ public class User implements UserDetails {
     private List<Share> preferedShares;
 
 
-
     @Getter
     @Setter
     @ManyToMany(mappedBy = "copayer")

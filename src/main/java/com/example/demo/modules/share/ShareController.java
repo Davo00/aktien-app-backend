@@ -27,7 +27,7 @@ public class ShareController {
     UserService userService;
 
     @GetMapping
-    public ResponseEntity<List<Share>> findAllShare(){
+    public ResponseEntity<List<Share>> findAllShare() {
         return ResponseEntity.ok(shareService.findAllShare());
     }
 
@@ -56,18 +56,17 @@ public class ShareController {
 
     @GetMapping("{username}")
     public ResponseEntity<List<Share>> getPreferedSharesbyUsername(@PathVariable String username) throws NotFoundException {
-         Optional<List<Share>> share = Optional.ofNullable(shareService.getPreferedSharesbyUser(username));
+        Optional<List<Share>> share = Optional.ofNullable(shareService.getPreferedSharesbyUser(username));
         List<Share> s = share.orElseThrow(() -> new NotFoundException("Sharelist could not be found"));
         return ResponseEntity.ok(s);
     }
 
 
-
     @PostMapping("share_id/username")
-    public  ResponseEntity<Share> selectShareFromPartner(@PathVariable Long share_id, @PathVariable String username)throws NotFoundException{
-    Share s = null;
-    //To do
-    return ResponseEntity.ok(s);
+    public ResponseEntity<Share> selectShareFromPartner(@PathVariable Long share_id, @PathVariable String username) throws NotFoundException {
+        Share s = null;
+        //To do
+        return ResponseEntity.ok(s);
     }
 
 

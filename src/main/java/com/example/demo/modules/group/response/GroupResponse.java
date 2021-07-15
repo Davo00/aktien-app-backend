@@ -20,10 +20,10 @@ public class GroupResponse {
         this.name = name;
     }
 
-    public GroupResponse(Group group){
+    public GroupResponse(Group group) {
         this(group.getId(), group.getName());
 
-        if(group.getMyUsers()!=null && !group.getMyUsers().isEmpty() ){
+        if (group.getMyUsers() != null && !group.getMyUsers().isEmpty()) {
             myUsers = new ArrayList<>();
             group.getMyUsers().forEach(user -> myUsers.add(user.getUsername()));
         }

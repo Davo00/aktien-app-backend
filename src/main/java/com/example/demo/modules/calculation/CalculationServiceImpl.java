@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-public class CalculationServiceImpl implements CalculationService{
+public class CalculationServiceImpl implements CalculationService {
 
     @Autowired
     ExpenseRepository expenseRepository;
@@ -37,29 +37,29 @@ public class CalculationServiceImpl implements CalculationService{
 
 
     @Override
-    public List<CreditOverview> calculateOverview(long groupId) throws NotFoundException{
-        Group group = groupRepository.findById(groupId).orElseThrow(()-> new NotFoundException("Group with groupId " + groupId +" could not be found "));
-        List <Expense> allExpense = expenseRepository.findByGroupExpense(group);
-        if (allExpense.isEmpty() || allExpense == null){
+    public List<CreditOverview> calculateOverview(long groupId) throws NotFoundException {
+        Group group = groupRepository.findById(groupId).orElseThrow(() -> new NotFoundException("Group with groupId " + groupId + " could not be found "));
+        List<Expense> allExpense = expenseRepository.findByGroupExpense(group);
+        if (allExpense.isEmpty() || allExpense == null) {
             throw new NotFoundException("No Expenses could be found");
         }
-        List<CreditOverview> creditOverviews= new ArrayList<>();
-        for(User user : group.getMyUsers()){
+        List<CreditOverview> creditOverviews = new ArrayList<>();
+        for (User user : group.getMyUsers()) {
             creditOverviews.add(new CreditOverview(user));
         }
 
-        for(Expense expense: allExpense){
-            if(!expense.isUnpaid()){
+        for (Expense expense : allExpense) {
+            if (!expense.isUnpaid()) {
                 continue;
             }
-            for(CreditOverview creditOverview : creditOverviews){
-                if(expense.getUserPaid().equals(creditOverview.getUsername())){
+            for (CreditOverview creditOverview : creditOverviews) {
+                if (expense.getUserPaid().equals(creditOverview.getUsername())) {
                     creditOverview.addToCredit(expense.getAmount(), expense.getCopayer().size());
                 }
 
-                for(User user : expense.getCopayer()) {
-                    if (user.getUsername().equals(creditOverview.getUsername())){
-                        creditOverview.takeFromCredit(expense.getAmount(),expense.getCopayer().size());
+                for (User user : expense.getCopayer()) {
+                    if (user.getUsername().equals(creditOverview.getUsername())) {
+                        creditOverview.takeFromCredit(expense.getAmount(), expense.getCopayer().size());
                     }
                 }
             }
@@ -72,61 +72,61 @@ public class CalculationServiceImpl implements CalculationService{
     @Override
     public List<WhoOwesWhom> calculateDebts(long groupId) throws NotFoundException {
         List<WhoOwesWhom> whoOwesWhomList = new ArrayList<>();
-        List <CreditOverview> creditOverviews = calculateOverview(groupId);
-        int creditZeroCounter=0;
-        boolean allZero=false;
-        for (CreditOverview creditOverview: creditOverviews){
-            if(creditOverview.getCredit()==0){
+        List<CreditOverview> creditOverviews = calculateOverview(groupId);
+        int creditZeroCounter = 0;
+        boolean allZero = false;
+        for (CreditOverview creditOverview : creditOverviews) {
+            if (creditOverview.getCredit() == 0) {
                 creditZeroCounter++;
             }
         }
-        if(creditOverviews.size()==creditZeroCounter){
-            allZero=true;
+        if (creditOverviews.size() == creditZeroCounter) {
+            allZero = true;
         }
 
 
-        if (creditOverviews==null || creditOverviews.isEmpty() || allZero){
+        if (creditOverviews == null || creditOverviews.isEmpty() || allZero) {
             List<WhoOwesWhom> returnable = new ArrayList<>();
-            returnable.add(new WhoOwesWhom("Nobody owes Nobody" ,"Nobody", 0.0));//do not change
+            returnable.add(new WhoOwesWhom("Nobody owes Nobody", "Nobody", 0.0));//do not change
             return returnable;
         }
 
-        int usersAmoutCalculated=0;
+        int usersAmoutCalculated = 0;
 
 
-        CreditOverview highest=null;
-        CreditOverview lowest=null;
+        CreditOverview highest = null;
+        CreditOverview lowest = null;
 
-        while(creditOverviews.size()-1>usersAmoutCalculated){
+        while (creditOverviews.size() - 1 > usersAmoutCalculated) {
 
-            for(CreditOverview creditOverview: creditOverviews){
-                if (creditOverview.getCredit()==0){
+            for (CreditOverview creditOverview : creditOverviews) {
+                if (creditOverview.getCredit() == 0) {
                     continue;
                 }
-                if(highest==null|| highest.getCredit()<creditOverview.getCredit()){
-                    highest=creditOverview;
+                if (highest == null || highest.getCredit() < creditOverview.getCredit()) {
+                    highest = creditOverview;
                 }
-                if(lowest==null|| lowest.getCredit()>creditOverview.getCredit()){
-                    lowest=creditOverview;
+                if (lowest == null || lowest.getCredit() > creditOverview.getCredit()) {
+                    lowest = creditOverview;
                 }
             }
 
-            if(highest.getCredit()>(lowest.getCredit()*(-1))){
-                whoOwesWhomList.add(new WhoOwesWhom(highest.getUsername(), lowest.getUsername(), lowest.getCredit()*-1));
+            if (highest.getCredit() > (lowest.getCredit() * (-1))) {
+                whoOwesWhomList.add(new WhoOwesWhom(highest.getUsername(), lowest.getUsername(), lowest.getCredit() * -1));
                 highest.takeFromCredit(lowest.getCredit());
                 lowest.setCredit(0.0);
                 usersAmoutCalculated++;
             }
 
-            if(highest.getCredit()== (lowest.getCredit()*(-1))){
-                whoOwesWhomList.add(new WhoOwesWhom(highest.getUsername(), lowest.getUsername(), lowest.getCredit()*-1));
+            if (highest.getCredit() == (lowest.getCredit() * (-1))) {
+                whoOwesWhomList.add(new WhoOwesWhom(highest.getUsername(), lowest.getUsername(), lowest.getCredit() * -1));
                 highest.takeFromCredit(lowest.getCredit());
                 lowest.setCredit(0.0);
                 usersAmoutCalculated++;
                 usersAmoutCalculated++;
             }
 
-            if(highest.getCredit()<(lowest.getCredit())*(-1)){
+            if (highest.getCredit() < (lowest.getCredit()) * (-1)) {
                 whoOwesWhomList.add(new WhoOwesWhom(highest.getUsername(), lowest.getUsername(), highest.getCredit()));
                 lowest.addToCredit(highest.getCredit());
                 highest.setCredit(0.0);
@@ -136,37 +136,36 @@ public class CalculationServiceImpl implements CalculationService{
         }//while
 
 
-
         return whoOwesWhomList;
     }
 
     @Override
     public List<DebtResponse> finalCalculation(long groupId) throws NotFoundException {
 
-        Group group = groupRepository.findById(groupId).orElseThrow(()-> new NotFoundException("Group with groupId " + groupId +" could not be found "));
+        Group group = groupRepository.findById(groupId).orElseThrow(() -> new NotFoundException("Group with groupId " + groupId + " could not be found "));
 
         List<WhoOwesWhom> whoOwesWhomList = calculateDebts(groupId);
 
         String firstCreditor = whoOwesWhomList.get(0).getCreditor();
-        if(firstCreditor.equals("Nobody owes Nobody")){
+        if (firstCreditor.equals("Nobody owes Nobody")) {
             List<DebtResponse> returnable = new ArrayList<>();
             returnable.add(new DebtResponse("No debt possible as nobody owes anything to nobody"));
             return returnable;
         }
 
-        List <Expense> allExpense = expenseRepository.findByGroupExpense(group);
-        for(Expense expense: allExpense){
+        List<Expense> allExpense = expenseRepository.findByGroupExpense(group);
+        for (Expense expense : allExpense) {
             expense.setUnpaid(false);
         }
         List<Debt> allNewDebts = new ArrayList<>();
 
-        for (WhoOwesWhom whom : whoOwesWhomList){
+        for (WhoOwesWhom whom : whoOwesWhomList) {
             User creditor = userRepository.findByUsername(whom.getCreditor()).orElseThrow(() -> new UsernameNotFoundException("Creditor: not found"));
             User debitor = userRepository.findByUsername(whom.getDebitor()).orElseThrow(() -> new UsernameNotFoundException("Debtor: not found"));
             allNewDebts.add(new Debt(false, whom.getAmount(), null, creditor, debitor, false, false, group.getName(), null));
         }
         List<DebtResponse> returnableDebts = new ArrayList<>();
-        for (Debt debt : allNewDebts){
+        for (Debt debt : allNewDebts) {
             debt = debtRepository.save(debt);
             returnableDebts.add(new DebtResponse(debt));
         }

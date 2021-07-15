@@ -34,7 +34,7 @@ public class Debt {
     @Setter
     @CreationTimestamp
     private Timestamp timestampCreation;
-    
+
     @Getter
     @Setter
     private Timestamp timestampDeadline;
@@ -72,12 +72,15 @@ public class Debt {
     @ManyToOne//(cascade = CascadeType.ALL)
     private Share selectedShare;
 
-    public Debt (){};
+    public Debt() {
+    }
 
-    public Debt (Long id, boolean paid,double amount, Timestamp timestampCreation, Timestamp timestampDeadline, User creditor, User debtor, boolean creditorConfirmed,  boolean debtorConfirmed, String groupName, Share selectedShare){
+    ;
+
+    public Debt(Long id, boolean paid, double amount, Timestamp timestampCreation, Timestamp timestampDeadline, User creditor, User debtor, boolean creditorConfirmed, boolean debtorConfirmed, String groupName, Share selectedShare) {
         this.id = id;
         this.paid = paid;
-        this.amount= amount;
+        this.amount = amount;
         this.timestampCreation = timestampCreation;
         this.timestampDeadline = timestampDeadline;
         this.creditor = creditor;
@@ -88,10 +91,10 @@ public class Debt {
         this.selectedShare = selectedShare;
     }
 
-    public Debt (boolean paid, double amount,/*Timestamp timestampCreation,*/ Timestamp timestampDeadline, User creditor, User debtor, boolean creditorConfirmed,  boolean debtorConfirmed, String groupName, Share selectedShare){
+    public Debt(boolean paid, double amount,/*Timestamp timestampCreation,*/ Timestamp timestampDeadline, User creditor, User debtor, boolean creditorConfirmed, boolean debtorConfirmed, String groupName, Share selectedShare) {
         this.paid = paid;
         //this.timestampCreation = timestampCreation;
-        this.amount= amount;
+        this.amount = amount;
         this.timestampDeadline = timestampDeadline;
         this.creditor = creditor;
         this.debtor = debtor;

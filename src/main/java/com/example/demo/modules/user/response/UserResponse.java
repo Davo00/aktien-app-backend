@@ -25,17 +25,17 @@ public class UserResponse {
         this.overallScore = overallScore;
     }
 
-    public UserResponse (User user){
+    public UserResponse(User user) {
         this(user.getId(), user.getUsername(), user.getEmail(), user.getOverallScore());
-        if( user.getJoinedGroups()!=null&& !user.getJoinedGroups().isEmpty()){
+        if (user.getJoinedGroups() != null && !user.getJoinedGroups().isEmpty()) {
             myGroupsIds = new ArrayList<>();
             user.getJoinedGroups().forEach(group -> myGroupsIds.add(group.getId()));
         }
-        if(user.getPreferedShares()!=null&& !user.getPreferedShares().isEmpty()){
+        if (user.getPreferedShares() != null && !user.getPreferedShares().isEmpty()) {
             prefferedSharesIds = new ArrayList<>();
             user.getPreferedShares().forEach(share -> prefferedSharesIds.add(share.getId()));
         }
-        if(user.getExpense()!=null &&!user.getExpense().isEmpty()){
+        if (user.getExpense() != null && !user.getExpense().isEmpty()) {
             myExpensesIds = new ArrayList<>();
             user.getExpense().forEach(expense -> myExpensesIds.add(expense.getId()));
         }

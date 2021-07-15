@@ -104,8 +104,7 @@ public class DebtServiceImpl implements DebtService {
 
         if (debt.isCreditorConfirmed() && debt.isDebtorConfirmed()) {
             debt = debtRepository.save(debt);
-        }
-        else {
+        } else {
             throw new Exception("Debt can't be accepted, please select a Share or try accepting an other debt");
         }
 
