@@ -15,5 +15,6 @@ public interface ShareService {
     List<Share>getPreferedSharesbyUser(String username) throws NotFoundException;
     Share selectShareFromCreditor(String username, Long shareId) throws NotFoundException;
     Stock getStockData(String stockName) throws NotFoundException;
+    double getSharePriceByDebt(Long debtId) throws Exception;
 
 }

@@ -17,12 +17,16 @@ import java.util.Optional;
 @Component
 public class ShareServiceImpl implements ShareService {
 
-    @Autowired
-    ShareRepository shareRepository;
+    private ShareRepository shareRepository;
+    private UserRepository userRepository;
+    private DebtRepository debtRepository;
 
     @Autowired
-    UserRepository userRepository;
-
+    public ShareServiceImpl(ShareRepository shareRepository, UserRepository userRepository, DebtRepository debtRepository) {
+        this.shareRepository = shareRepository;
+        this.userRepository = userRepository;
+        this.debtRepository = debtRepository;
+    }
 
     @Override
     public List<Share> findAllShare() {
@@ -31,12 +35,12 @@ public class ShareServiceImpl implements ShareService {
     }
 
     @Override
-    public Share createShare(CreateShare request) throws NotFoundException{
+    public Share createShare(CreateShare request) throws NotFoundException {
         List<User> userList = new ArrayList<>();
-        for(String name: request.getUserNames()){
+        for (String name : request.getUserNames()) {
             User user = userRepository.findByUsername(name);
-            if(user == null){
-                throw new NotFoundException("User "+ name + " could not be found!");
+            if (user == null) {
+                throw new NotFoundException("User " + name + " could not be found!");
             }
             userList.add(user);
         }
@@ -47,7 +51,7 @@ public class ShareServiceImpl implements ShareService {
 
 
     @Override
-    public Share one(long id) throws NotFoundException{
+    public Share one(long id) throws NotFoundException {
         Share share = shareRepository.findById(id).orElseThrow(() -> new NotFoundException("Share cound not be found"));
 
         return share;
@@ -58,18 +62,18 @@ public class ShareServiceImpl implements ShareService {
 
         Share share = shareRepository.findById(id).orElseThrow(() -> new NotFoundException("Share could not be found"));
         List<User> toSafeAtTheEnd = new ArrayList<>();
-        try{
-            for (User user : share.getUsers()){
+        try {
+            for (User user : share.getUsers()) {
                 user.getPreferedShares().remove(share);
                 toSafeAtTheEnd.add(user);
             }
 
             share.getUsers().clear();
             shareRepository.delete(share);
-            for (User user : toSafeAtTheEnd){
+            for (User user : toSafeAtTheEnd) {
                 user = userRepository.save(user);
             }
-        }catch (Exception e ){
+        } catch (Exception e) {
             throw new DeletionIntegrityException(e.getMessage());
         }
 
@@ -80,9 +84,9 @@ public class ShareServiceImpl implements ShareService {
     public List<Share> getPreferedSharesbyUser(String username) throws NotFoundException {
         User user = userRepository.findByUsername(username);
 
-       List<Share> shares =user.getPreferedShares();
-     //   List<Share> shares = Wird nachgeholt, wenn User_sharelist da ist
-      // To do
+        List<Share> shares = user.getPreferedShares();
+        //   List<Share> shares = Wird nachgeholt, wenn User_sharelist da ist
+        // To do
 
         return shares;
     }
@@ -101,5 +105,31 @@ public class ShareServiceImpl implements ShareService {
         return null;
     }
 
+    @Override
+    public double getSharePriceByDebt(Long debtId) throws Exception {
+        double price = 0.0;
+        Debt debt = debtRepository.findById(debtId)
+                .orElseThrow(() -> new NotFoundException("Debt: " + debtId + " not found"));
+        if (!debt.isDebtorConfirmed() || !debt.isCreditorConfirmed()) {
+            throw new Exception("Please select and accept a share");
+        }
+        Share share = shareRepository.findById(debt.getSelectedShare().getId())
+                .orElseThrow(() -> new NotFoundException("Share: " + debt.getSelectedShare().getId() + " not found"));
+        String close = Stock.getStock(share.getName(), "TIME_SERIES_INTRADAY").getClose();
+        if (close == null)
+            close = "0.0";
+        price = Double.parseDouble(close);
+        return price;
+    }
+
+    /*private Double getStockValueAt(String stockName, Timestamp timestamp) throws IOException {
+        Date d = timestamp.getTimestamp();
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        String dateString = format.format(d);
+        Stock s = Stock.getStock(stockName, dateString);
+        Double amount = Double.parseDouble(s.getClose());
+
+        return amount;
+    }*/
 
 }
