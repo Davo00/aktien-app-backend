@@ -51,7 +51,6 @@ public class ShareServiceImpl implements ShareService {
     @Override
     public Share one(long id) throws NotFoundException {
         Share share = shareRepository.findById(id).orElseThrow(() -> new NotFoundException("Share cound not be found"));
-
         return share;
     }
 
@@ -98,11 +97,6 @@ public class ShareServiceImpl implements ShareService {
         return null;
     }
 
-    @Override
-    public Stock getStockData(String stockName) throws NotFoundException {
-
-        return null;
-    }
 
     @Override
     public double getSharePriceByDebt(Long debtId) throws Exception {
@@ -121,14 +115,5 @@ public class ShareServiceImpl implements ShareService {
         return price;
     }
 
-    /*private Double getStockValueAt(String stockName, Timestamp timestamp) throws IOException {
-        Date d = timestamp.getTimestamp();
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        String dateString = format.format(d);
-        Stock s = Stock.getStock(stockName, dateString);
-        Double amount = Double.parseDouble(s.getClose());
-
-        return amount;
-    }*/
 
 }

@@ -50,18 +50,12 @@ public class Stock {
     }
 
     public static String getShareByName(String shareName, String func) throws IOException {
-        Date d = new Date();
-
         URL url = buildUrl(shareName, func);
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
         con.setDoOutput(true);
         con.setRequestMethod("GET");
         con.setRequestProperty("Content-Type", "application/json");
         BufferedReader br = new BufferedReader(new InputStreamReader((con.getInputStream())));
-        //
-
-
-//
         StringBuilder responseBuilder = new StringBuilder();
         String line = br.readLine();
         while (line != null) {
@@ -76,14 +70,12 @@ public class Stock {
     public static URL buildUrl(String shareName, String func) throws MalformedURLException {
         String shareAdress = "https://www.alphavantage.co/query?function=";
         shareAdress += func + "&symbol=" + shareName + "&interval=60min&" + "&apikey=" + API_KEY;
-
         return new URL(shareAdress);
 
     }
 
     public static Stock parseStringToJson(String stock) {
         Gson gson = new Gson();
-
         Stock s = gson.fromJson(stock, Stock.class);
 
         return s;
@@ -93,7 +85,6 @@ public class Stock {
 
 
         String result = getShareByName(shareName, func);
-        // JSONObject rootObject = new JSONObject(result);
         System.out.println(result);
 
         if (func.equals("TIME_SERIES_INTRADAY")) {
@@ -135,20 +126,11 @@ public class Stock {
             }
 
             JsonArray timeSeriesArray = new JsonArray();
+            // To do
             return null;
 
-            // JsonObject timeSeriesObject = jsonArray.get
-
-            //.get(1).getAsJsonObject();
-
-
-
- /*           for (String key : timeSeriesObject.keySet()) {
-                timeSeriesArray.add(timeSeriesObject.get(key));
-            }*/
-            //in timeSeriesObject das Datum finden und den close wert zurücklierfern
         }
-            return null;/*new Stock(new Date(System.currentTimeMillis()), currentOpen, currentHigh, currentLow, currentClose, currentVolume);*/
+            return null;
     }
 
 }

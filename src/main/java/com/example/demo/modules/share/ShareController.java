@@ -26,8 +26,6 @@ import java.util.Optional;
 @RequestMapping("/share")
 public class ShareController {
     final private String API_KEY = "C5R0KD15LKFP929I";
-    final String ADDRESS = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=";
-
     @Autowired
     ShareService shareService;
     @Autowired
@@ -61,7 +59,6 @@ public class ShareController {
     public ResponseEntity<Share> deleteShare(@PathVariable long id) throws NotFoundException, DeletionIntegrityException {
         shareService.deleteShare(id);
         return ResponseEntity.noContent().build();
-
     }
 
     @GetMapping("{username}")
@@ -74,39 +71,7 @@ public class ShareController {
     @GetMapping("debtValue/debtId")
     public double getCurrentDebtValue(@PathVariable Long debtId) throws Exception {
         double price = shareService.getSharePriceByDebt(debtId);
-        /*Optional<Debt> debt= Optional.ofNullable(debtService.one(debtId));
-        Debt dept = new Debt();
-        Double amountDebt=0.0;
-        Double stockValueStart;
-        Double stockValueEnd;
-        Double currentAmountDebt = 0.0;
-        Share share = dept.getSelectedShare();
-        String stockName = dept.getSelectedShare().getName();
-        Date date= new Date();
-        Long datetime = System.currentTimeMillis();
-        java.sql.Timestamp ts = new java.sql.Timestamp(datetime);
-
-        if(dept.isCreditorConfirmed() && dept.isDebtorConfirmed()){
-            stockValueStart = getStockValueAt(stockName, dept.getTimestampCreation());
-            stockValueEnd =   getStockValueAt(stockName,dept.getTimestampDeadline());
-             currentAmountDebt = calculateDiff(stockValueStart, stockValueEnd,amountDebt);
-             dept.getSelectedShare().setPrice(stockValueEnd);
-
-        }*/
-
-
-       // List<Share> s = share.orElseThrow(() -> new NotFoundException("Sharelist could not be found"));
         return price;
-    }
-
-    private Double calculateDiff(Double stockValueStart, Double stockValueEnd, Double amountDebt) {
-     Double result = 0.0;
-     result = (amountDebt/stockValueStart)* stockValueEnd;
-     return result;
-    }
-
-    private Double calculateCurrentAmount(double close, double amount) {
-    return null;
     }
 
     @PostMapping("share_id/username")
@@ -126,23 +91,17 @@ public class ShareController {
         BufferedReader br = new BufferedReader(new InputStreamReader((con.getInputStream())));
         String output = br.readLine();
         return parseStringToJson(output);
-
-
     }
 
     private URL buildUrl(String shareName) throws MalformedURLException {
         String shareAdress = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=";
         shareAdress += shareName + "&apikey=" + this.API_KEY;
-
         return new URL(shareAdress);
-
     }
 
     public Stock parseStringToJson(String stock) {
         Gson gson = new Gson();
-
         Stock s = gson.fromJson(stock, Stock.class);
-
         return s;
     }
 
