@@ -32,9 +32,11 @@ public class DebtController {
     }
 
     @GetMapping
-    public ResponseEntity<List<DebtResponse>> findAllDebt() {return ResponseEntity.ok(debtService.findAllDebt()); }
+    public ResponseEntity<List<DebtResponse>> findAllDebt() {
+        return ResponseEntity.ok(debtService.findAllDebt());
+    }
 
-    @PostMapping("")
+    @PostMapping
     public ResponseEntity<DebtResponse> createDebt(@RequestBody @Valid CreateDebt request,
                                                    UriComponentsBuilder uriComponentsBuilder) {
         DebtResponse debt = debtService.createDebt(request);
@@ -45,14 +47,15 @@ public class DebtController {
 
     @PutMapping("propose")
     public ResponseEntity proposeDebt(@RequestHeader("Authorization") String token,
-                                            @RequestBody @Valid ProposeDebt proposeDebt,
-                                            UriComponentsBuilder uriComponentsBuilder) throws Exception {
+                                      @RequestBody @Valid ProposeDebt proposeDebt,
+                                      UriComponentsBuilder uriComponentsBuilder) throws Exception {
         User user = userService.getCurrentUser(token);
         debtService.proposeDebt(user, proposeDebt);
         UriComponents uriComponents = uriComponentsBuilder.path("debt/{id}").buildAndExpand(proposeDebt.getDebtId());
         URI location = uriComponents.toUri();
         return ResponseEntity.ok(location);
     }
+
     @PutMapping("accept/{debtId}")
     public ResponseEntity<DebtResponse> acceptDebt(@RequestHeader("Authorization") String token,
                                                    @PathVariable("debtId") long debtId) throws Exception {
