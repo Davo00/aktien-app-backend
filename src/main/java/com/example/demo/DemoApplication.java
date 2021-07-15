@@ -86,7 +86,8 @@ public class DemoApplication {
            // stock s1 = stock.getShareByName("IBM");
             Date d = new Date() ;
             SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd");
-            Stock s2 = Stock.getStock("SAP");
+            String func = "TIME_SERIES_INTRADAY";
+            Stock s2 = Stock.getStock("SAP",func);
             //String text = stock.getShareByName("SAP");
             System.out.println("hallo"+ s2);
 

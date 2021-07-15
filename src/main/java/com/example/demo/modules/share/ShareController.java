@@ -33,8 +33,11 @@ public class ShareController {
     @Autowired
     UserService userService;
 
+    @Autowired
+    UserService debtService;
+
     @GetMapping
-    public ResponseEntity<List<Share>> findAllShare(){
+    public ResponseEntity<List<Share>> findAllShare() {
         return ResponseEntity.ok(shareService.findAllShare());
     }
 
@@ -63,33 +66,70 @@ public class ShareController {
 
     @GetMapping("{username}")
     public ResponseEntity<List<Share>> getPreferedSharesbyUsername(@PathVariable String username) throws NotFoundException {
-         Optional<List<Share>> share = Optional.ofNullable(shareService.getPreferedSharesbyUser(username));
+        Optional<List<Share>> share = Optional.ofNullable(shareService.getPreferedSharesbyUser(username));
         List<Share> s = share.orElseThrow(() -> new NotFoundException("Sharelist could not be found"));
         return ResponseEntity.ok(s);
     }
 
+    @GetMapping("debtValue/debtId")
+    public double getCurrentDebtValue(@PathVariable Long debtId) throws Exception {
+        double price = shareService.getSharePriceByDebt(debtId);
+        /*Optional<Debt> debt= Optional.ofNullable(debtService.one(debtId));
+        Debt dept = new Debt();
+        Double amountDebt=0.0;
+        Double stockValueStart;
+        Double stockValueEnd;
+        Double currentAmountDebt = 0.0;
+        Share share = dept.getSelectedShare();
+        String stockName = dept.getSelectedShare().getName();
+        Date date= new Date();
+        Long datetime = System.currentTimeMillis();
+        java.sql.Timestamp ts = new java.sql.Timestamp(datetime);
+
+        if(dept.isCreditorConfirmed() && dept.isDebtorConfirmed()){
+            stockValueStart = getStockValueAt(stockName, dept.getTimestampCreation());
+            stockValueEnd =   getStockValueAt(stockName,dept.getTimestampDeadline());
+             currentAmountDebt = calculateDiff(stockValueStart, stockValueEnd,amountDebt);
+             dept.getSelectedShare().setPrice(stockValueEnd);
+
+        }*/
 
 
-    @PostMapping("share_id/username")
-    public  ResponseEntity<Share> selectShareFromPartner(@PathVariable Long share_id, @PathVariable String username)throws NotFoundException{
-    Share s = null;
-    //To do
-    return ResponseEntity.ok(s);
+       // List<Share> s = share.orElseThrow(() -> new NotFoundException("Sharelist could not be found"));
+        return price;
+    }
+
+    private Double calculateDiff(Double stockValueStart, Double stockValueEnd, Double amountDebt) {
+     Double result = 0.0;
+     result = (amountDebt/stockValueStart)* stockValueEnd;
+     return result;
+    }
+
+    private Double calculateCurrentAmount(double close, double amount) {
+    return null;
     }
 
 
-   public Stock getShareByName(String shareName) throws IOException {
-       URL url = buildUrl(shareName);
-       HttpURLConnection con = (HttpURLConnection) url.openConnection();
-       con.setDoOutput(true);
-       con.setRequestMethod("GET");
-       con.setRequestProperty("Content-Type", "application/json");
-       BufferedReader br = new BufferedReader(new InputStreamReader((con.getInputStream())));
-       String output = br.readLine();
-       return parseStringToJson(output);
+    @PostMapping("share_id/username")
+    public ResponseEntity<Share> selectShareFromPartner(@PathVariable Long share_id, @PathVariable String username) throws NotFoundException {
+        Share s = null;
+        //To do
+        return ResponseEntity.ok(s);
+    }
 
 
-   }
+    public Stock getShareByName(String shareName) throws IOException {
+        URL url = buildUrl(shareName);
+        HttpURLConnection con = (HttpURLConnection) url.openConnection();
+        con.setDoOutput(true);
+        con.setRequestMethod("GET");
+        con.setRequestProperty("Content-Type", "application/json");
+        BufferedReader br = new BufferedReader(new InputStreamReader((con.getInputStream())));
+        String output = br.readLine();
+        return parseStringToJson(output);
+
+
+    }
 
     private URL buildUrl(String shareName) throws MalformedURLException {
         String shareAdress = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=";

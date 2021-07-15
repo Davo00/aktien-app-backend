@@ -1,5 +1,7 @@
 package com.example.demo.modules.share;
 
+import com.example.demo.modules.debt.Debt;
+import com.example.demo.modules.debt.DebtRepository;
 import com.example.demo.modules.share.request.CreateShare;
 import com.example.demo.modules.user.User;
 import com.example.demo.modules.user.UserRepository;

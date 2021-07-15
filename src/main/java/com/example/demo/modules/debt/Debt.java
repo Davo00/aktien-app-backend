@@ -1,5 +1,6 @@
 package com.example.demo.modules.debt;
 
+import com.example.demo.modules.share.Share;
 import com.example.demo.modules.user.User;
 import lombok.Getter;
 import lombok.Setter;
@@ -24,6 +25,10 @@ public class Debt {
     @Getter
     @Setter
     private boolean paid;
+
+    @Getter
+    @Setter
+    private double amount;
 
     @Getter
     @Setter
@@ -60,12 +65,17 @@ public class Debt {
     @Setter
     @ManyToOne(cascade = CascadeType.ALL)
     private Share selectedShare;*/
+    @Getter
+    @Setter
+    @ManyToOne//(cascade = CascadeType.ALL)
+    private Share selectedShare;
 
     public Debt (){};
 
-    public Debt (Long id, boolean paid, Timestamp timestampCreation, Timestamp timestampDeadline, User creditor, User debtor, boolean creditorConfirmed,  boolean debtorConfirmed){
+    public Debt (Long id, boolean paid, double amount, Timestamp timestampCreation, Timestamp timestampDeadline, User creditor, User debtor, boolean creditorConfirmed,  boolean debtorConfirmed){
         this.id = id;
         this.paid = paid;
+        this.amount = amount;
         this.timestampCreation = timestampCreation;
         this.timestampDeadline = timestampDeadline;
         this.creditor = creditor;
