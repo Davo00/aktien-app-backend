@@ -10,6 +10,7 @@ import com.example.demo.modules.user.UserRepository;
 import com.example.demo.utils.DeletionIntegrityException;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -41,14 +42,12 @@ public class ExpenseServiceImpl implements ExpenseService{
 
         List<User> copayers = new ArrayList<>();
         for (String name: request.getCopayerNames()){
-            User user = userRepository.findByUsername(name);
-            if(user ==null){
-                throw new NotFoundException("User "+ name +" could not be found");
-            }
+            User user = userRepository.findByUsername(name).orElseThrow(() ->
+                    new UsernameNotFoundException("User " + name + " not found"));
             copayers.add(user);
         }
-        User user = userRepository.findByUsername(request.getUserPaid());
-        if(!user.getUsername().equals(request.getUserPaid())|| user ==null){
+        User user = userRepository.findByUsername(request.getUserPaid()).orElseThrow(() -> new UsernameNotFoundException("Username not found"));
+        if(!user.getUsername().equals(request.getUserPaid())){
             throw new NotFoundException("The User who paid the bill could not be found, please enter a valid username");
         }
 
@@ -92,21 +91,15 @@ public class ExpenseServiceImpl implements ExpenseService{
     @Override
     public ExpenseResponse updateExpensebyId(Long id, UpdateExpense request) throws NotFoundException {
        Expense expense = expenseRepository.findById(id).orElseThrow(() ->new NotFoundException("Expense could not be found"));
-       User userPaid = userRepository.findByUsername(request.getUserPaid());
-       if(userPaid == null){
-           throw  new NotFoundException("UserPaid : " + request.getUserPaid() +" could not be found");
-       }
+       User userPaid = userRepository.findByUsername(request.getUserPaid()).orElseThrow(() -> new UsernameNotFoundException("Username not found"));
 
         List<User> toSafeAtTheEnd = new ArrayList<>();
 
         if (request.getUserIds()!= null && !request.getUserIds().isEmpty()){
            List<User> newUserList = new ArrayList<>();
            for(int i=0; i<request.getUserIds().size();i++){
-
               User user = userRepository.findById(request.getUserIds().get(i)).orElseThrow(() -> new NotFoundException("User could not be found"));
-               if(user!=null){
-                   newUserList.add(user);
-               }
+              newUserList.add(user);
            }
            if(expense.getCopayer()!= null && !expense.getCopayer().isEmpty()){
                for(User user: expense.getCopayer()){
@@ -156,7 +149,7 @@ public class ExpenseServiceImpl implements ExpenseService{
 
         expense= expenseRepository.save(expense);
         for(User user : toSafeAtTheEnd){
-            user = userRepository.save(user);
+            userRepository.save(user);
 
         }
 
@@ -166,9 +159,7 @@ public class ExpenseServiceImpl implements ExpenseService{
 
     @Override
     public Expense one(Long id) throws NotFoundException{
-
-        Expense expense= expenseRepository.findById(id).orElseThrow(() -> new NotFoundException("Group could not be found"));
-        return expense;
+        return expenseRepository.findById(id).orElseThrow(() -> new NotFoundException("Group could not be found"));
     }
 
     @Override

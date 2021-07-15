@@ -43,12 +43,12 @@ public class DemoApplication {
                            ShareRepository shareRepository){
         return args -> {
 
-            User hendrik = new User("Hendrik", "hendrik@googlemail.com");
-            User moritz = new User("Moritz", "moritz@googlemail.com");
-            User davit = new User("Davit", "davit@googlemail.com");
-            User ramona = new User("Ramona", "ramona@googlemail.com");
-            User cevin = new User("Cevin", "cevin@googlemail.com");
-            User anonym = new User("Anonym", "anonym@googlemail.com");
+            User hendrik = new User("Hendrik", "pass", "hendrik@googlemail.com");
+            User moritz = new User("Moritz", "pass","moritz@googlemail.com");
+            User davit = new User("Davit", "pass","davit@googlemail.com");
+            User ramona = new User("Ramona", "pass","ramona@googlemail.com");
+            User cevin = new User("Cevin", "pass", "cevin@googlemail.com");
+            User anonym = new User("Anonym", "pass", "anonym@googlemail.com");
 
 
             /*CurrencyUnit euro = Monetary.getCurrency("EUR");
@@ -86,7 +86,6 @@ public class DemoApplication {
                 user.setJoinedGroups(groups);
             }
 
-
             groupRepository.save(group);
             userRepository.save(hendrik);
             userRepository.save(moritz);
@@ -114,6 +113,8 @@ public class DemoApplication {
 
             Share s = new Share("SAP",127.99, sapEmployees);
             shareRepository.save(s);
+            Share s2 = new Share("IBM",139.59, sapEmployees);
+            shareRepository.save(s2);
 
             DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
             Date date = dateFormat.parse("23/09/2021");

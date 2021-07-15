@@ -27,11 +27,11 @@ public class Share {
 
     @Getter
     @Setter
+    @Column(unique = true)
     private String name;
 
     @Getter
     @Setter
-    //@Lob
     private double price;
 
     @ManyToMany

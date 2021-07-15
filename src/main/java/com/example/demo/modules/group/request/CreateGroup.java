@@ -10,5 +10,5 @@ import java.util.List;
 @Setter
 public class CreateGroup {
     private String name;
-    private List<String> myUsersnames;
+    private List<String> usernames;
 }

@@ -11,6 +11,5 @@ import java.util.List;
 @NoArgsConstructor
 public class UpdateGroup {
     private String name;
-
-    private List<Long> userIds;
+    private List<String> usernames;
 }
