@@ -10,16 +10,10 @@ import com.example.demo.modules.share.Share;
 import com.example.demo.modules.share.ShareRepository;
 import com.example.demo.modules.user.User;
 import com.example.demo.modules.user.UserRepository;
-import org.javamoney.moneta.Money;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-
-import javax.money.CurrencyUnit;
-import javax.money.Monetary;
-import javax.money.MonetaryAmount;
-import javax.money.NumberValue;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -40,13 +34,13 @@ public class DemoApplication {
                            GroupRepository groupRepository,
                            UserRepository userRepository,
                            DebtRepository debtRepository,
-                           ShareRepository shareRepository){
+                           ShareRepository shareRepository) {
         return args -> {
 
             User hendrik = new User("Hendrik", "pass", "hendrik@googlemail.com");
-            User moritz = new User("Moritz", "pass","moritz@googlemail.com");
-            User davit = new User("Davit", "pass","davit@googlemail.com");
-            User ramona = new User("Ramona", "pass","ramona@googlemail.com");
+            User moritz = new User("Moritz", "pass", "moritz@googlemail.com");
+            User davit = new User("Davit", "pass", "davit@googlemail.com");
+            User ramona = new User("Ramona", "pass", "ramona@googlemail.com");
             User cevin = new User("Cevin", "pass", "cevin@googlemail.com");
             User anonym = new User("Anonym", "pass", "anonym@googlemail.com");
 
@@ -82,7 +76,7 @@ public class DemoApplication {
             group.setMyUsers(wholeGroup);
             List<Group> groups = new ArrayList<>();
             groups.add(group);
-            for(User user: wholeGroup){
+            for (User user : wholeGroup) {
                 user.setJoinedGroups(groups);
             }
 
@@ -95,25 +89,25 @@ public class DemoApplication {
             userRepository.save(anonym);
 
 
-            Expense test = new Expense( group, "Hendrik", "Bier", 16.99, "Teuerstes Bier der Welt", userList);
+            Expense test = new Expense(group, "Hendrik", "Bier", 16.99, "Teuerstes Bier der Welt", userList);
             expenseRepository.save(test);
-            Expense test2 = new Expense( group, "Moritz", "Bier", 28.99, "Teuerstes Bier der Welt", sapEmployees);
+            Expense test2 = new Expense(group, "Moritz", "Bier", 28.99, "Teuerstes Bier der Welt", sapEmployees);
             expenseRepository.save(test2);
-            Expense test3 = new Expense( group, "Hendrik", "Bier", 5.99, "Teuerstes Bier der Welt", sapEmployees);
+            Expense test3 = new Expense(group, "Hendrik", "Bier", 5.99, "Teuerstes Bier der Welt", sapEmployees);
             expenseRepository.save(test3);
-            Expense test4 = new Expense( group, "Ramona", "Bier", 25.99, "Teuerstes Bier der Welt", userList);
+            Expense test4 = new Expense(group, "Ramona", "Bier", 25.99, "Teuerstes Bier der Welt", userList);
             expenseRepository.save(test4);
-            Expense test5 = new Expense( group, "Hendrik", "Bier", 19.99, "Teuerstes Bier der Welt", wholeGroup);
+            Expense test5 = new Expense(group, "Hendrik", "Bier", 19.99, "Teuerstes Bier der Welt", wholeGroup);
             expenseRepository.save(test5);
-            Expense test6 = new Expense( group, "Davit", "Bier", 12.99, "Teuerstes Bier der Welt", userList);
+            Expense test6 = new Expense(group, "Davit", "Bier", 12.99, "Teuerstes Bier der Welt", userList);
             expenseRepository.save(test6);
-            Expense test7 = new Expense( group, "Cevin", "Bier", 20.99, "Teuerstes Bier der Welt", wholeGroup);
+            Expense test7 = new Expense(group, "Cevin", "Bier", 20.99, "Teuerstes Bier der Welt", wholeGroup);
             test7.setUnpaid(false);
             expenseRepository.save(test7);
 
-            Share s = new Share("SAP",127.99, sapEmployees);
+            Share s = new Share("SAP", 127.99, sapEmployees);
             shareRepository.save(s);
-            Share s2 = new Share("IBM",139.59, sapEmployees);
+            Share s2 = new Share("IBM", 139.59, sapEmployees);
             shareRepository.save(s2);
 
             DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
@@ -121,7 +115,8 @@ public class DemoApplication {
             long time = date.getTime();
             Timestamp deadline = new Timestamp(time);
 
-            Debt debt = new Debt(false,14.99, deadline, hendrik, davit, false, false, "Shafi",s);
+            Debt debt = new Debt(false, 14.99, deadline, hendrik, davit, false,
+                    false, "Shafi", s, 0);
             //debt.getSuggestions().add(s);
 
             debtRepository.save(debt);

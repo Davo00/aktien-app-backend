@@ -31,7 +31,8 @@ public class DebtResponse {
 
     public DebtResponse(Long id, double amount, boolean paid, Timestamp creation, Timestamp deadline,
                         String creditorUsername, String debtorUsername, boolean creditorConfirmed,
-                        boolean debtorConfirmed, String groupName) {
+                        boolean debtorConfirmed, String groupName,
+                        double shareProportion) {
         this.id = id;
         this.amount = amount;
         this.paid = paid;
@@ -42,6 +43,7 @@ public class DebtResponse {
         this.creditorConfirmed = creditorConfirmed;
         this.debtorConfirmed = debtorConfirmed;
         this.groupName = groupName;
+        this.shareProportion = shareProportion;
 
     }
 
@@ -56,7 +58,11 @@ public class DebtResponse {
                 debt.getDebtor().getUsername(),
                 debt.isCreditorConfirmed(),
                 debt.isDebtorConfirmed(),
-                debt.getGroupName());
+                debt.getGroupName(),
+                debt.getShareProportion()
+        );
+
+
 
         if (debt.getSelectedShare() != null) {
             this.setSelectedShareId(debt.getSelectedShare().getId());
