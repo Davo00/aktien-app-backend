@@ -11,7 +11,9 @@ The plan for our Project is as follows:
 
 [Klassendiagram.pdf](https://github.com/Davo00/aktien-app-backend/files/6823431/Klassendiagram.pdf)
 
+The documentation of the API:
 
+http://162.55.185.65:8080/swagger-ui/#/
 
 Lessons Learned:
 - How to use git effectively
