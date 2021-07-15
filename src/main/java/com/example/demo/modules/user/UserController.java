@@ -1,5 +1,6 @@
 package com.example.demo.modules.user;
 
+import com.example.demo.modules.debt.response.DebtResponse;
 import com.example.demo.modules.security.JwtTokenUtil;
 import com.example.demo.modules.share.Share;
 import com.example.demo.modules.user.request.UserLogin;
@@ -7,7 +8,6 @@ import com.example.demo.modules.group.response.GroupResponse;
 import com.example.demo.modules.user.request.CreateUser;
 import com.example.demo.modules.user.response.UserResponse;
 import com.example.demo.utils.NotFoundException;
-import org.hibernate.annotations.Parameter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -29,7 +29,7 @@ import java.util.List;
 @RequestMapping("/user")
 public class UserController {
 
-    private UserService userService;
+    private final UserService userService;
     private final AuthenticationManager authenticationManager;
     private final JwtTokenUtil jwtTokenUtil;
 
@@ -107,6 +107,16 @@ public class UserController {
         UriComponents uriComponents = uriComponentsBuilder.path("user/preferredShares").buildAndExpand(username);
         URI location = uriComponents.toUri();
         return ResponseEntity.created(location).body(userService.getPreferredShares(username));
+    }
+
+    @GetMapping("debt")
+    public ResponseEntity<List<DebtResponse>> getDebts(@RequestHeader("Authorization") String token,
+                                                       UriComponentsBuilder uriComponentsBuilder) throws UsernameNotFoundException {
+        User user = userService.getCurrentUser(token);
+        List<DebtResponse> debtResponses = userService.getDebtsbyUser(user);
+        UriComponents uriComponents = uriComponentsBuilder.path("user/debt").build();
+        URI location = uriComponents.toUri();
+        return ResponseEntity.created(location).body(debtResponses);
     }
 
 }

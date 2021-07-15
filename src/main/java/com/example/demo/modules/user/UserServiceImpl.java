@@ -1,5 +1,8 @@
 package com.example.demo.modules.user;
 
+import com.example.demo.modules.debt.Debt;
+import com.example.demo.modules.debt.DebtRepository;
+import com.example.demo.modules.debt.response.DebtResponse;
 import com.example.demo.modules.group.Group;
 import com.example.demo.modules.group.GroupRepository;
 import com.example.demo.modules.security.JwtTokenUtil;
@@ -18,15 +21,18 @@ import java.util.List;
 @Component
 public class UserServiceImpl implements UserService {
 
-    private UserRepository userRepository;
-    private GroupRepository groupRepository;
+    private final UserRepository userRepository;
+    private final GroupRepository groupRepository;
     private final JwtTokenUtil jwtTokenUtil;
+    private final DebtRepository debtRepository;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, GroupRepository groupRepository, JwtTokenUtil jwtTokenUtil) {
+    public UserServiceImpl(UserRepository userRepository, GroupRepository groupRepository,
+                           JwtTokenUtil jwtTokenUtil, DebtRepository debtRepository) {
         this.userRepository = userRepository;
         this.groupRepository = groupRepository;
         this.jwtTokenUtil = jwtTokenUtil;
+        this.debtRepository = debtRepository;
     }
 
     @Override
@@ -99,6 +105,16 @@ public class UserServiceImpl implements UserService {
         return userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Username: " + username + " not found"))
                 .getPreferedShares();
+    }
+
+    @Override
+    public List<DebtResponse> getDebtsbyUser(User user) {
+        List<Debt> debts = debtRepository.findAllByCreditorOrDebtor(user, user);
+        List<DebtResponse> debtResponses = new ArrayList<>();
+        for (Debt debt: debts) {
+            debtResponses.add(new DebtResponse(debt));
+        }
+        return debtResponses;
     }
 
     private boolean isUsernameReserved(String username) {

@@ -5,6 +5,7 @@ import com.example.demo.modules.debt.request.ProposeDebt;
 import com.example.demo.modules.debt.response.DebtResponse;
 import com.example.demo.modules.share.Share;
 import com.example.demo.modules.share.ShareRepository;
+import com.example.demo.modules.share.ShareService;
 import com.example.demo.modules.user.User;
 import com.example.demo.modules.user.UserRepository;
 import com.example.demo.utils.NotFoundException;
@@ -21,15 +22,17 @@ import java.util.List;
 @Component
 public class DebtServiceImpl implements DebtService {
 
-    private DebtRepository debtRepository;
-    private UserRepository userRepository;
-    private ShareRepository shareRepository;
+    private final DebtRepository debtRepository;
+    private final UserRepository userRepository;
+    private final ShareRepository shareRepository;
+    private final ShareService shareService;
 
     @Autowired
-    public DebtServiceImpl(DebtRepository debtRepository, UserRepository userRepository, ShareRepository shareRepository) {
+    public DebtServiceImpl(DebtRepository debtRepository, UserRepository userRepository, ShareRepository shareRepository, ShareService shareService) {
         this.debtRepository = debtRepository;
         this.userRepository = userRepository;
         this.shareRepository = shareRepository;
+        this.shareService = shareService;
     }
 
     @Override
@@ -64,7 +67,9 @@ public class DebtServiceImpl implements DebtService {
         Share share = shareRepository.findById(request.getSelectedShareId())
                 .orElseThrow(() -> new NotFoundException("Share with the Id " + request.getSelectedShareId() + " could not be found"));
 
-        Debt debt = new Debt(request.isPaid(), request.getAmount(),/*request.getTimestampCreation(),*/ deadline, creditor, debtor, request.isCreditorConfirmed(), request.isDebtorConfirmed(), request.getGroupName(), share);
+        Debt debt = new Debt(request.isPaid(), request.getAmount(),/*request.getTimestampCreation(),*/ deadline,
+                creditor, debtor, request.isCreditorConfirmed(), request.isDebtorConfirmed(),
+                request.getGroupName(), share, 0);
         debt = debtRepository.save(debt);
         return new DebtResponse(debt);
     }
@@ -77,6 +82,8 @@ public class DebtServiceImpl implements DebtService {
         boolean isCreditor = proposer.getId().equals(debt.getCreditor().getId());
         if (!isCreditor && !isDebtor) {
             throw new Exception("User is neither Creditor nor Debtor, no rights to propose Share for this debt");
+        } else if (debt.isCreditorConfirmed() && debt.isCreditorConfirmed()) {
+            throw new Exception("Debt has been accepted already. You can not propose other share after accepting");
         } else {
             debt.setDebtorConfirmed(isDebtor);
             debt.setCreditorConfirmed(isCreditor);
@@ -103,9 +110,10 @@ public class DebtServiceImpl implements DebtService {
         }
 
         if (debt.isCreditorConfirmed() && debt.isDebtorConfirmed()) {
+            /*double currentPrice = shareService.getSharePriceByDebt(debt.getId());
+            debt.setShareProportion(debt.getAmount()/currentPrice);*/ //TODO uncoment after Allphavantage merged in main
             debt = debtRepository.save(debt);
-        }
-        else {
+        } else {
             throw new Exception("Debt can't be accepted, please select a Share or try accepting an other debt");
         }
 

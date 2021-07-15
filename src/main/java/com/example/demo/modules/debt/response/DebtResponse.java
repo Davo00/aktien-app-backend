@@ -12,7 +12,8 @@ import java.sql.Timestamp;
 public class DebtResponse {
 
     private Long id;
-    private double amount;
+    private double amount; // TODO Anteil der Aktie hinzufügen
+    private double shareProportion;
     private boolean paid;
     private Timestamp creation;
     private Timestamp deadline;
