@@ -41,17 +41,17 @@ public class GroupServiceImpl implements GroupService {
     @Override
     public GroupResponse createGroup(CreateGroup request) {
         Group alreadyExist = groupRepository.findByName(request.getName());
-        if(alreadyExist!= null ){
-            throw new AlreadyExistsException("A Group by the name "+ request.getName() + " already exists");
+        if (alreadyExist != null) {
+            throw new AlreadyExistsException("A Group by the name " + request.getName() + " already exists");
         }
         Group group = new Group(request.getName());
-        List <User> myUser = new ArrayList<>();
+        List<User> myUser = new ArrayList<>();
         for (String username : request.getUsernames()) {
             User user = userRepository.findByUsername(username)
-                    .orElseThrow(() -> new NotFoundException("User with the id "+ username + " could not be found"));
+                    .orElseThrow(() -> new NotFoundException("User with the id " + username + " could not be found"));
             myUser.add(user);
         }
-        for(User user : myUser){
+        for (User user : myUser) {
             group.addUser(user);
         }
 
@@ -65,17 +65,17 @@ public class GroupServiceImpl implements GroupService {
     public void deleteGroupById(long groupId) throws NotFoundException, DeletionIntegrityException {
         Group group = groupRepository.findById(groupId).orElseThrow(() -> new NotFoundException("Group could not be found"));
         List<User> toSafeAtTheEnd = new ArrayList<>();
-        try{
+        try {
             for (User user : group.getMyUsers()) {
                 user.getJoinedGroups().remove(group);
                 toSafeAtTheEnd.add(user);
             }
             group.getMyUsers().clear();
             groupRepository.delete(group);
-            for (User user : toSafeAtTheEnd){
+            for (User user : toSafeAtTheEnd) {
                 userRepository.save(user);
             }
-        }catch (Exception e ){
+        } catch (Exception e) {
             throw new DeletionIntegrityException(e.getMessage());
         }
     }
@@ -92,15 +92,15 @@ public class GroupServiceImpl implements GroupService {
 
 
     @Override
-    public void addUserToGroup(long groupId, String username) throws NotFoundException{
+    public void addUserToGroup(long groupId, String username) throws NotFoundException {
         User user = userRepository.findByUsername(username).orElseThrow(() ->
                 new UsernameNotFoundException("User: " + username + " not found"));
-        if (user==null){
+        if (user == null) {
             throw new NotFoundException("User wiht the username " + username + " could not be found");
         }
         Group group = groupRepository.findById(groupId).orElseThrow(() -> new NotFoundException("Group with the id " + groupId + " could not be found"));
-        for (User userInGroup: group.getMyUsers()){
-            if(userInGroup.getUsername().equals(username)){
+        for (User userInGroup : group.getMyUsers()) {
+            if (userInGroup.getUsername().equals(username)) {
                 throw new AlreadyExistsException("The User " + username + " is already part of the Group");
             }
         }
@@ -117,31 +117,30 @@ public class GroupServiceImpl implements GroupService {
         Group group = groupRepository.findById(groupId).orElseThrow(() -> new NotFoundException("group could not be found "));
         List<User> toSafeAtTheEnd = new ArrayList<>();
 
-        if (request.getUsernames()!= null && !request.getUsernames().isEmpty()){
+        if (request.getUsernames() != null && !request.getUsernames().isEmpty()) {
             List<User> newUserList = new ArrayList<>();
-            for( int i =0; i<request.getUsernames().size(); i++){
+            for (int i = 0; i < request.getUsernames().size(); i++) {
                 User user = userRepository.findByUsername(request.getUsernames().get(i))
                         .orElseThrow(() -> new NotFoundException("User could not be found"));
-                    newUserList.add(user);
+                newUserList.add(user);
             }
-            if (group.getMyUsers()!=null && !group.getMyUsers().isEmpty()){
-                for (User user : group.getMyUsers()){
+            if (group.getMyUsers() != null && !group.getMyUsers().isEmpty()) {
+                for (User user : group.getMyUsers()) {
                     user.getJoinedGroups().remove(group);
                     toSafeAtTheEnd.add(user);
                 }
                 group.getMyUsers().clear();
             }
-            for ( User user : newUserList){
+            for (User user : newUserList) {
                 group.addUser(user);
                 toSafeAtTheEnd.add(user);
             }
         }
-        if (request.getName()!= null){
+        if (request.getName() != null) {
             group.setName(request.getName());
         }
-
-        group= groupRepository.save(group);
-        for(User user : toSafeAtTheEnd){
+        group = groupRepository.save(group);
+        for (User user : toSafeAtTheEnd) {
             userRepository.save(user);
 
         }

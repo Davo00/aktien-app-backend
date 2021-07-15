@@ -9,8 +9,6 @@ import java.util.List;
 @Getter
 @Setter
 public class CreateGroup {
-
     private String name;
     private List<String> usernames;
-
 }
