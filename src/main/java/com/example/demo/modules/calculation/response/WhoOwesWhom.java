@@ -11,8 +11,6 @@ public class WhoOwesWhom {
     private String debitor;
     private double amount;
 
-
-
     public WhoOwesWhom(String creditor, String debitor, double amount) {
         this.creditor = creditor;
         this.debitor = debitor;

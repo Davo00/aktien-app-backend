@@ -30,7 +30,7 @@ public class CalculationController {
     }
 
     @PutMapping("/final/{groupId}")
-    public ResponseEntity<List<DebtResponse>> finalCalculation(@PathVariable ("groupId") long groupId) throws NotFoundException {
+    public ResponseEntity<List<DebtResponse>> finalCalculation(@PathVariable("groupId") long groupId) throws NotFoundException {
         return ResponseEntity.ok(calculationService.finalCalculation(groupId));
     }
 

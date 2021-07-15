@@ -12,7 +12,10 @@ import java.util.List;
 public interface DebtService {
 
     List<DebtResponse> findAllDebt();
+
     DebtResponse createDebt(CreateDebt request) throws NotFoundException;
-    void proposeDebt (User user, ProposeDebt proposeDebt) throws Exception;
+
+    void proposeDebt(User user, ProposeDebt proposeDebt) throws Exception;
+
     DebtResponse acceptDebt(Long debtId, Long userId) throws Exception;
 }

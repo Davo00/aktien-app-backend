@@ -70,8 +70,6 @@ public class Expense {
     }
 
 
-
-
     public Expense(@NotNull Long id, @NotNull Group group, String userPaid, String name, double amount, String description, List<User> copayer) {
         this.id = id;
         this.groupExpense = group;
@@ -94,13 +92,13 @@ public class Expense {
         this.consumerCount = 0;
         this.groupExpense = group;
         //this.copayer = copayers;
-        if(!copayers.isEmpty() && copayers!=null){
+        if (!copayers.isEmpty() && copayers != null) {
             copayers.forEach(user -> addUser(user));
         }
     }
 
 
-    public void addUser(User user){
+    public void addUser(User user) {
         copayer.add(user);
         user.getExpense().add(this);
     }

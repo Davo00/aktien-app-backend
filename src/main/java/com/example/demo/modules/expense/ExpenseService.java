@@ -11,10 +11,15 @@ import java.util.List;
 public interface ExpenseService {
 
     List<ExpenseResponse> findAllExpense();
+
     ExpenseResponse createExpense(CreateExpense request) throws NotFoundException;
+
     void deleteExpense(Long id) throws NotFoundException, DeletionIntegrityException;
-    ExpenseResponse updateExpensebyId(Long id, UpdateExpense request)throws NotFoundException;
+
+    ExpenseResponse updateExpensebyId(Long id, UpdateExpense request) throws NotFoundException;
+
     Expense one(Long id) throws NotFoundException;
+
     List<ExpenseResponse> getAllExpensebyGroup(long groupId) throws NotFoundException;
 
 

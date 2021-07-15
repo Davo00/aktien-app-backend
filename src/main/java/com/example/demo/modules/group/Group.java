@@ -36,7 +36,7 @@ public class Group {
 
     @Getter
     @Setter
-    @OneToMany( mappedBy = "groupExpense",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "groupExpense", cascade = CascadeType.ALL)
     private List<Expense> myExpenses;
 
 
@@ -56,16 +56,15 @@ public class Group {
 
     public Group(@NotNull String name, @NotNull List<User> myUsers) {
         this.name = name;
-        if(!myUsers.isEmpty() && myUsers!=null){
-           myUsers.forEach(user -> addUser(user));
+        if (!myUsers.isEmpty() && myUsers != null) {
+            myUsers.forEach(user -> addUser(user));
         }
     }
 
-    public void addUser(User user){
+    public void addUser(User user) {
         myUsers.add(user);
         user.getJoinedGroups().add(this);
     }
-
 
 
 }
