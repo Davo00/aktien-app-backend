@@ -8,18 +8,14 @@ import com.example.demo.modules.group.Group;
 import com.example.demo.modules.group.GroupRepository;
 import com.example.demo.modules.share.Share;
 import com.example.demo.modules.share.ShareRepository;
+import com.example.demo.modules.share.Stock;
 import com.example.demo.modules.user.User;
 import com.example.demo.modules.user.UserRepository;
-import org.javamoney.moneta.Money;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
-import javax.money.CurrencyUnit;
-import javax.money.Monetary;
-import javax.money.MonetaryAmount;
-import javax.money.NumberValue;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -113,8 +109,15 @@ public class DemoApplication {
 
             Share s = new Share("SAP", 127.99, sapEmployees);
             shareRepository.save(s);
-            Share s2 = new Share("IBM", 139.59, sapEmployees);
-            shareRepository.save(s2);
+           // stock s1 = stock.getShareByName("IBM");
+            Date d = new Date() ;
+            SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd");
+            String func = "TIME_SERIES_INTRADAY";
+            Stock s2 = Stock.getStock("SAP",func);
+            //String text = stock.getShareByName("SAP");
+            System.out.println("hallo"+ s2);
+            Share s3 = new Share("IBM", 139.59, sapEmployees);
+            shareRepository.save(s3);
 
             DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
             Date date = dateFormat.parse("23/09/2021");
@@ -125,7 +128,10 @@ public class DemoApplication {
             //debt.getSuggestions().add(s);
 
             debtRepository.save(debt);
+            Debt debt2 = new Debt(false, 19.99, deadline, davit, hendrik, true, true, "Shafi", s);
+            //debt.getSuggestions().add(s);
 
+            debtRepository.save(debt2);
 
         };
     }

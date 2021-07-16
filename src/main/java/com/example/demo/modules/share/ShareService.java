@@ -20,4 +20,6 @@ public interface ShareService {
 
     Share selectShareFromCreditor(String username, Long shareId) throws NotFoundException;
 
+    double getSharePriceByDebt(Long debtId) throws Exception;
+
 }

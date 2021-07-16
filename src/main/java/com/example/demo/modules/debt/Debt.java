@@ -1,5 +1,6 @@
 package com.example.demo.modules.debt;
 
+import com.example.demo.modules.share.Share;
 import com.example.demo.modules.calculation.response.WhoOwesWhom;
 import com.example.demo.modules.share.Share;
 import com.example.demo.modules.user.User;

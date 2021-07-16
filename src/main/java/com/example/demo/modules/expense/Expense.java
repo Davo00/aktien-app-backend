@@ -4,10 +4,8 @@ package com.example.demo.modules.expense;
 import com.example.demo.modules.group.Group;
 import com.example.demo.modules.user.User;
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.Setter;
-
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;

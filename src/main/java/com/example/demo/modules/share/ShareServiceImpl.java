@@ -1,5 +1,7 @@
 package com.example.demo.modules.share;
 
+import com.example.demo.modules.debt.Debt;
+import com.example.demo.modules.debt.DebtRepository;
 import com.example.demo.modules.share.request.CreateShare;
 import com.example.demo.modules.user.User;
 import com.example.demo.modules.user.UserRepository;
@@ -16,12 +18,16 @@ import java.util.Optional;
 @Component
 public class ShareServiceImpl implements ShareService {
 
-    @Autowired
-    ShareRepository shareRepository;
+    private ShareRepository shareRepository;
+    private UserRepository userRepository;
+    private DebtRepository debtRepository;
 
     @Autowired
-    UserRepository userRepository;
-
+    public ShareServiceImpl(ShareRepository shareRepository, UserRepository userRepository, DebtRepository debtRepository) {
+        this.shareRepository = shareRepository;
+        this.userRepository = userRepository;
+        this.debtRepository = debtRepository;
+    }
 
     @Override
     public List<Share> findAllShare() {
@@ -45,7 +51,6 @@ public class ShareServiceImpl implements ShareService {
     @Override
     public Share one(long id) throws NotFoundException {
         Share share = shareRepository.findById(id).orElseThrow(() -> new NotFoundException("Share cound not be found"));
-
         return share;
     }
 
@@ -90,6 +95,24 @@ public class ShareServiceImpl implements ShareService {
 
 
         return null;
+    }
+
+
+    @Override
+    public double getSharePriceByDebt(Long debtId) throws Exception {
+        double price = 0.0;
+        Debt debt = debtRepository.findById(debtId)
+                .orElseThrow(() -> new NotFoundException("Debt: " + debtId + " not found"));
+        if (!debt.isDebtorConfirmed() || !debt.isCreditorConfirmed()) {
+            throw new Exception("Please select and accept a share");
+        }
+        Share share = shareRepository.findById(debt.getSelectedShare().getId())
+                .orElseThrow(() -> new NotFoundException("Share: " + debt.getSelectedShare().getId() + " not found"));
+        String close = Stock.getStock(share.getName(), "TIME_SERIES_INTRADAY").getClose();
+        if (close == null)
+            close = "0.0";
+        price = Double.parseDouble(close);
+        return price;
     }
 
 

@@ -45,7 +45,6 @@ public class ExpenseController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Expense> deleteExpense(@PathVariable long id) throws NotFoundException {
         expenseService.deleteExpense(id);
-
         return ResponseEntity.noContent().build();
 
     }
