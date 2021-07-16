@@ -30,7 +30,7 @@ public class Group {
 
     @Getter
     @Setter
-    @ManyToMany(mappedBy = "joinedGroups", cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "joinedGroups")
     @JsonManagedReference
     private List<User> myUsers = new ArrayList<>();
 

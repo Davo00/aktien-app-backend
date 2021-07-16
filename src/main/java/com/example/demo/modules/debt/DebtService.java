@@ -13,6 +13,6 @@ public interface DebtService {
 
     List<DebtResponse> findAllDebt();
     DebtResponse createDebt(CreateDebt request) throws NotFoundException;
-    void proposeDebt (User user, ProposeDebt proposeDebt) throws Exception;
+    DebtResponse proposeDebt (User user, ProposeDebt proposeDebt) throws Exception;
     DebtResponse acceptDebt(Long debtId, Long userId) throws Exception;
 }

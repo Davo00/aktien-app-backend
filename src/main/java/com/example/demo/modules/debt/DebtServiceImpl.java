@@ -75,14 +75,14 @@ public class DebtServiceImpl implements DebtService {
     }
 
     @Override
-    public void proposeDebt(User proposer, ProposeDebt proposeDebt) throws Exception {
+    public DebtResponse proposeDebt(User proposer, ProposeDebt proposeDebt) throws Exception {
         Debt debt = debtRepository.findById(proposeDebt.getDebtId())
                 .orElseThrow(() -> new NotFoundException("Debt with the Id " + proposeDebt.getDebtId() + " could not be found"));
         boolean isDebtor = proposer.getId().equals(debt.getDebtor().getId());
         boolean isCreditor = proposer.getId().equals(debt.getCreditor().getId());
         if (!isCreditor && !isDebtor) {
             throw new Exception("User is neither Creditor nor Debtor, no rights to propose Share for this debt");
-        } else if (debt.isCreditorConfirmed() && debt.isCreditorConfirmed()) {
+        } else if (debt.isCreditorConfirmed() && debt.isDebtorConfirmed()) {
             throw new Exception("Debt has been accepted already. You can not propose other share after accepting");
         } else {
             debt.setDebtorConfirmed(isDebtor);
@@ -93,6 +93,7 @@ public class DebtServiceImpl implements DebtService {
             );
             debtRepository.save(debt);
         }
+        return new DebtResponse(debt);
     }
 
     @Override
