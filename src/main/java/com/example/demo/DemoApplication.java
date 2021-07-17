@@ -112,9 +112,9 @@ public class DemoApplication {
             Date d = new Date() ;
             SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd");
             String func = "TIME_SERIES_INTRADAY";
-            Stock s2 = Stock.getStock("SAP",func);
+            //Stock s2 = Stock.getStock("SAP",func);
             //String text = stock.getShareByName("SAP");
-            System.out.println("hallo"+ s2);
+           //System.out.println("hallo"+ s2);
             Share s3 = new Share("IBM", 139.59, sapEmployees);
             shareRepository.save(s3);
 

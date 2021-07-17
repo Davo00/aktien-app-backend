@@ -14,7 +14,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Component
@@ -41,22 +43,27 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public GroupResponse createGroup(CreateGroup request) {
-        Group alreadyExist = groupRepository.findByName(request.getName());
+        /*Group alreadyExist = groupRepository.findByName(request.getName());
         if (alreadyExist != null) {
             throw new AlreadyExistsException("A Group by the name " + request.getName() + " already exists");
-        }
+        }*/
         Group group = new Group(request.getName());
-        List<User> myUser = new ArrayList<>();
-        for (String username : request.getUsernames()) {
-            User user = userRepository.findByUsername(username)
-                    .orElseThrow(() -> new NotFoundException("User with the id " + username + " could not be found"));
-            myUser.add(user);
-        }
+        Set<String> myUsernamesSet = new HashSet<>(request.getUsernames());
+        List<User> myUser = myUsernamesSet.stream().map(username -> userRepository.findByUsername(username)
+                .orElseThrow(() -> new NotFoundException("User with the id " + username + " could not be found"))).collect(Collectors.toList());
+        List<User> toSafeAtTheEnd = new ArrayList<>();
+
+
         for (User user : myUser) {
             group.addUser(user);
+            toSafeAtTheEnd.add(user);
         }
 
+
         group = groupRepository.save(group);
+        for (User user : toSafeAtTheEnd) {
+            user = userRepository.save(user);
+        }
 
 
         return new GroupResponse(group);
@@ -64,7 +71,8 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public void deleteGroupById(long groupId) throws NotFoundException, DeletionIntegrityException {
-        Group group = groupRepository.findById(groupId).orElseThrow(() -> new NotFoundException("Group could not be found"));
+        Group group = groupRepository.findById(groupId).orElseThrow(() -> new NotFoundException("Group could not be " +
+                "found"));
         List<User> toSafeAtTheEnd = new ArrayList<>();
         try {
             for (User user : group.getMyUsers()) {
@@ -84,7 +92,8 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public List<UserResponse> getAllUserOfGroup(long groupId) throws NotFoundException {
-        Group group = groupRepository.findById(groupId).orElseThrow(() -> new NotFoundException("Group could not be found"));
+        Group group = groupRepository.findById(groupId).orElseThrow(() -> new NotFoundException("Group could not be " +
+                "found"));
         List<User> myUsers = userRepository.findAllByJoinedGroups(group);
         List<UserResponse> userResponseList = new ArrayList<>();
         myUsers.forEach(user -> userResponseList.add(new UserResponse(user)));
@@ -99,7 +108,8 @@ public class GroupServiceImpl implements GroupService {
         if (user == null) {
             throw new NotFoundException("User wiht the username " + username + " could not be found");
         }
-        Group group = groupRepository.findById(groupId).orElseThrow(() -> new NotFoundException("Group with the id " + groupId + " could not be found"));
+        Group group =
+                groupRepository.findById(groupId).orElseThrow(() -> new NotFoundException("Group with the id " + groupId + " could not be found"));
         for (User userInGroup : group.getMyUsers()) {
             if (userInGroup.getUsername().equals(username)) {
                 throw new AlreadyExistsException("The User " + username + " is already part of the Group");
@@ -115,6 +125,8 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public GroupResponse updateGroupById(long groupId, UpdateGroup request) throws NotFoundException {
+
+
         Group group = groupRepository.findById(groupId)
                 .orElseThrow(() -> new NotFoundException("group could not be found "));
 
@@ -125,8 +137,11 @@ public class GroupServiceImpl implements GroupService {
         if (request.getUsernames() != null && !request.getUsernames().isEmpty()) {
             group.getMyUsers().forEach(user -> user.getJoinedGroups().remove(group));
             List<User> toSaveAtTheEnd = new ArrayList<>(group.getMyUsers());
-            List<User> updatedUsers = request.getUsernames().stream().map(username -> userRepository.findByUsername(username)
-                    .orElseThrow(() -> new NotFoundException("User could not be found"))).collect(Collectors.toList());
+
+            Set<String> myUsernamesSet = new HashSet<>(request.getUsernames());
+            List<User> updatedUsers = myUsernamesSet.stream().map(username -> userRepository.findByUsername(username)
+                    .orElseThrow(() -> new NotFoundException("User with the id " + username + " could not be found")))
+                    .collect(Collectors.toList());
             group.setMyUsers(updatedUsers);
             groupRepository.save(group);
             updatedUsers.forEach(user -> {
