@@ -117,8 +117,6 @@ public class DemoApplication {
             System.out.println("hallo"+ s2);
             Share s3 = new Share("IBM", 139.59, sapEmployees);
             shareRepository.save(s3);
-            Share s2 = new Share("IBM", 139.59, sapEmployees);
-            shareRepository.save(s2);
 
             DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
             Date date = dateFormat.parse("23/09/2021");
@@ -130,7 +128,8 @@ public class DemoApplication {
             //debt.getSuggestions().add(s);
 
             debtRepository.save(debt);
-            Debt debt2 = new Debt(false, 19.99, deadline, davit, hendrik, true, true, "Shafi", s);
+            Debt debt2 = new Debt(false, 19.99, deadline, davit, hendrik,
+                    true, true, "Shafi", s, 0);
             //debt.getSuggestions().add(s);
 
             debtRepository.save(debt2);
