@@ -22,4 +22,7 @@ public interface ShareService {
 
     double getSharePriceByDebt(Long debtId) throws Exception;
 
+    double getSharePrice(Long shareId) throws Exception;
+
+    void updateSharePrice(Share share) throws Exception;
 }

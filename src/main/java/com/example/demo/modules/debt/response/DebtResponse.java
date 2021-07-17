@@ -1,7 +1,7 @@
 package com.example.demo.modules.debt.response;
 
-
 import com.example.demo.modules.debt.Debt;
+import com.example.demo.modules.share.Share;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,7 +12,7 @@ import java.sql.Timestamp;
 public class DebtResponse {
 
     private Long id;
-    private double amount; // TODO Anteil der Aktie hinzufügen
+    private double amount;
     private double shareProportion;
     private boolean paid;
     private Timestamp creation;
@@ -22,7 +22,7 @@ public class DebtResponse {
     private boolean creditorConfirmed;
     private boolean debtorConfirmed;
     private String groupName;
-    private Long selectedShareId;
+    private Share selectedShare;
 
     public DebtResponse(String message) {
         this.groupName = message;
@@ -62,10 +62,8 @@ public class DebtResponse {
                 debt.getShareProportion()
         );
 
-
-
         if (debt.getSelectedShare() != null) {
-            this.setSelectedShareId(debt.getSelectedShare().getId());
+            this.setSelectedShare(debt.getSelectedShare());
         }
     }
 

@@ -6,6 +6,7 @@ import com.example.demo.modules.debt.response.DebtResponse;
 import com.example.demo.modules.share.Share;
 import com.example.demo.modules.share.ShareRepository;
 import com.example.demo.modules.share.ShareService;
+import com.example.demo.modules.share.Stock;
 import com.example.demo.modules.user.User;
 import com.example.demo.modules.user.UserRepository;
 import com.example.demo.utils.NotFoundException;
@@ -44,7 +45,7 @@ public class DebtServiceImpl implements DebtService {
     }
 
     @Override
-    public DebtResponse createDebt(CreateDebt request) throws NotFoundException {
+    public DebtResponse createDebt(CreateDebt request) throws Exception {
         String endDate = request.getDeadline();
         Timestamp deadline = null;
         try {
@@ -66,6 +67,7 @@ public class DebtServiceImpl implements DebtService {
 
         Share share = shareRepository.findById(request.getSelectedShareId())
                 .orElseThrow(() -> new NotFoundException("Share with the Id " + request.getSelectedShareId() + " could not be found"));
+        shareService.updateSharePrice(share);
 
         Debt debt = new Debt(request.isPaid(), request.getAmount(),/*request.getTimestampCreation(),*/ deadline,
                 creditor, debtor, request.isCreditorConfirmed(), request.isDebtorConfirmed(),
@@ -91,8 +93,14 @@ public class DebtServiceImpl implements DebtService {
                     shareRepository.findById(proposeDebt.getShareId())
                             .orElseThrow(() -> new NotFoundException("Share with ID: " + proposeDebt.getShareId() + " not found"))
             );
+
+            double currentPrice = shareService.getSharePrice(debt.getSelectedShare().getId());
+            debt.setShareProportion(debt.getAmount()/currentPrice);
+            debt.getSelectedShare().setPrice(currentPrice);
             debtRepository.save(debt);
+            shareRepository.save(debt.getSelectedShare());
         }
+
         return new DebtResponse(debt);
     }
 
@@ -111,9 +119,11 @@ public class DebtServiceImpl implements DebtService {
         }
 
         if (debt.isCreditorConfirmed() && debt.isDebtorConfirmed()) {
-            /*double currentPrice = shareService.getSharePriceByDebt(debt.getId());
-            debt.setShareProportion(debt.getAmount()/currentPrice);*/ //TODO uncoment after Allphavantage merged in main
+            double currentPrice = shareService.getSharePriceByDebt(debt.getId());
+            debt.setShareProportion(debt.getAmount()/currentPrice);
+            debt.getSelectedShare().setPrice(currentPrice);
             debt = debtRepository.save(debt);
+            shareRepository.save(debt.getSelectedShare());
         } else {
             throw new Exception("Debt can't be accepted, please select a Share or try accepting an other debt");
         }
