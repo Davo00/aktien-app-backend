@@ -6,9 +6,11 @@ import com.example.demo.modules.user.User;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,6 +39,11 @@ public class Expense {
     @Getter
     @Setter
     private String description;
+
+    @Getter
+    @Setter
+    @CreationTimestamp
+    private Timestamp created;
 
     @Getter
     @Setter

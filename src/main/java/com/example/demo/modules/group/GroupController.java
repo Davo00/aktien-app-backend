@@ -41,7 +41,8 @@ public class GroupController {
     @PostMapping
     public ResponseEntity<GroupResponse> createGroup(@RequestHeader("Authorization") String token,
                                                      @RequestBody @Valid CreateGroup request,
-                                                     UriComponentsBuilder uriComponentsBuilder) {
+                                                     UriComponentsBuilder uriComponentsBuilder)
+    {
         User user = userService.getCurrentUser(token);
         String requester = user.getUsername();
         request.getUsernames().add(requester);
@@ -53,19 +54,23 @@ public class GroupController {
 
     @PutMapping("{groupId}/{username}")
     public ResponseEntity<Void> addUserToGroup(@PathVariable("groupId") long groupId,
-                                               @PathVariable("username") String username) {
+                                               @PathVariable("username") String username)
+    {
         groupService.addUserToGroup(groupId, username);
         return ResponseEntity.noContent().build();
     }
 
     @PutMapping("{groupId}")
-    public ResponseEntity<GroupResponse> updateGroupById(@RequestBody @Valid UpdateGroup request, @PathVariable("groupId") long groupId) throws NotFoundException {
+    public ResponseEntity<GroupResponse> updateGroupById(@RequestHeader("Authorization") String token,
+                                                         @RequestBody @Valid UpdateGroup request, @PathVariable(
+                                                                 "groupId") long groupId) throws NotFoundException {
         return ResponseEntity.ok(groupService.updateGroupById(groupId, request));
     }
 
 
     @DeleteMapping("{groupId}")
-    public ResponseEntity<Void> deleteGroupById(@PathVariable("groupId") long groupId) throws NotFoundException, DeletionIntegrityException {
+    public ResponseEntity<Void> deleteGroupById(@PathVariable("groupId") long groupId) throws NotFoundException,
+            DeletionIntegrityException {
 
         groupService.deleteGroupById(groupId);
         return ResponseEntity.noContent().build();
