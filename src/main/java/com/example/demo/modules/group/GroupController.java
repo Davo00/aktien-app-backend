@@ -32,11 +32,6 @@ public class GroupController {
         this.userService = userService;
     }
 
-    /*@GetMapping("name/{name}/all/user")
-    public ResponseEntity<List<Group>> findAllExpense(@PathVariable String name) {
-        return ResponseEntity.ok(groupService.findAllUsersByGroupName(name));
-    }*/
-
     @GetMapping("allUsers/{groupId}")
     public ResponseEntity<List<UserResponse>> getUsersbyGroup(@PathVariable("groupId") long groupId) throws NotFoundException {
         return ResponseEntity.ok(groupService.getAllUserOfGroup(groupId));
@@ -57,25 +52,24 @@ public class GroupController {
     }
 
     @PutMapping("{groupId}/{username}")
-    public ResponseEntity<Void> addUserToGroup(@PathVariable ("groupId") long groupId,
-                                                @PathVariable ("username") String username) {
+    public ResponseEntity<Void> addUserToGroup(@PathVariable("groupId") long groupId,
+                                               @PathVariable("username") String username) {
         groupService.addUserToGroup(groupId, username);
         return ResponseEntity.noContent().build();
     }
 
     @PutMapping("{groupId}")
-    public ResponseEntity<GroupResponse> updateGroupById(@RequestBody @Valid UpdateGroup request , @PathVariable ("groupId") long groupId) throws NotFoundException{
+    public ResponseEntity<GroupResponse> updateGroupById(@RequestBody @Valid UpdateGroup request, @PathVariable("groupId") long groupId) throws NotFoundException {
         return ResponseEntity.ok(groupService.updateGroupById(groupId, request));
     }
 
 
     @DeleteMapping("{groupId}")
-    public ResponseEntity<Void> deleteGroupById ( @PathVariable("groupId") long groupId) throws NotFoundException, DeletionIntegrityException {
+    public ResponseEntity<Void> deleteGroupById(@PathVariable("groupId") long groupId) throws NotFoundException, DeletionIntegrityException {
 
         groupService.deleteGroupById(groupId);
         return ResponseEntity.noContent().build();
     }
-
 
 
 }

@@ -22,9 +22,9 @@ public class ExpenseResponse {
     private int consumerCount;
     private List<Long> copayerIds;
 
-    public ExpenseResponse(long id,String userPaid, String name, double amount, String description,
+    public ExpenseResponse(long id, String userPaid, String name, double amount, String description,
                            boolean unpaid, int consumerCount) {
-        this.id=id;
+        this.id = id;
         this.userPaid = userPaid;
         this.name = name;
         this.amount = amount;
@@ -33,13 +33,13 @@ public class ExpenseResponse {
         this.consumerCount = consumerCount;
     }
 
-    public ExpenseResponse (Expense expense){
-        this(expense.getId(), expense.getUserPaid(), expense.getName(), expense.getAmount(),expense.getDescription(), expense.isUnpaid(), expense.getConsumerCount());
+    public ExpenseResponse(Expense expense) {
+        this(expense.getId(), expense.getUserPaid(), expense.getName(), expense.getAmount(), expense.getDescription(), expense.isUnpaid(), expense.getConsumerCount());
 
-        if (expense.getGroupExpense()!=null){
+        if (expense.getGroupExpense() != null) {
             this.setGroupId(expense.getGroupExpense().getId());
         }
-        if(expense.getCopayer()!=null&& !expense.getCopayer().isEmpty()){
+        if (expense.getCopayer() != null && !expense.getCopayer().isEmpty()) {
             this.copayerIds = new ArrayList<>();
             expense.getCopayer().forEach(copayer -> copayerIds.add(copayer.getId()));
         }

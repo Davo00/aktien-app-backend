@@ -1,5 +1,6 @@
 package com.example.demo.modules.debt;
 
+import com.example.demo.modules.share.Share;
 import com.example.demo.modules.calculation.response.WhoOwesWhom;
 import com.example.demo.modules.share.Share;
 import com.example.demo.modules.user.User;
@@ -78,8 +79,6 @@ public class Debt {
 
     public Debt() {
     }
-
-    ;
 
     public Debt(Long id, boolean paid, double amount, Timestamp timestampCreation, Timestamp timestampDeadline,
                 User creditor, User debtor, boolean creditorConfirmed, boolean debtorConfirmed,

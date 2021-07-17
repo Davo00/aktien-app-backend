@@ -9,7 +9,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-public class UpdateExpense{
+public class UpdateExpense {
     private String userPaid;
     private double amount;
     private String description;

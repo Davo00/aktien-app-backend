@@ -4,10 +4,8 @@ package com.example.demo.modules.expense;
 import com.example.demo.modules.group.Group;
 import com.example.demo.modules.user.User;
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.Setter;
-
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -70,8 +68,6 @@ public class Expense {
     }
 
 
-
-
     public Expense(@NotNull Long id, @NotNull Group group, String userPaid, String name, double amount, String description, List<User> copayer) {
         this.id = id;
         this.groupExpense = group;
@@ -94,13 +90,13 @@ public class Expense {
         this.consumerCount = 0;
         this.groupExpense = group;
         //this.copayer = copayers;
-        if(!copayers.isEmpty() && copayers!=null){
+        if (!copayers.isEmpty() && copayers != null) {
             copayers.forEach(user -> addUser(user));
         }
     }
 
 
-    public void addUser(User user){
+    public void addUser(User user) {
         copayer.add(user);
         user.getExpense().add(this);
     }

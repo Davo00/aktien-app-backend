@@ -12,7 +12,7 @@ public class GroupResponse {
 
     private Long id;
     private String name;
-    private List<Long> myUsers;
+    private List<String> myUsers;
 
     public GroupResponse(Long id, String name) {
         this.id = id;
@@ -24,7 +24,7 @@ public class GroupResponse {
 
         if (group.getMyUsers() != null && !group.getMyUsers().isEmpty()) {
             myUsers = new ArrayList<>();
-            group.getMyUsers().forEach(user -> myUsers.add(user.getId()));
+            group.getMyUsers().forEach(user -> myUsers.add(user.getUsername()));
         }
     }
 }

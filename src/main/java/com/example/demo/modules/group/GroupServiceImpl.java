@@ -137,7 +137,6 @@ public class GroupServiceImpl implements GroupService {
 
         }
 
-
         return new GroupResponse(group);
     }
 }

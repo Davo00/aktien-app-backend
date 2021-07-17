@@ -33,7 +33,7 @@ public class CreateDebt {
         this.selectedShareId = selectedShareId;
     }
 
-    public CreateDebt(Debt debt){
+    public CreateDebt(Debt debt) {
         this(false, debt.getAmount(), null, debt.getCreditor().getId(), debt.getDebtor().getId(), false, false, debt.getGroupName(), null);
     }
 }
