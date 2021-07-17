@@ -15,7 +15,6 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -124,11 +123,13 @@ public class DemoApplication {
             long time = date.getTime();
             Timestamp deadline = new Timestamp(time);
 
-            Debt debt = new Debt(false, 14.99, deadline, hendrik, davit, false, false, "Shafi", s);
+            Debt debt = new Debt(false, 14.99, deadline, hendrik, davit, false,
+                    false, "Shafi", s, 0);
             //debt.getSuggestions().add(s);
 
             debtRepository.save(debt);
-            Debt debt2 = new Debt(false, 19.99, deadline, davit, hendrik, true, true, "Shafi", s);
+            Debt debt2 = new Debt(false, 19.99, deadline, davit, hendrik,
+                    true, true, "Shafi", s, 0);
             //debt.getSuggestions().add(s);
 
             debtRepository.save(debt2);

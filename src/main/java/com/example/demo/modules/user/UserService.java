@@ -1,5 +1,6 @@
 package com.example.demo.modules.user;
 
+import com.example.demo.modules.debt.response.DebtResponse;
 import com.example.demo.modules.group.response.GroupResponse;
 import com.example.demo.modules.share.Share;
 import com.example.demo.modules.user.request.CreateUser;
@@ -22,4 +23,6 @@ public interface UserService {
     List<Share> getOwnPreferredShares(String token);
 
     List<Share> getPreferredShares(String username);
+
+    List<DebtResponse> getDebtsbyUser(User user);
 }

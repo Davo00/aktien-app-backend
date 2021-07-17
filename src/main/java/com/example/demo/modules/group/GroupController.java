@@ -10,7 +10,6 @@ import com.example.demo.utils.DeletionIntegrityException;
 import com.example.demo.utils.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -24,12 +23,13 @@ import java.util.List;
 public class GroupController {
 
 
-    private GroupService groupService;
-    private UserService userService;
+    private final GroupService groupService;
+    private final UserService userService;
 
     @Autowired
-    public GroupController(GroupService groupService) {
+    public GroupController(GroupService groupService, UserService userService) {
         this.groupService = groupService;
+        this.userService = userService;
     }
 
     @GetMapping("allUsers/{groupId}")
@@ -42,7 +42,8 @@ public class GroupController {
     public ResponseEntity<GroupResponse> createGroup(@RequestHeader("Authorization") String token,
                                                      @RequestBody @Valid CreateGroup request,
                                                      UriComponentsBuilder uriComponentsBuilder) {
-        String requester = userService.getCurrentUser(token).getUsername();
+        User user = userService.getCurrentUser(token);
+        String requester = user.getUsername();
         request.getUsernames().add(requester);
         GroupResponse group = groupService.createGroup(request);
         UriComponents uriComponents = uriComponentsBuilder.path("group/{name}").buildAndExpand(request.getName());

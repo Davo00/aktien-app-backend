@@ -160,9 +160,12 @@ public class CalculationServiceImpl implements CalculationService {
         List<Debt> allNewDebts = new ArrayList<>();
 
         for (WhoOwesWhom whom : whoOwesWhomList) {
-            User creditor = userRepository.findByUsername(whom.getCreditor()).orElseThrow(() -> new UsernameNotFoundException("Creditor: not found"));
-            User debitor = userRepository.findByUsername(whom.getDebitor()).orElseThrow(() -> new UsernameNotFoundException("Debtor: not found"));
-            allNewDebts.add(new Debt(false, whom.getAmount(), null, creditor, debitor, false, false, group.getName(), null));
+            User creditor = userRepository.findByUsername(whom.getCreditor())
+                    .orElseThrow(() -> new UsernameNotFoundException("Creditor: not found"));
+            User debitor = userRepository.findByUsername(whom.getDebitor())
+                    .orElseThrow(() -> new UsernameNotFoundException("Debtor: not found"));
+            allNewDebts.add(new Debt(false, whom.getAmount(), null, creditor, debitor,
+                    false, false, group.getName(), null, 0));
         }
         List<DebtResponse> returnableDebts = new ArrayList<>();
         for (Debt debt : allNewDebts) {

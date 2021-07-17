@@ -63,6 +63,10 @@ public class Debt {
     @Setter
     private String groupName;
 
+    @Getter
+    @Setter
+    private double shareProportion;
+
     /*@Getter
     @Setter
     @ManyToMany//(cascade = CascadeType.ALL)
@@ -76,9 +80,9 @@ public class Debt {
     public Debt() {
     }
 
-    ;
-
-    public Debt(Long id, boolean paid, double amount, Timestamp timestampCreation, Timestamp timestampDeadline, User creditor, User debtor, boolean creditorConfirmed, boolean debtorConfirmed, String groupName, Share selectedShare) {
+    public Debt(Long id, boolean paid, double amount, Timestamp timestampCreation, Timestamp timestampDeadline,
+                User creditor, User debtor, boolean creditorConfirmed, boolean debtorConfirmed,
+                String groupName, Share selectedShare, double shareProportion) {
         this.id = id;
         this.paid = paid;
         this.amount = amount;
@@ -90,9 +94,12 @@ public class Debt {
         this.debtorConfirmed = debtorConfirmed;
         this.groupName = groupName;
         this.selectedShare = selectedShare;
+        this.shareProportion = shareProportion;
     }
 
-    public Debt(boolean paid, double amount,/*Timestamp timestampCreation,*/ Timestamp timestampDeadline, User creditor, User debtor, boolean creditorConfirmed, boolean debtorConfirmed, String groupName, Share selectedShare) {
+    public Debt(boolean paid, double amount,/*Timestamp timestampCreation,*/ Timestamp timestampDeadline, User creditor,
+                User debtor, boolean creditorConfirmed, boolean debtorConfirmed,
+                String groupName, Share selectedShare, double shareProportion) {
         this.paid = paid;
         //this.timestampCreation = timestampCreation;
         this.amount = amount;
@@ -103,6 +110,7 @@ public class Debt {
         this.debtorConfirmed = debtorConfirmed;
         this.groupName = groupName;
         this.selectedShare = selectedShare;
+        this.shareProportion = shareProportion;
     }
 
 

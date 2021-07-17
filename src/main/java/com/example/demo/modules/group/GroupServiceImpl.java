@@ -15,12 +15,13 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class GroupServiceImpl implements GroupService {
 
-    private GroupRepository groupRepository;
-    private UserRepository userRepository;
+    private final GroupRepository groupRepository;
+    private final UserRepository userRepository;
 
     @Autowired
     public GroupServiceImpl(GroupRepository groupRepository, UserRepository userRepository) {
@@ -114,34 +115,25 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public GroupResponse updateGroupById(long groupId, UpdateGroup request) throws NotFoundException {
-        Group group = groupRepository.findById(groupId).orElseThrow(() -> new NotFoundException("group could not be found "));
-        List<User> toSafeAtTheEnd = new ArrayList<>();
+        Group group = groupRepository.findById(groupId)
+                .orElseThrow(() -> new NotFoundException("group could not be found "));
 
-        if (request.getUsernames() != null && !request.getUsernames().isEmpty()) {
-            List<User> newUserList = new ArrayList<>();
-            for (int i = 0; i < request.getUsernames().size(); i++) {
-                User user = userRepository.findByUsername(request.getUsernames().get(i))
-                        .orElseThrow(() -> new NotFoundException("User could not be found"));
-                newUserList.add(user);
-            }
-            if (group.getMyUsers() != null && !group.getMyUsers().isEmpty()) {
-                for (User user : group.getMyUsers()) {
-                    user.getJoinedGroups().remove(group);
-                    toSafeAtTheEnd.add(user);
-                }
-                group.getMyUsers().clear();
-            }
-            for (User user : newUserList) {
-                group.addUser(user);
-                toSafeAtTheEnd.add(user);
-            }
-        }
-        if (request.getName() != null) {
+        if (request.getName() != null && !request.getName().isEmpty()) {
             group.setName(request.getName());
         }
-        group = groupRepository.save(group);
-        for (User user : toSafeAtTheEnd) {
-            userRepository.save(user);
+
+        if (request.getUsernames() != null && !request.getUsernames().isEmpty()) {
+            group.getMyUsers().forEach(user -> user.getJoinedGroups().remove(group));
+            List<User> toSaveAtTheEnd = new ArrayList<>(group.getMyUsers());
+            List<User> updatedUsers = request.getUsernames().stream().map(username -> userRepository.findByUsername(username)
+                    .orElseThrow(() -> new NotFoundException("User could not be found"))).collect(Collectors.toList());
+            group.setMyUsers(updatedUsers);
+            groupRepository.save(group);
+            updatedUsers.forEach(user -> {
+                user.getJoinedGroups().add(group);
+                userRepository.save(user);
+            });
+            toSaveAtTheEnd.forEach(userRepository::save);
 
         }
 
