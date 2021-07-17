@@ -5,6 +5,7 @@ import com.example.demo.modules.expense.Expense;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,7 +21,8 @@ public class ExpenseResponse {
     private long groupId;
     private boolean unpaid;
     private int consumerCount;
-    private List<Long> copayerIds;
+    private List<String> copayerNames;
+    private Timestamp created;
 
     public ExpenseResponse(long id, String userPaid, String name, double amount, String description,
                            boolean unpaid, int consumerCount) {
@@ -36,12 +38,13 @@ public class ExpenseResponse {
     public ExpenseResponse(Expense expense) {
         this(expense.getId(), expense.getUserPaid(), expense.getName(), expense.getAmount(), expense.getDescription(), expense.isUnpaid(), expense.getConsumerCount());
 
+        this.created=expense.getCreated();
         if (expense.getGroupExpense() != null) {
             this.setGroupId(expense.getGroupExpense().getId());
         }
         if (expense.getCopayer() != null && !expense.getCopayer().isEmpty()) {
-            this.copayerIds = new ArrayList<>();
-            expense.getCopayer().forEach(copayer -> copayerIds.add(copayer.getId()));
+            this.copayerNames = new ArrayList<>();
+            expense.getCopayer().forEach(copayer -> copayerNames.add(copayer.getUsername()));
         }
 
     }
