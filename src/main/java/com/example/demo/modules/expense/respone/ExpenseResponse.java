@@ -19,7 +19,7 @@ public class ExpenseResponse {
     private double amount;
     private String description;
     private long groupId;
-    private boolean unpaid;
+    //private boolean unpaid;
     private int consumerCount;
     private List<String> copayerNames;
     private Timestamp created;
