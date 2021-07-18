@@ -121,7 +121,7 @@ public class ExpenseServiceImpl implements ExpenseService {
 
 
         expense.setAmount(request.getAmount());
-        expense.setUnpaid(request.isOpen());
+        //expense.setUnpaid(request.isOpen());
         expense.setConsumerCount(request.getConsumercount());
 
         if (request.getUserPaid() != null) {
