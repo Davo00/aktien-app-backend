@@ -39,7 +39,7 @@ public class ShareController {
         return ResponseEntity.ok(shareService.findAllShare());
     }
 
-    @PostMapping("")
+    @PostMapping
     public ResponseEntity<Share> createShare(@RequestBody @Valid CreateShare request, UriComponentsBuilder uriComponentsBuilder) throws NotFoundException {
         Share share = shareService.createShare(request);
         UriComponents uriComponents = uriComponentsBuilder.path("share/{name}").buildAndExpand(share.getName());
@@ -68,13 +68,12 @@ public class ShareController {
         return ResponseEntity.ok(s);
     }
 
-    @GetMapping("debtValue/debtId")
+    @GetMapping("debtValue/{debtId}")
     public double getCurrentDebtValue(@PathVariable Long debtId) throws Exception {
-        double price = shareService.getSharePriceByDebt(debtId);
-        return price;
+        return shareService.getSharePriceByDebt(debtId);
     }
 
-    @PostMapping("share_id/username")
+    @PostMapping("share_id/{username}")
     public ResponseEntity<Share> selectShareFromPartner(@PathVariable Long share_id, @PathVariable String username) throws NotFoundException {
         Share s = null;
         //To do
