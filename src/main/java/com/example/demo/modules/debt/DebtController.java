@@ -38,7 +38,7 @@ public class DebtController {
 
     @PostMapping
     public ResponseEntity<DebtResponse> createDebt(@RequestBody @Valid CreateDebt request,
-                                                   UriComponentsBuilder uriComponentsBuilder) {
+                                                   UriComponentsBuilder uriComponentsBuilder) throws Exception {
         DebtResponse debt = debtService.createDebt(request);
         UriComponents uriComponents = uriComponentsBuilder.path("debt/{id}").buildAndExpand(debt.getId());
         URI location = uriComponents.toUri();

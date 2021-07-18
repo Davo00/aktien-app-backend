@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Component
@@ -100,7 +101,6 @@ public class ShareServiceImpl implements ShareService {
 
     @Override
     public double getSharePriceByDebt(Long debtId) throws Exception {
-        double price = 0.0;
         Debt debt = debtRepository.findById(debtId)
                 .orElseThrow(() -> new NotFoundException("Debt: " + debtId + " not found"));
         if (!debt.isDebtorConfirmed() || !debt.isCreditorConfirmed()) {
@@ -108,12 +108,26 @@ public class ShareServiceImpl implements ShareService {
         }
         Share share = shareRepository.findById(debt.getSelectedShare().getId())
                 .orElseThrow(() -> new NotFoundException("Share: " + debt.getSelectedShare().getId() + " not found"));
-        String close = Stock.getStock(share.getName(), "TIME_SERIES_INTRADAY").getClose();
+        return getSharePrice(share.getId());
+    }
+
+    @Override
+    public double getSharePrice(Long shareId) throws Exception {
+        double price = 0.0;
+        Share share = shareRepository.findById(shareId)
+                .orElseThrow(() -> new NotFoundException("Share: " + shareId + " not found"));
+        String close = Objects.requireNonNull(Stock.getStock(share.getName(), "TIME_SERIES_INTRADAY")).getClose();
         if (close == null)
             close = "0.0";
+        close = close.replace("\"", "");
         price = Double.parseDouble(close);
         return price;
     }
 
+    @Override
+    public void updateSharePrice(Share share) throws Exception {
+        share.setPrice(getSharePrice(share.getId()));
+        shareRepository.save(share);
+    }
 
 }
