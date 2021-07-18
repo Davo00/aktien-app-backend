@@ -103,7 +103,7 @@ public class DemoApplication {
             Expense test6 = new Expense(group, "Davit", "Bier", 12.99, "Teuerstes Bier der Welt", userList);
             expenseRepository.save(test6);
             Expense test7 = new Expense(group, "Cevin", "Bier", 20.99, "Teuerstes Bier der Welt", wholeGroup);
-            test7.setUnpaid(false);
+            test7.setUnpaid(true);
             expenseRepository.save(test7);
 
             Share s = new Share("SAP", 127.99, sapEmployees);
