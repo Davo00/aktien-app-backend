@@ -17,6 +17,6 @@ public class UpdateExpense {
     //private boolean open;
     private int consumercount;
 
-    private List<Long> userIds;
+    private List<String> userNames;
     private Long groupId;
 }
