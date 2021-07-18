@@ -26,21 +26,26 @@ import java.util.Optional;
 @RequestMapping("/share")
 public class ShareController {
     final private String API_KEY = "C5R0KD15LKFP929I";
-    @Autowired
-    ShareService shareService;
-    @Autowired
-    UserService userService;
+
+    private final ShareService shareService;
+    private final UserService userService;
+    private final UserService debtService;
 
     @Autowired
-    UserService debtService;
+    public ShareController(ShareService shareService, UserService userService, UserService debtService) {
+        this.shareService = shareService;
+        this.userService = userService;
+        this.debtService = debtService;
+    }
+
 
     @GetMapping
-    public ResponseEntity<List<Share>> findAllShare() {
+    public ResponseEntity<List<Share>> findAllShare() throws Exception {
         return ResponseEntity.ok(shareService.findAllShare());
     }
 
     @PostMapping
-    public ResponseEntity<Share> createShare(@RequestBody @Valid CreateShare request, UriComponentsBuilder uriComponentsBuilder) throws NotFoundException {
+    public ResponseEntity<Share> createShare(@RequestBody @Valid CreateShare request, UriComponentsBuilder uriComponentsBuilder) throws Exception {
         Share share = shareService.createShare(request);
         UriComponents uriComponents = uriComponentsBuilder.path("share/{name}").buildAndExpand(share.getName());
         URI location = uriComponents.toUri();
@@ -48,7 +53,7 @@ public class ShareController {
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<Share> one(@PathVariable long id) throws NotFoundException {
+    public ResponseEntity<Share> one(@PathVariable long id) throws Exception {
         Optional<Share> share = Optional.ofNullable(shareService.one(id));
         Share s = share.orElseThrow(() -> new NotFoundException("Share could not be found"));
         return ResponseEntity.ok(s);
@@ -62,7 +67,7 @@ public class ShareController {
     }
 
     @GetMapping("{username}")
-    public ResponseEntity<List<Share>> getPreferedSharesbyUsername(@PathVariable String username) throws NotFoundException {
+    public ResponseEntity<List<Share>> getPreferedSharesbyUsername(@PathVariable String username) throws Exception {
         Optional<List<Share>> share = Optional.ofNullable(shareService.getPreferedSharesbyUser(username));
         List<Share> s = share.orElseThrow(() -> new NotFoundException("Sharelist could not be found"));
         return ResponseEntity.ok(s);
@@ -100,8 +105,7 @@ public class ShareController {
 
     public Stock parseStringToJson(String stock) {
         Gson gson = new Gson();
-        Stock s = gson.fromJson(stock, Stock.class);
-        return s;
+        return gson.fromJson(stock, Stock.class);
     }
 
 
