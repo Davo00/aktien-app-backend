@@ -14,7 +14,10 @@ public interface DebtService {
     List<DebtResponse> findAllDebt();
 
     DebtResponse createDebt(CreateDebt request) throws Exception;
+
     DebtResponse proposeDebt (User user, ProposeDebt proposeDebt) throws Exception;
 
     DebtResponse acceptDebt(Long debtId, Long userId) throws Exception;
+
+    DebtResponse setPaid(User user, long debtId, boolean paid) throws Exception;
 }

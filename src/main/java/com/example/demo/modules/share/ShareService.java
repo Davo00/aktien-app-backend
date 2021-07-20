@@ -8,15 +8,15 @@ import java.util.List;
 
 public interface ShareService {
 
-    List<Share> findAllShare();
+    List<Share> findAllShare() throws Exception;
 
-    Share createShare(CreateShare request) throws NotFoundException;
+    Share createShare(CreateShare request) throws Exception;
 
-    Share one(long id) throws NotFoundException;
+    Share one(long id) throws Exception;
 
     void deleteShare(long id) throws NotFoundException, DeletionIntegrityException;
 
-    List<Share> getPreferedSharesbyUser(String username) throws NotFoundException;
+    List<Share> getPreferedSharesbyUser(String username) throws Exception;
 
     Share selectShareFromCreditor(String username, Long shareId) throws NotFoundException;
 

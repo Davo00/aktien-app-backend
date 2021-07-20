@@ -47,8 +47,8 @@ public class DebtController {
 
     @PutMapping("propose")
     public ResponseEntity<DebtResponse> proposeDebt(@RequestHeader("Authorization") String token,
-                                      @RequestBody @Valid ProposeDebt proposeDebt,
-                                      UriComponentsBuilder uriComponentsBuilder) throws Exception {
+                                                    @RequestBody @Valid ProposeDebt proposeDebt,
+                                                    UriComponentsBuilder uriComponentsBuilder) throws Exception {
         User user = userService.getCurrentUser(token);
         DebtResponse debtResponse = debtService.proposeDebt(user, proposeDebt);
         UriComponents uriComponents = uriComponentsBuilder.path("debt/{id}").buildAndExpand(proposeDebt.getDebtId());
@@ -62,4 +62,13 @@ public class DebtController {
         User user = userService.getCurrentUser(token);
         return ResponseEntity.ok(debtService.acceptDebt(debtId, user.getId()));
     }
+
+    @PutMapping("{debt_id}/paid/{paid_value}")
+    public ResponseEntity<DebtResponse> setDebtValue(@RequestHeader("Authorization") String token,
+                                                     @PathVariable("paid_value") boolean paid,
+                                                     @PathVariable("debt_id") long debtId) throws Exception {
+        User user = userService.getCurrentUser(token);
+        return ResponseEntity.ok(debtService.setPaid(user, debtId, paid));
+    }
+
 }

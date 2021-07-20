@@ -11,6 +11,7 @@ import com.example.demo.modules.user.User;
 import com.example.demo.modules.user.UserRepository;
 import com.example.demo.utils.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
 import java.sql.Timestamp;
@@ -94,6 +95,7 @@ public class DebtServiceImpl implements DebtService {
                             .orElseThrow(() -> new NotFoundException("Share with ID: " + proposeDebt.getShareId() + " not found"))
             );
 
+            debt.setTimestampDeadline(new Timestamp(System.currentTimeMillis()+1209600000)); //+2 Weeks
             double currentPrice = shareService.getSharePrice(debt.getSelectedShare().getId());
             debt.setShareProportion(debt.getAmount()/currentPrice);
             debt.getSelectedShare().setPrice(currentPrice);
@@ -128,6 +130,20 @@ public class DebtServiceImpl implements DebtService {
             throw new Exception("Debt can't be accepted, please select a Share or try accepting an other debt");
         }
 
+        return new DebtResponse(debt);
+    }
+
+    @Override
+    public DebtResponse setPaid(User user, long debtId, boolean paid) throws Exception {
+        Debt debt = debtRepository.findById(debtId)
+                .orElseThrow(() -> new NotFoundException("Debt not found"));
+        User creditor = userRepository.findById(debt.getCreditor().getId())
+                .orElseThrow(() -> new UsernameNotFoundException("Username not found"));
+        if (!user.getId().equals(creditor.getId())) {
+            throw new Exception("User is not Creditor, can't set paid");
+        }
+        debt.setPaid(paid);
+        debtRepository.save(debt);
         return new DebtResponse(debt);
     }
 
