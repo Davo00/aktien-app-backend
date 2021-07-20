@@ -91,10 +91,10 @@ public class ExpenseServiceImpl implements ExpenseService {
 
         List<User> toSafeAtTheEnd = new ArrayList<>();
 
-        if (request.getUserIds() != null && !request.getUserIds().isEmpty()) {
+        if (request.getUserNames() != null && !request.getUserNames().isEmpty()) {
             List<User> newUserList = new ArrayList<>();
-            for (int i = 0; i < request.getUserIds().size(); i++) {
-                User user = userRepository.findById(request.getUserIds().get(i)).orElseThrow(() -> new NotFoundException("User could not be found"));
+            for (int i = 0; i < request.getUserNames().size(); i++) {
+                User user = userRepository.findByUsername(request.getUserNames().get(i)).orElseThrow(() -> new NotFoundException("User could not be found"));
                 newUserList.add(user);
             }
             if (expense.getCopayer() != null && !expense.getCopayer().isEmpty()) {
@@ -121,7 +121,7 @@ public class ExpenseServiceImpl implements ExpenseService {
 
 
         expense.setAmount(request.getAmount());
-        expense.setUnpaid(request.isOpen());
+        //expense.setUnpaid(request.isOpen());
         expense.setConsumerCount(request.getConsumercount());
 
         if (request.getUserPaid() != null) {
@@ -132,14 +132,6 @@ public class ExpenseServiceImpl implements ExpenseService {
             expense.setDescription(request.getDescription());
         }
 
-        if (request.getDescription() != null) {
-            expense.setDescription(request.getDescription());
-        }
-
-
-        if (request.getDescription() != null) {
-            expense.setDescription(request.getDescription());
-        }
 
 
         expense = expenseRepository.save(expense);
@@ -147,6 +139,7 @@ public class ExpenseServiceImpl implements ExpenseService {
             userRepository.save(user);
 
         }
+
 
         return new ExpenseResponse(expense);
 
