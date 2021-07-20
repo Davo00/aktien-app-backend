@@ -106,9 +106,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         config.setAllowCredentials(true);
         config.addAllowedOrigin("http://localhost:4200");
         config.addAllowedOrigin("http://kreativegruppe42.de");
+        config.addAllowedOrigin("http://www.kreativegruppe42.de");
         config.addAllowedOrigin("http://162.55.185.65");
         config.addAllowedOrigin("https://localhost:4200");
         config.addAllowedOrigin("https://kreativegruppe42.de");
+        config.addAllowedOrigin("https://www.kreativegruppe42.de");
         config.addAllowedOrigin("https://162.55.185.65");
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
