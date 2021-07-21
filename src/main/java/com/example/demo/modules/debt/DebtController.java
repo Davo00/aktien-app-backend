@@ -32,12 +32,13 @@ public class DebtController {
     }
 
     @GetMapping
-    public ResponseEntity<List<DebtResponse>> findAllDebt() {
+    public ResponseEntity<List<DebtResponse>> findAllDebt(@RequestHeader("Authorization") String token) {
         return ResponseEntity.ok(debtService.findAllDebt());
     }
 
     @PostMapping
-    public ResponseEntity<DebtResponse> createDebt(@RequestBody @Valid CreateDebt request,
+    public ResponseEntity<DebtResponse> createDebt(@RequestHeader("Authorization") String token,
+                                                   @RequestBody @Valid CreateDebt request,
                                                    UriComponentsBuilder uriComponentsBuilder) throws Exception {
         DebtResponse debt = debtService.createDebt(request);
         UriComponents uriComponents = uriComponentsBuilder.path("debt/{id}").buildAndExpand(debt.getId());

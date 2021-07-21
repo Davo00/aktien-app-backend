@@ -45,7 +45,8 @@ public class ShareController {
     }
 
     @PostMapping
-    public ResponseEntity<Share> createShare(@RequestBody @Valid CreateShare request, UriComponentsBuilder uriComponentsBuilder) throws Exception {
+    public ResponseEntity<Share> createShare(@RequestHeader("Authorization") String token,
+                                             @RequestBody @Valid CreateShare request, UriComponentsBuilder uriComponentsBuilder) throws Exception {
         Share share = shareService.createShare(request);
         UriComponents uriComponents = uriComponentsBuilder.path("share/{name}").buildAndExpand(share.getName());
         URI location = uriComponents.toUri();
@@ -53,7 +54,8 @@ public class ShareController {
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<Share> one(@PathVariable long id) throws Exception {
+    public ResponseEntity<Share> one(@RequestHeader("Authorization") String token,
+                                     @PathVariable long id) throws Exception {
         Optional<Share> share = Optional.ofNullable(shareService.one(id));
         Share s = share.orElseThrow(() -> new NotFoundException("Share could not be found"));
         return ResponseEntity.ok(s);
@@ -61,25 +63,30 @@ public class ShareController {
 
 
     @DeleteMapping("{id}")
-    public ResponseEntity<Share> deleteShare(@PathVariable long id) throws NotFoundException, DeletionIntegrityException {
+    public ResponseEntity<Share> deleteShare(@RequestHeader("Authorization") String token,
+                                             @PathVariable long id) throws NotFoundException, DeletionIntegrityException {
         shareService.deleteShare(id);
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping("{username}")
-    public ResponseEntity<List<Share>> getPreferedSharesbyUsername(@PathVariable String username) throws Exception {
+    public ResponseEntity<List<Share>> getPreferedSharesbyUsername(@RequestHeader("Authorization") String token,
+                                                                   @PathVariable String username) throws Exception {
         Optional<List<Share>> share = Optional.ofNullable(shareService.getPreferedSharesbyUser(username));
         List<Share> s = share.orElseThrow(() -> new NotFoundException("Sharelist could not be found"));
         return ResponseEntity.ok(s);
     }
 
     @GetMapping("debtValue/{debtId}")
-    public double getCurrentDebtValue(@PathVariable Long debtId) throws Exception {
+    public double getCurrentDebtValue(@RequestHeader("Authorization") String token,
+                                      @PathVariable Long debtId) throws Exception {
         return shareService.getSharePriceByDebt(debtId);
     }
 
     @PostMapping("share_id/{username}")
-    public ResponseEntity<Share> selectShareFromPartner(@PathVariable Long share_id, @PathVariable String username) throws NotFoundException {
+    public ResponseEntity<Share> selectShareFromPartner(@RequestHeader("Authorization") String token,
+                                                        @PathVariable Long share_id,
+                                                        @PathVariable String username) throws NotFoundException {
         Share s = null;
         //To do
         return ResponseEntity.ok(s);
@@ -110,7 +117,8 @@ public class ShareController {
 
 
     @GetMapping("{sharename}")
-    public ResponseEntity<?> getStocks(@PathVariable String shareName) throws IOException {
+    public ResponseEntity<?> getStocks(@RequestHeader("Authorization") String token,
+                                       @PathVariable String shareName) throws IOException {
         return ResponseEntity.ok(getShareByName(shareName));
     }
 
