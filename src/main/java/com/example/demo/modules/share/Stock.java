@@ -19,7 +19,6 @@ import java.util.Date;
 public class Stock {
 
 
-
     @Getter
     @Setter
     private Date date;
@@ -28,7 +27,8 @@ public class Stock {
     private String low;
     private String close;
     private String volume;
-    final static String API_KEY = "C5R0KD15LKFP929I";
+    final static String[] API_KEYS = {"C5R0KD15LKFP929I", "B304OSZCXK9QQ2ZA", "OMD26PBRKZLT0VX7",
+            "KUZQ8QEPI3QKATAR", "477YLCWARZVM6DB5", "AC611JG0N46JJBEU", "94Y3ITLOOH9T6DDQ"};
 
     public String getClose() {
         return close;
@@ -68,8 +68,11 @@ public class Stock {
 
 
     public static URL buildUrl(String shareName, String func) throws MalformedURLException {
+        int index = (int) ((Math.random() * 7));
+        index = index >= 7 ? 0: index;
+        String apiKey = API_KEYS[index];
         String shareAdress = "https://www.alphavantage.co/query?function=";
-        shareAdress += func + "&symbol=" + shareName + "&interval=60min&" + "&apikey=" + API_KEY;
+        shareAdress += func + "&symbol=" + shareName + "&interval=60min&" + "&apikey=" + apiKey;
         return new URL(shareAdress);
 
     }
@@ -108,14 +111,14 @@ public class Stock {
             String currentLow = timeSeriesArray.get(0).getAsJsonObject().get("3. low").toString();
             String currentClose = timeSeriesArray.get(0).getAsJsonObject().get("4. close").toString();
             String currentVolume = timeSeriesArray.get(0).getAsJsonObject().get("5. volume").toString();
-            System.out.println("Open: " + currentOpen);
+            /*System.out.println("Open: " + currentOpen);
             System.out.println("High: " + currentHigh);
             System.out.println("low: " + currentLow);
             System.out.println("close: " + currentClose);
-            System.out.println("volume: " + currentVolume);
+            System.out.println("volume: " + currentVolume);*/
             return new Stock(currentOpen, currentHigh, currentLow, currentClose, currentVolume);
 
-        }else if(func.equals("TIME_SERIES_DAILY_ADJUSTED")) {
+        } else if (func.equals("TIME_SERIES_DAILY_ADJUSTED")) {
 
             Gson gson = new Gson();
             JsonElement jsonElement = gson.fromJson(result, JsonElement.class);
@@ -130,7 +133,7 @@ public class Stock {
             return null;
 
         }
-            return null;
+        return null;
     }
 
 }

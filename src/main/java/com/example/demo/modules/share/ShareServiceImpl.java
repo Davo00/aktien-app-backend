@@ -33,7 +33,7 @@ public class ShareServiceImpl implements ShareService {
     @Override
     public List<Share> findAllShare() throws Exception {
         List<Share> allShare = shareRepository.findAll();
-        for(Share share: allShare) {
+        for (Share share : allShare) {
             updateSharePrice(share);
         }
         return allShare;
@@ -130,7 +130,7 @@ public class ShareServiceImpl implements ShareService {
             close = "0.0";
         close = close.replace("\"", "");
         price = Double.parseDouble(close);
-        return price;
+        return Math.round(price * 85.0) / 100.0;
     }
 
     @Override

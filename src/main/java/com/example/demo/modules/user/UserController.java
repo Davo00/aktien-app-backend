@@ -102,7 +102,8 @@ public class UserController {
     }
 
     @GetMapping("preferredShares/{username}")
-    public ResponseEntity<List<Share>> getPreferredShareList(@PathVariable String username,
+    public ResponseEntity<List<Share>> getPreferredShareList(@RequestHeader("Authorization") String token,
+                                                             @PathVariable String username,
                                                              UriComponentsBuilder uriComponentsBuilder) throws UsernameNotFoundException {
         UriComponents uriComponents = uriComponentsBuilder.path("user/preferredShares").buildAndExpand(username);
         URI location = uriComponents.toUri();

@@ -20,17 +20,20 @@ public class CalculationController {
     CalculationService calculationService;
 
     @GetMapping("/overview/{groupId}")
-    public ResponseEntity<List<CreditOverview>> calculateOverview(@PathVariable("groupId") long groupId) throws NotFoundException {
+    public ResponseEntity<List<CreditOverview>> calculateOverview(@RequestHeader("Authorization") String token,
+                                                                  @PathVariable("groupId") long groupId) throws NotFoundException {
         return ResponseEntity.ok(calculationService.calculateOverview(groupId));
     }
 
     @GetMapping("/debts/{groupId}")
-    public ResponseEntity<List<WhoOwesWhom>> calculateDebts(@PathVariable("groupId") long groupId) throws NotFoundException {
+    public ResponseEntity<List<WhoOwesWhom>> calculateDebts(@RequestHeader("Authorization") String token,
+                                                            @PathVariable("groupId") long groupId) throws NotFoundException {
         return ResponseEntity.ok(calculationService.calculateDebts(groupId));
     }
 
     @PutMapping("/final/{groupId}")
-    public ResponseEntity<List<DebtResponse>> finalCalculation(@PathVariable("groupId") long groupId) throws NotFoundException {
+    public ResponseEntity<List<DebtResponse>> finalCalculation(@RequestHeader("Authorization") String token,
+                                                               @PathVariable("groupId") long groupId) throws NotFoundException {
         return ResponseEntity.ok(calculationService.finalCalculation(groupId));
     }
 

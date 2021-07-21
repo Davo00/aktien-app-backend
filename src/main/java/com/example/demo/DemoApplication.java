@@ -15,6 +15,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -108,15 +109,31 @@ public class DemoApplication {
 
             Share s = new Share("SAP", 127.99, sapEmployees);
             shareRepository.save(s);
-           // stock s1 = stock.getShareByName("IBM");
-            Date d = new Date() ;
+            // stock s1 = stock.getShareByName("IBM");
+            Date d = new Date();
             SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd");
             String func = "TIME_SERIES_INTRADAY";
             //Stock s2 = Stock.getStock("SAP",func);
             //String text = stock.getShareByName("SAP");
-           //System.out.println("hallo"+ s2);
+            //System.out.println("hallo"+ s2);
             Share s3 = new Share("IBM", 139.59, sapEmployees);
             shareRepository.save(s3);
+            Share apple = new Share("AAPL", 0, wholeGroup);
+            Share amazon = new Share("AMZN", 0, wholeGroup);
+            Share google = new Share("GOOG", 0, wholeGroup);
+            Share intel = new Share("INTC", 0, wholeGroup);
+            Share facebook = new Share("FB", 0, wholeGroup);
+            Share twitter = new Share("TWTR", 0, wholeGroup);
+            Share tesla = new Share("TSLA", 0, wholeGroup);
+            Share netflix = new Share("NFLX", 0, wholeGroup);
+            shareRepository.save(apple);
+            shareRepository.save(amazon);
+            shareRepository.save(google);
+            shareRepository.save(intel);
+            shareRepository.save(facebook);
+            shareRepository.save(twitter);
+            shareRepository.save(tesla);
+            shareRepository.save(netflix);
 
             DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
             Date date = dateFormat.parse("23/09/2021");
