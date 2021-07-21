@@ -112,6 +112,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         config.addAllowedOrigin("https://kreativegruppe42.de");
         config.addAllowedOrigin("https://www.kreativegruppe42.de");
         config.addAllowedOrigin("https://162.55.185.65");
+        config.addAllowedHeader("Authorization");
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
         source.registerCorsConfiguration("/**", config);
