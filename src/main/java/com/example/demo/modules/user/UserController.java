@@ -6,6 +6,7 @@ import com.example.demo.modules.share.Share;
 import com.example.demo.modules.user.request.UserLogin;
 import com.example.demo.modules.group.response.GroupResponse;
 import com.example.demo.modules.user.request.CreateUser;
+import com.example.demo.modules.user.response.UserLoginResponse;
 import com.example.demo.modules.user.response.UserResponse;
 import com.example.demo.utils.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,7 +52,7 @@ public class UserController {
 
     @CrossOrigin("http://localhost:4200")
     @PostMapping("login")
-    public ResponseEntity<String> login(@RequestBody @Valid UserLogin request) {
+    public ResponseEntity<UserLoginResponse> login(@RequestBody @Valid UserLogin request) {
         try {
             Authentication authenticate = authenticationManager
                     .authenticate(
@@ -66,7 +67,7 @@ public class UserController {
                     .header(
                             HttpHeaders.AUTHORIZATION,
                             jwtTokenUtil.generateAccessToken(user)
-                    ).body(jwtTokenUtil.generateAccessToken(user));
+                    ).body(new UserLoginResponse(jwtTokenUtil.generateAccessToken(user)));
         } catch (BadCredentialsException ex) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
