@@ -51,7 +51,7 @@ public class UserController {
 
     @CrossOrigin("http://localhost:4200")
     @PostMapping("login")
-    public ResponseEntity login(@RequestBody @Valid UserLogin request) {
+    public ResponseEntity<String> login(@RequestBody @Valid UserLogin request) {
         try {
             Authentication authenticate = authenticationManager
                     .authenticate(
@@ -66,7 +66,7 @@ public class UserController {
                     .header(
                             HttpHeaders.AUTHORIZATION,
                             jwtTokenUtil.generateAccessToken(user)
-                    ).build();
+                    ).body(jwtTokenUtil.generateAccessToken(user));
         } catch (BadCredentialsException ex) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
