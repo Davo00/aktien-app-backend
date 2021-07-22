@@ -27,6 +27,7 @@ public class Stock {
     private String low;
     private String close;
     private String volume;
+    static int apiIndex = 0;
     final static String[] API_KEYS = {"C5R0KD15LKFP929I", "B304OSZCXK9QQ2ZA", "OMD26PBRKZLT0VX7",
             "KUZQ8QEPI3QKATAR", "477YLCWARZVM6DB5", "AC611JG0N46JJBEU", "94Y3ITLOOH9T6DDQ"};
 
@@ -68,11 +69,13 @@ public class Stock {
 
 
     public static URL buildUrl(String shareName, String func) throws MalformedURLException {
-        int index = (int) ((Math.random() * 7));
+        int index = apiIndex % API_KEYS.length;
         index = index >= 7 ? 0: index;
         String apiKey = API_KEYS[index];
+        System.out.println(apiKey);
         String shareAdress = "https://www.alphavantage.co/query?function=";
         shareAdress += func + "&symbol=" + shareName + "&interval=60min&" + "&apikey=" + apiKey;
+        apiIndex++;
         return new URL(shareAdress);
 
     }

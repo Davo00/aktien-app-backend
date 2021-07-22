@@ -121,16 +121,25 @@ public class ShareServiceImpl implements ShareService {
     }
 
     @Override
-    public double getSharePrice(Long shareId) throws Exception {
+    public double getSharePrice(Long shareId) throws NotFoundException {
         double price = 0.0;
         Share share = shareRepository.findById(shareId)
                 .orElseThrow(() -> new NotFoundException("Share: " + shareId + " not found"));
-        String close = Objects.requireNonNull(Stock.getStock(share.getName(), "TIME_SERIES_INTRADAY")).getClose();
+        String close = "0.0";
+        try {
+            close = Objects.requireNonNull(Stock.getStock(share.getName(), "TIME_SERIES_INTRADAY")).getClose();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         if (close == null)
             close = "0.0";
         close = close.replace("\"", "");
         price = Double.parseDouble(close);
-        return Math.round(price * 85.0) / 100.0;
+        price = Math.round(price * 85.0) / 100.0;
+        if (price <= 1) {
+            price = share.getPrice();
+        }
+        return price;
     }
 
     @Override

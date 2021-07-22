@@ -93,6 +93,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST, AUTH_WHITELIST_POST).permitAll()
                 .antMatchers(HttpMethod.PUT, AUTH_WHITELIST_PUT).permitAll()
                 .antMatchers(HttpMethod.DELETE, AUTH_WHITELIST_DELETE).permitAll()
+                .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 .anyRequest().authenticated();
 
         http.addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
