@@ -91,10 +91,10 @@ public class ExpenseServiceImpl implements ExpenseService {
 
         List<User> toSafeAtTheEnd = new ArrayList<>();
 
-        if (request.getUserNames() != null && !request.getUserNames().isEmpty()) {
+        if (request.getCopayerNames() != null && !request.getCopayerNames().isEmpty()) {
             List<User> newUserList = new ArrayList<>();
-            for (int i = 0; i < request.getUserNames().size(); i++) {
-                User user = userRepository.findByUsername(request.getUserNames().get(i)).orElseThrow(() -> new NotFoundException("User could not be found"));
+            for (int i = 0; i < request.getCopayerNames().size(); i++) {
+                User user = userRepository.findByUsername(request.getCopayerNames().get(i)).orElseThrow(() -> new NotFoundException("User could not be found"));
                 newUserList.add(user);
             }
             if (expense.getCopayer() != null && !expense.getCopayer().isEmpty()) {

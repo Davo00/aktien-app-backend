@@ -3,6 +3,7 @@ package com.example.demo.modules.group;
 import com.example.demo.modules.group.request.CreateGroup;
 import com.example.demo.modules.group.request.UpdateGroup;
 import com.example.demo.modules.group.response.GroupResponse;
+import com.example.demo.modules.group.response.GroupnameResponse;
 import com.example.demo.modules.user.User;
 import com.example.demo.modules.user.UserRepository;
 import com.example.demo.modules.user.response.UserResponse;
@@ -134,7 +135,7 @@ public class GroupServiceImpl implements GroupService {
             group.setName(request.getName());
         }
 
-        if (request.getUsernames() != null && !request.getUsernames().isEmpty()) {
+        if (request.getUsernames() != null) {
             group.getMyUsers().forEach(user -> user.getJoinedGroups().remove(group));
             List<User> toSaveAtTheEnd = new ArrayList<>(group.getMyUsers());
 
@@ -153,5 +154,12 @@ public class GroupServiceImpl implements GroupService {
         }
 
         return new GroupResponse(group);
+    }
+
+    @Override
+    public GroupnameResponse getGroupnameById(long groupId) {
+        return new GroupnameResponse(groupRepository.findById(groupId)
+                .orElseThrow(() -> new NotFoundException("Group with id: " + groupId + "not found"))
+                .getName());
     }
 }

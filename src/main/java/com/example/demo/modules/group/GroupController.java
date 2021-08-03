@@ -3,6 +3,7 @@ package com.example.demo.modules.group;
 import com.example.demo.modules.group.request.CreateGroup;
 import com.example.demo.modules.group.request.UpdateGroup;
 import com.example.demo.modules.group.response.GroupResponse;
+import com.example.demo.modules.group.response.GroupnameResponse;
 import com.example.demo.modules.user.User;
 import com.example.demo.modules.user.UserService;
 import com.example.demo.modules.user.response.UserResponse;
@@ -30,6 +31,13 @@ public class GroupController {
     public GroupController(GroupService groupService, UserService userService) {
         this.groupService = groupService;
         this.userService = userService;
+    }
+
+    @GetMapping("name/{groupId}")
+    public ResponseEntity<GroupnameResponse> getGroupnameById(@RequestHeader("Authorization") String token,
+                                                              @PathVariable("groupId") long groupId) throws NotFoundException {
+        return ResponseEntity.ok(groupService.getGroupnameById(groupId));
+
     }
 
     @GetMapping("allUsers/{groupId}")

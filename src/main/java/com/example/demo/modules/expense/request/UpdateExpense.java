@@ -17,6 +17,6 @@ public class UpdateExpense {
     //private boolean open;
     private int consumercount;
 
-    private List<String> userNames;
+    private List<String> copayerNames;
     private Long groupId;
 }

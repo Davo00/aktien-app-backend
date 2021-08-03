@@ -3,6 +3,7 @@ package com.example.demo.modules.group;
 import com.example.demo.modules.group.request.CreateGroup;
 import com.example.demo.modules.group.request.UpdateGroup;
 import com.example.demo.modules.group.response.GroupResponse;
+import com.example.demo.modules.group.response.GroupnameResponse;
 import com.example.demo.modules.user.User;
 import com.example.demo.modules.user.response.UserResponse;
 import com.example.demo.utils.DeletionIntegrityException;
@@ -23,4 +24,6 @@ public interface GroupService {
     void addUserToGroup(long groupId, String username);
 
     GroupResponse updateGroupById(long groupId, UpdateGroup request) throws NotFoundException;
+
+    GroupnameResponse getGroupnameById(long groupId);
 }
